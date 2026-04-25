@@ -48,6 +48,7 @@ export const Navbar = () => {
             hover:text-white
             hover:bg-white/10
             hover:border-white/30
+            cursor-pointer
           "
         >
           Sign In
