@@ -37,7 +37,7 @@ export const Navbar = () => {
 
         {/* ── Sign In button ── */}
         <Link
-          href=""
+          href="/login"
           className="
             shrink-0
             text-sm font-medium text-white/80
