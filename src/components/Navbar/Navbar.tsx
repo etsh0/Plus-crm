@@ -42,7 +42,6 @@ export const Navbar = () => {
                   <span className={`w-5 h-0.5 bg-white rounded-full transition-all duration-300 ${isOpen ? '-rotate-45 -translate-y-2' : ''}`} />
                 </button>
             </div>
-
             {/* ── Nav links ── */}
             <ul 
               className={`
