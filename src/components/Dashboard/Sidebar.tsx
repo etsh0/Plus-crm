@@ -170,16 +170,16 @@ export default function Sidebar() {
   const pathname = usePathname();
 
   return (
-    <aside className="w-60 shrink-0 flex flex-col border-r border-white/10 bg-white/5 backdrop-blur-xl min-h-screen relative z-20 shadow-[8px_0_32px_0_rgba(0,0,0,0.3)]">
+    <aside className="w-64 shrink-0 flex flex-col border-r border-white/10 bg-[#0A0A0A] h-screen sticky top-0 z-20 shadow-[8px_0_32px_0_rgba(0,0,0,0.3)]">
       {/* Brand */}
-      <div className="px-6 py-6 border-b border-white/[0.06]">
-        <span className="text-lg font-bold tracking-tight text-white select-none">
-          PLUS <span className="text-white/30">CRM</span>
+      <div className="px-6 py-7 border-b border-white/6 shrink-0">
+        <span className="text-xl font-bold tracking-tight text-white select-none">
+          PLUS <span className='bg-gradient-to-r from-fuchsia-400 via-violet-400 to-purple-400 bg-clip-text text-transparent'>CRM</span>
         </span>
       </div>
 
       {/* Navigation */}
-      <nav className="flex-1 px-3 py-4 flex flex-col gap-1">
+      <nav className="flex-1 px-3 py-4 flex flex-col gap-1 overflow-y-auto custom-scrollbar">
         {navItems.map((item) => {
           const isActive = pathname === item.href;
           return (
@@ -202,7 +202,7 @@ export default function Sidebar() {
       </nav>
 
       {/* Account footer */}
-      <div className="px-3 py-4 border-t border-white/[0.06]">
+      <div className="px-3 py-4 border-t border-white/6">
         <Link
           href="/account"
           className={`flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium transition-all duration-200 ${
