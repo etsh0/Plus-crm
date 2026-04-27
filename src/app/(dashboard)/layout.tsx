@@ -1,6 +1,4 @@
 import Sidebar from "@/components/Dashboard/Sidebar";
-import Image from "next/image";
-import bgImg from "@/assets/light-pillar-1776934798991.png";
 
 export default function DashboardLayout({
   children,
@@ -8,17 +6,7 @@ export default function DashboardLayout({
   children: React.ReactNode;
 }) {
   return (
-    <div className="relative flex min-h-screen overflow-hidden">
-      {/* Background Image */}
-      <Image
-        src={bgImg}
-        alt=""
-        fill
-        priority
-        className="object-cover object-center -z-20"
-      />
-      {/* Dark overlay to ensure readability */}
-      <div className="absolute inset-0 -z-10 bg-black/60 backdrop-blur-[2px]" />
+    <div className="relative flex min-h-screen bg-[#0f0f11] overflow-hidden">
 
       {/* Sidebar with Glassmorphism */}
       <Sidebar />

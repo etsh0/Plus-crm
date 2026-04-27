@@ -1,4 +1,4 @@
-
+"use client";
 
 const stats = [
   { label: "Total Customers", value: "1,284", change: "+12%", up: true, data: [30, 40, 45, 50, 49, 60, 70, 91] },
