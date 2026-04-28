@@ -1,146 +1,15 @@
 "use client";
 
-import React, { useState } from "react";
+import React from "react";
 import Link from "next/link";
-import { toast } from "sonner";
-import Swal from "sweetalert2";
-
-const initialContacts = [
-  {
-    id: 1,
-    name: "Sarah Johnson",
-    role: "VP of Sales",
-    avatar: "https://i.pravatar.cc/150?img=1",
-    company: "Acme Corp",
-    email: "sarah.j@acmecorp.com",
-    phone: "+1 (555) 123-4567",
-    location: "New York, NY",
-    status: "Hot Lead",
-    lastContact: "2 days ago",
-  },
-  {
-    id: 2,
-    name: "Mike Chen",
-    role: "CEO",
-    avatar: "https://i.pravatar.cc/150?img=11",
-    company: "TechStart Inc",
-    email: "m.chen@techstart.io",
-    phone: "+1 (555) 234-5678",
-    location: "San Francisco, CA",
-    status: "Customer",
-    lastContact: "1 week ago",
-  },
-  {
-    id: 3,
-    name: "Emily Davis",
-    role: "Director of IT",
-    avatar: "https://i.pravatar.cc/150?img=5",
-    company: "Global Solutions",
-    email: "emily@globalsol.com",
-    phone: "+1 (555) 345-6789",
-    location: "Austin, TX",
-    status: "Warm Lead",
-    lastContact: "3 days ago",
-  },
-];
+import { useContacts } from "@/hooks/use-contacts";
+import { Button } from "@/components/ui/button";
+import { StatusBadge } from "@/components/ui/status-badge";
+import { SearchInput } from "@/components/ui/search-input";
+import { initialContacts } from "@/constants/mock-data";
 
 export default function ContactsPage() {
-  const [contacts, setContacts] = useState(initialContacts);
-  const [search, setSearch] = useState("");
-
-  // Load data from localStorage on mount
-  React.useEffect(() => {
-    const saved = localStorage.getItem("crm_contacts");
-    if (saved) {
-      setContacts(JSON.parse(saved));
-    } else {
-      // First time: initialize localStorage with our hardcoded initial data
-      localStorage.setItem("crm_contacts", JSON.stringify(initialContacts));
-    }
-  }, []);
-
-  const handleDelete = (id: number, name: string) => {
-    Swal.fire({
-      title: "Are you sure?",
-      text: `You are about to delete contact "${name}". This cannot be undone!`,
-      icon: "warning",
-      showCancelButton: true,
-      confirmButtonColor: "#a855f7", // Using the purple theme color
-      cancelButtonColor: "#3f3f46",
-      confirmButtonText: "Yes, delete it!",
-      background: "#18181b",
-      color: "#fff",
-      customClass: {
-        popup: "rounded-2xl border border-white/10 shadow-2xl",
-        title: "text-white font-bold",
-        htmlContainer: "text-white/60",
-        confirmButton: "rounded-xl px-6 py-2.5 font-medium",
-        cancelButton: "rounded-xl px-6 py-2.5 font-medium",
-      },
-    }).then((result) => {
-      if (result.isConfirmed) {
-        const updatedContacts = contacts.filter((c) => c.id !== id);
-
-        // Update state
-        setContacts(updatedContacts);
-
-        // Update persistent storage
-        localStorage.setItem("crm_contacts", JSON.stringify(updatedContacts));
-
-        // Show success Swal
-        Swal.fire({
-          title: "Deleted!",
-          text: "The contact has been removed successfully.",
-          icon: "success",
-          background: "#18181b",
-          color: "#fff",
-          confirmButtonColor: "#a855f7",
-          customClass: {
-            popup: "rounded-2xl border border-white/10 shadow-2xl",
-            title: "text-white font-bold",
-            htmlContainer: "text-white/60",
-            confirmButton: "rounded-xl px-6 py-2.5 font-medium",
-          },
-        });
-      }
-    });
-  };
-
-  const filteredContacts = contacts.filter(
-    (c) =>
-      c.name.toLowerCase().includes(search.toLowerCase()) ||
-      c.email.toLowerCase().includes(search.toLowerCase()) ||
-      c.company.toLowerCase().includes(search.toLowerCase()),
-  );
-
-  const getStatusBadge = (status: string) => {
-    switch (status) {
-      case "Hot Lead":
-        return (
-          <span className="inline-flex items-center px-2 py-0.5 rounded text-[11px] font-medium bg-red-500/10 text-red-500 border border-red-500/20">
-            {status}
-          </span>
-        );
-      case "Customer":
-        return (
-          <span className="inline-flex items-center px-2 py-0.5 rounded text-[11px] font-medium bg-emerald-500/10 text-emerald-500 border border-emerald-500/20">
-            {status}
-          </span>
-        );
-      case "Warm Lead":
-        return (
-          <span className="inline-flex items-center px-2 py-0.5 rounded text-[11px] font-medium bg-amber-500/10 text-amber-500 border border-amber-500/20">
-            {status}
-          </span>
-        );
-      default:
-        return (
-          <span className="inline-flex items-center px-2 py-0.5 rounded text-[11px] font-medium bg-white/5 text-white/50 border border-white/10">
-            {status}
-          </span>
-        );
-    }
-  };
+  const { search, setSearch, handleDelete, filteredContacts } = useContacts(initialContacts);
 
   return (
     <div className="p-8 max-w-[1600px] mx-auto">
@@ -151,53 +20,35 @@ export default function ContactsPage() {
             Manage your professional network and leads
           </p>
         </div>
-        <Link
-          href="/contacts/add"
-          className="px-4 py-2 rounded-lg bg-[#a855f7] text-sm font-medium cursor-pointer text-white hover:bg-[#9333ea] transition-all duration-200 flex items-center gap-2"
-        >
-          <svg
-            width="16"
-            height="16"
-            fill="none"
-            viewBox="0 0 24 24"
-            stroke="currentColor"
-            strokeWidth={2}
-          >
-            <path
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              d="M12 4v16m8-8H4"
-            />
-          </svg>
-          Add Contact
-        </Link>
+        <Button asChild variant="primary">
+          <Link href="/contacts/add" className="flex items-center gap-2">
+            <svg
+              width="16"
+              height="16"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+              strokeWidth={2}
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                d="M12 4v16m8-8H4"
+              />
+            </svg>
+            Add Contact
+          </Link>
+        </Button>
       </div>
 
       <div className="rounded-xl bg-[#18181b] border border-white/[0.08] shadow-2xl overflow-hidden">
         {/* Toolbar */}
         <div className="p-4 border-b border-white/[0.04]">
-          <div className="relative max-w-xl">
-            <svg
-              className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-white/30"
-              fill="none"
-              viewBox="0 0 24 24"
-              stroke="currentColor"
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth={2}
-                d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
-              />
-            </svg>
-            <input
-              type="text"
-              placeholder="Search contacts by name, email, or company..."
-              value={search}
-              onChange={(e) => setSearch(e.target.value)}
-              className="w-full bg-[#27272a]/50 border border-white/5 rounded-lg pl-9 pr-4 py-2 text-sm text-white placeholder-white/30 outline-none focus:border-white/20 transition-colors"
-            />
-          </div>
+          <SearchInput
+            placeholder="Search contacts by name, email, or company..."
+            value={search}
+            onChange={(e) => setSearch(e.target.value)}
+          />
         </div>
 
         {/* Table */}
@@ -341,35 +192,37 @@ export default function ContactsPage() {
                         {c.location}
                       </div>
                     </td>
-                    <td className="px-4 py-3">{getStatusBadge(c.status)}</td>
+                    <td className="px-4 py-3">
+                      <StatusBadge status={c.status} />
+                    </td>
                     <td className="px-4 py-3 text-white/50 text-[11px]">
                       {c.lastContact}
                     </td>
                     <td className="px-4 py-3 text-right">
                       <div className="flex items-center justify-end gap-2">
-                        <Link
-                          href={`/contacts/add?edit=${c.id}`}
-                          className="flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg bg-white/5 text-white/70 hover:bg-white/10 hover:text-white transition-all text-[10px] font-medium border border-white/5 cursor-pointer"
-                        >
-                          <svg
-                            width="12"
-                            height="12"
-                            fill="none"
-                            viewBox="0 0 24 24"
-                            stroke="currentColor"
-                          >
-                            <path
-                              strokeLinecap="round"
-                              strokeLinejoin="round"
-                              strokeWidth={2}
-                              d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"
-                            />
-                          </svg>
-                          Edit
-                        </Link>
-                        <button
+                        <Button asChild variant="secondary" size="sm">
+                          <Link href={`/contacts/add?edit=${c.id}`}>
+                            <svg
+                              width="12"
+                              height="12"
+                              fill="none"
+                              viewBox="0 0 24 24"
+                              stroke="currentColor"
+                            >
+                              <path
+                                strokeLinecap="round"
+                                strokeLinejoin="round"
+                                strokeWidth={2}
+                                d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"
+                              />
+                            </svg>
+                            Edit
+                          </Link>
+                        </Button>
+                        <Button
+                          variant="destructive"
+                          size="sm"
                           onClick={() => handleDelete(c.id, c.name)}
-                          className="flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg bg-red-500/10 text-red-500 hover:bg-red-500/20 transition-all text-[10px] font-medium border border-red-500/10 cursor-pointer"
                         >
                           <svg
                             width="12"
@@ -386,7 +239,7 @@ export default function ContactsPage() {
                             />
                           </svg>
                           Delete
-                        </button>
+                        </Button>
                       </div>
                     </td>
                   </tr>

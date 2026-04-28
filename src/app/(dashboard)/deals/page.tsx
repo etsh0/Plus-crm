@@ -1,50 +1,28 @@
 "use client";
 
-import { useState } from "react";
+import React from "react";
 import { 
   Plus, 
-  Search, 
-  Filter, 
   DollarSign,
   TrendingUp,
   Percent,
   Calendar,
 } from "lucide-react";
 import Link from "next/link";
+import { useDeals, Deal } from "@/hooks/use-deals";
+import { Button } from "@/components/ui/button";
+import { SearchInput } from "@/components/ui/search-input";
+import { StatusBadge } from "@/components/ui/status-badge";
+import { initialDeals } from "@/constants/mock-data";
 
 export default function DealsPage() {
-  const [searchQuery, setSearchQuery] = useState("");
+  const { searchQuery, setSearchQuery, filteredDeals } = useDeals(initialDeals);
 
   const stats = [
     { title: "Total Pipeline Value", value: "$425,000", change: "+12% from last month", icon: DollarSign },
     { title: "Active Deals", value: "3", change: "+3 new this week", icon: TrendingUp },
     { title: "Avg. Probability", value: "60%", change: "+5% from last month", icon: Percent },
     { title: "This Month", value: "5", change: "deals closing", icon: Calendar },
-  ];
-
-  const deals = [
-    {
-      id: 1,
-      title: "Enterprise Software License",
-      company: "TechCorp Inc.",
-      stage: "Negotiation",
-      probability: "80%",
-      closeDate: "1/15/2024",
-      value: "$150,000",
-      owner: "John Smith",
-      initials: "JS"
-    },
-    {
-      id: 2,
-      title: "Marketing Automation Setup",
-      company: "StartupXYZ",
-      stage: "Proposal",
-      probability: "60%",
-      closeDate: "1/20/2024",
-      value: "$75,000",
-      owner: "Sarah Johnson",
-      initials: "SJ"
-    }
   ];
 
   return (
@@ -56,13 +34,12 @@ export default function DealsPage() {
             <h1 className="text-3xl font-bold text-white tracking-tight">Deals</h1>
             <p className="text-white/40 text-sm mt-2">Manage your sales pipeline and opportunities</p>
           </div>
-          <Link 
-            href="/deals/add" 
-            className="flex items-center gap-2 px-4 py-2 bg-[#a855f7] hover:bg-[#9333ea] text-white rounded-lg text-sm font-semibold transition-all active:scale-95 shadow-[0_0_15px_rgba(168,85,247,0.4)] hover:shadow-[0_0_20px_rgba(168,85,247,0.6)]"
-          >
-            <Plus className="w-4 h-4" />
-            <span>New Deal</span>
-          </Link>
+          <Button asChild variant="primary">
+            <Link href="/deals/add" className="flex items-center gap-2">
+              <Plus className="w-4 h-4" />
+              <span>New Deal</span>
+            </Link>
+          </Button>
         </div>
       </div>
 
@@ -90,26 +67,21 @@ export default function DealsPage() {
             <p className="text-sm text-white/40 mt-1">Track and manage your sales opportunities</p>
           </div>
           <div className="flex items-center gap-3">
-            <div className="relative">
-              <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-white/30" />
-              <input 
-                type="text" 
-                placeholder="Search deals..." 
-                value={searchQuery}
-                onChange={(e) => setSearchQuery(e.target.value)}
-                className="w-full md:w-64 bg-[#18181b] border border-white/[0.08] rounded-lg pl-10 pr-4 py-2.5 text-sm text-white placeholder-white/30 outline-none focus:border-[#a855f7]/50 focus:ring-1 focus:ring-[#a855f7]/50 transition-all"
-              />
-            </div>
-            <button className="flex items-center gap-2 px-4 py-2.5 bg-[#18181b] hover:bg-[#27272a] border border-white/10 rounded-lg text-sm font-medium text-white/70 hover:text-white transition-all">
-              <Filter className="w-4 h-4" />
-              <span>Filter</span>
-            </button>
+            <SearchInput 
+              placeholder="Search deals..." 
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+              className="md:w-64"
+            />
+            <Button variant="secondary">
+              Filter
+            </Button>
           </div>
         </div>
 
         {/* Deals List */}
         <div className="flex flex-col gap-4">
-          {deals.map((deal) => (
+          {filteredDeals.map((deal) => (
             <div key={deal.id} className="bg-[#18181b]/50 hover:bg-[#18181b] border border-white/[0.04] hover:border-white/10 rounded-xl p-6 transition-all group flex flex-col md:flex-row justify-between md:items-center gap-6">
               
               <div className="flex items-start md:items-center gap-5">
@@ -122,13 +94,7 @@ export default function DealsPage() {
                   </div>
                   
                   <div className="flex flex-wrap items-center gap-3 mt-1 text-xs text-white/40">
-                    <span className={`px-2.5 py-1 rounded-full font-bold uppercase tracking-wider text-[10px] ${
-                      deal.stage === 'Negotiation' 
-                        ? 'bg-amber-500/10 text-amber-400 border border-amber-500/20 shadow-[0_0_10px_rgba(245,158,11,0.1)]' 
-                        : 'bg-blue-500/10 text-blue-400 border border-blue-500/20 shadow-[0_0_10px_rgba(59,130,246,0.1)]'
-                    }`}>
-                      {deal.stage}
-                    </span>
+                    <StatusBadge status={deal.stage} />
                     <span className="flex items-center gap-1"><span className="text-white/30">{deal.probability}</span> probability</span>
                     <span className="flex items-center gap-1"><span className="text-white/30">Close:</span> {deal.closeDate}</span>
                   </div>
@@ -152,7 +118,6 @@ export default function DealsPage() {
           ))}
         </div>
       </div>
-
     </div>
   );
 }

@@ -1,13 +1,12 @@
 
+"use client";
 
-const stats = [
-  { label: "Total Customers", value: "1,284", change: "+12%", up: true, data: [30, 40, 45, 50, 49, 60, 70, 91] },
-  { label: "Active Leads", value: "347", change: "+5%", up: true, data: [20, 25, 20, 30, 28, 35, 40, 45] },
-  { label: "Won Deals", value: "89", change: "+15%", up: true, data: [10, 15, 12, 20, 25, 24, 30, 35] },
-  { label: "Lost Deals", value: "12", change: "-3%", up: false, data: [5, 4, 6, 8, 5, 3, 4, 2] },
-];
+import React from "react";
+import { useDashboard } from "@/hooks/use-dashboard";
 
 export default function DashboardPage() {
+  const { stats, recentActivity } = useDashboard();
+
   return (
     <div className="p-8">
       <div className="mb-8">
@@ -50,18 +49,13 @@ export default function DashboardPage() {
         ))}
       </div>
 
-      {/* Placeholder content */}
+      {/* Recent Activity */}
       <div className="rounded-2xl bg-white/5 backdrop-blur-xl border border-white/10 shadow-[0_8px_32px_0_rgba(0,0,0,0.37)] p-6">
         <h2 className="text-sm font-semibold text-white/70 mb-4">
           Recent Activity
         </h2>
         <div className="flex flex-col gap-3">
-          {[
-            "New customer added: Sarah Connor",
-            "Lead status updated: Acme Corp → Qualified",
-            "Deal won: TechStart Inc — $12,000",
-            "Meeting scheduled with: Wayne Enterprises",
-          ].map((item, i) => (
+          {recentActivity.map((item, i) => (
             <div
               key={i}
               className="flex items-center gap-3 py-2 border-b border-white/[0.05] last:border-0"

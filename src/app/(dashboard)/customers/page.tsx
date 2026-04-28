@@ -1,160 +1,15 @@
 "use client";
 
-import React, { useState } from "react";
+import React from "react";
 import Link from "next/link";
-
-const initialCustomers = [
-  {
-    id: 1,
-    name: "Sarah Johnson",
-    role: "VP of Sales",
-    avatar: "https://i.pravatar.cc/150?img=1",
-    company: "Acme Corp",
-    email: "sarah.j@acmecorp.com",
-    phone: "+1 (555) 123-4567",
-    location: "New York, NY",
-    status: "Active",
-    lastContact: "2 days ago",
-  },
-  {
-    id: 2,
-    name: "Mike Chen",
-    role: "CEO",
-    avatar: "https://i.pravatar.cc/150?img=11",
-    company: "TechStart Inc",
-    email: "m.chen@techstart.io",
-    phone: "+1 (555) 234-5678",
-    location: "San Francisco, CA",
-    status: "Premium",
-    lastContact: "1 week ago",
-  },
-  {
-    id: 3,
-    name: "Emily Davis",
-    role: "Director of IT",
-    avatar: "https://i.pravatar.cc/150?img=5",
-    company: "Global Solutions",
-    email: "emily@globalsol.com",
-    phone: "+1 (555) 345-6789",
-    location: "Austin, TX",
-    status: "Active",
-    lastContact: "3 days ago",
-  },
-  {
-    id: 4,
-    name: "James Wilson",
-    role: "CTO",
-    avatar: "https://i.pravatar.cc/150?img=12",
-    company: "Innovate Ltd",
-    email: "jwilson@innovate.com",
-    phone: "+1 (555) 456-7890",
-    location: "Boston, MA",
-    status: "At Risk",
-    lastContact: "2 weeks ago",
-  },
-  {
-    id: 5,
-    name: "Lisa Anderson",
-    role: "Marketing Manager",
-    avatar: "",
-    initials: "LA",
-    company: "NextGen Co",
-    email: "l.anderson@nextgen.co",
-    phone: "+1 (555) 567-8901",
-    location: "Seattle, WA",
-    status: "Active",
-    lastContact: "Yesterday",
-  },
-  {
-    id: 6,
-    name: "David Martinez",
-    role: "Operations Lead",
-    avatar: "https://i.pravatar.cc/150?img=8",
-    company: "BuildIt Inc",
-    email: "david.m@buildit.com",
-    phone: "+1 (555) 678-9012",
-    location: "Chicago, IL",
-    status: "Premium",
-    lastContact: "4 days ago",
-  },
-];
+import { useCustomers } from "@/hooks/use-customers";
+import { Button } from "@/components/ui/button";
+import { StatusBadge } from "@/components/ui/status-badge";
+import { SearchInput } from "@/components/ui/search-input";
+import { initialCustomers } from "@/constants/mock-data";
 
 export default function CustomersPage() {
-  const [customers, setCustomers] = useState(initialCustomers);
-  const [search, setSearch] = useState("");
-
-  // Load data from localStorage on mount
-  React.useEffect(() => {
-    const saved = localStorage.getItem("crm_customers");
-    if (saved) {
-      setCustomers(JSON.parse(saved));
-    } else {
-      // First time: initialize localStorage with our hardcoded initial data
-      localStorage.setItem("crm_customers", JSON.stringify(initialCustomers));
-    }
-  }, []);
-
-  const handleDelete = (id: number, name: string) => {
-    // Professional confirmation dialog
-    const isConfirmed = window.confirm(
-      `Are you sure you want to delete "${name}"? This action cannot be undone.`,
-    );
-
-    if (isConfirmed) {
-      const updatedCustomers = customers.filter((c) => c.id !== id);
-
-      // Update state
-      setCustomers(updatedCustomers);
-
-      // Update persistent storage
-      localStorage.setItem("crm_customers", JSON.stringify(updatedCustomers));
-
-      // Show success message
-      alert("Customer deleted successfully.");
-    }
-  };
-
-  const filteredCustomers = customers.filter(
-    (c) =>
-      c.name.toLowerCase().includes(search.toLowerCase()) ||
-      c.email.toLowerCase().includes(search.toLowerCase()) ||
-      c.company.toLowerCase().includes(search.toLowerCase()),
-  );
-
-  const getStatusBadge = (status: string) => {
-    switch (status) {
-      case "Premium":
-        return (
-          <span className="inline-flex items-center px-2 py-0.5 rounded text-[11px] font-medium bg-purple-500/10 text-purple-500 border border-purple-500/20">
-            {status}
-          </span>
-        );
-      case "Active":
-        return (
-          <span className="inline-flex items-center px-2 py-0.5 rounded text-[11px] font-medium bg-emerald-500/10 text-emerald-500 border border-emerald-500/20">
-            {status}
-          </span>
-        );
-      case "At Risk":
-        return (
-          <span className="inline-flex items-center px-2 py-0.5 rounded text-[11px] font-medium bg-amber-500/10 text-amber-500 border border-amber-500/20">
-            {status}
-          </span>
-        );
-      case "Churned":
-        return (
-          <span className="inline-flex items-center px-2 py-0.5 rounded text-[11px] font-medium bg-red-500/10 text-red-500 border border-red-500/20">
-            {status}
-          </span>
-        );
-      default:
-        return (
-          <span className="inline-flex items-center px-2 py-0.5 rounded text-[11px] font-medium bg-white/5 text-white/50 border border-white/10">
-            {status}
-          </span>
-        );
-    }
-  };
+  const { search, setSearch, handleDelete, filteredCustomers } = useCustomers(initialCustomers);
 
   return (
     <div className="p-8 max-w-[1600px] mx-auto">
@@ -165,53 +20,35 @@ export default function CustomersPage() {
             Manage your customer relationships and accounts
           </p>
         </div>
-        <Link
-          href="/customers/add"
-          className="px-4 py-2 rounded-lg bg-[#a855f7] text-sm font-medium cursor-pointer text-white hover:bg-[#9333ea] transition-all duration-200 flex items-center gap-2"
-        >
-          <svg
-            width="16"
-            height="16"
-            fill="none"
-            viewBox="0 0 24 24"
-            stroke="currentColor"
-            strokeWidth={2}
-          >
-            <path
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              d="M12 4v16m8-8H4"
-            />
-          </svg>
-          Add Customer
-        </Link>
+        <Button asChild variant="primary">
+          <Link href="/customers/add" className="flex items-center gap-2">
+            <svg
+              width="16"
+              height="16"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+              strokeWidth={2}
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                d="M12 4v16m8-8H4"
+              />
+            </svg>
+            Add Customer
+          </Link>
+        </Button>
       </div>
 
       <div className="rounded-xl bg-[#18181b] border border-white/[0.08] shadow-2xl overflow-hidden">
         {/* Toolbar */}
         <div className="p-4 border-b border-white/[0.04]">
-          <div className="relative max-w-xl">
-            <svg
-              className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-white/30"
-              fill="none"
-              viewBox="0 0 24 24"
-              stroke="currentColor"
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth={2}
-                d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
-              />
-            </svg>
-            <input
-              type="text"
-              placeholder="Search customers by name, email, or company..."
-              value={search}
-              onChange={(e) => setSearch(e.target.value)}
-              className="w-full bg-[#27272a]/50 border border-white/5 rounded-lg pl-9 pr-4 py-2 text-sm text-white placeholder-white/30 outline-none focus:border-white/20 transition-colors"
-            />
-          </div>
+          <SearchInput
+            placeholder="Search customers by name, email, or company..."
+            value={search}
+            onChange={(e) => setSearch(e.target.value)}
+          />
         </div>
 
         {/* Table */}
@@ -350,35 +187,37 @@ export default function CustomersPage() {
                         {c.location}
                       </div>
                     </td>
-                    <td className="px-4 py-3">{getStatusBadge(c.status)}</td>
+                    <td className="px-4 py-3">
+                      <StatusBadge status={c.status} />
+                    </td>
                     <td className="px-4 py-3 text-white/50 text-[11px]">
                       {c.lastContact}
                     </td>
                     <td className="px-4 py-3 text-right">
                       <div className="flex items-center justify-end gap-2">
-                        <Link
-                          href={`/customers/add?edit=${c.id}`}
-                          className="flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg bg-white/5 text-white/70 hover:bg-white/10 hover:text-white transition-all text-[10px] font-medium border border-white/5 cursor-pointer"
-                        >
-                          <svg
-                            width="12"
-                            height="12"
-                            fill="none"
-                            viewBox="0 0 24 24"
-                            stroke="currentColor"
-                          >
-                            <path
-                              strokeLinecap="round"
-                              strokeLinejoin="round"
-                              strokeWidth={2}
-                              d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"
-                            />
-                          </svg>
-                          Edit
-                        </Link>
-                        <button
+                        <Button asChild variant="secondary" size="sm">
+                          <Link href={`/customers/add?edit=${c.id}`}>
+                            <svg
+                              width="12"
+                              height="12"
+                              fill="none"
+                              viewBox="0 0 24 24"
+                              stroke="currentColor"
+                            >
+                              <path
+                                strokeLinecap="round"
+                                strokeLinejoin="round"
+                                strokeWidth={2}
+                                d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"
+                              />
+                            </svg>
+                            Edit
+                          </Link>
+                        </Button>
+                        <Button
+                          variant="destructive"
+                          size="sm"
                           onClick={() => handleDelete(c.id, c.name)}
-                          className="flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg bg-red-500/10 text-red-500 hover:bg-red-500/20 transition-all text-[10px] font-medium border border-red-500/10 cursor-pointer"
                         >
                           <svg
                             width="12"
@@ -395,7 +234,7 @@ export default function CustomersPage() {
                             />
                           </svg>
                           Delete
-                        </button>
+                        </Button>
                       </div>
                     </td>
                   </tr>
@@ -403,7 +242,7 @@ export default function CustomersPage() {
               ) : (
                 <tr>
                   <td
-                    colSpan={6}
+                    colSpan={7}
                     className="px-4 py-8 text-center text-white/40"
                   >
                     No customers found matching your search.

@@ -1,27 +1,13 @@
 "use client";
 
-import { useState } from "react";
+import React from "react";
 import { ArrowLeft, Save, Repeat, Calendar, Star } from "lucide-react";
 import Link from "next/link";
+import { useAddLead } from "@/hooks/use-add-lead";
+import { Button } from "@/components/ui/button";
 
 export default function AddLeadPage() {
-  const [formData, setFormData] = useState({
-    firstName: "",
-    lastName: "",
-    email: "",
-    phone: "",
-    company: "",
-    jobTitle: "",
-    status: "",
-    source: "",
-    leadScore: "85",
-    owner: "",
-    notes: ""
-  });
-
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>) => {
-    setFormData({ ...formData, [e.target.name]: e.target.value });
-  };
+  const { formData, handleChange, handleSave } = useAddLead();
 
   return (
     <div className="p-8 max-w-[1600px] mx-auto">
@@ -202,18 +188,18 @@ export default function AddLeadPage() {
           <div className="bg-white/2 border border-white/[0.08] rounded-2xl p-6 shadow-xl">
             <h2 className="text-lg font-bold text-white mb-4">Actions</h2>
             <div className="flex flex-col gap-3">
-              <button className="flex items-center justify-center gap-2 w-full py-2.5 bg-[#a855f7] hover:bg-[#9333ea] text-white rounded-lg text-sm font-semibold transition-all active:scale-95 shadow-[0_0_15px_rgba(168,85,247,0.4)]">
+              <Button onClick={handleSave} variant="primary" className="w-full">
                 <Save className="w-4 h-4" />
                 <span>Save Lead</span>
-              </button>
-              <button className="flex items-center justify-center gap-2 w-full py-2.5 bg-[#18181b] hover:bg-white/5 border border-white/10 text-white rounded-lg text-sm font-medium transition-all">
+              </Button>
+              <Button variant="secondary" className="w-full">
                 <Repeat className="w-4 h-4 text-white/40" />
                 <span>Convert to Deal</span>
-              </button>
-              <button className="flex items-center justify-center gap-2 w-full py-2.5 bg-[#18181b] hover:bg-white/5 border border-white/10 text-white rounded-lg text-sm font-medium transition-all">
+              </Button>
+              <Button variant="secondary" className="w-full">
                 <Calendar className="w-4 h-4 text-white/40" />
                 <span>Schedule Follow-up</span>
-              </button>
+              </Button>
             </div>
           </div>
 
@@ -225,7 +211,7 @@ export default function AddLeadPage() {
                 <Star className="w-6 h-6 text-amber-400 fill-amber-400" />
               </div>
               <div>
-                <div className="text-2xl font-bold text-white tracking-tight">85<span className="text-sm text-white/40 font-normal">/100</span></div>
+                <div className="text-2xl font-bold text-white tracking-tight">{formData.leadScore}<span className="text-sm text-white/40 font-normal">/100</span></div>
                 <div className="text-sm text-white/60">High Quality Lead</div>
               </div>
             </div>

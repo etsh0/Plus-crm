@@ -1,25 +1,13 @@
 "use client";
 
-import { useState } from "react";
+import React from "react";
 import { ArrowLeft, Save, FileText } from "lucide-react";
 import Link from "next/link";
+import { useAddDeal } from "@/hooks/use-add-deal";
+import { Button } from "@/components/ui/button";
 
 export default function AddDealPage() {
-  const [formData, setFormData] = useState({
-    title: "",
-    company: "",
-    value: "0",
-    stage: "",
-    probability: "50",
-    description: "",
-    closeDate: "",
-    owner: "",
-    contact: ""
-  });
-
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>) => {
-    setFormData({ ...formData, [e.target.name]: e.target.value });
-  };
+  const { formData, handleChange, handleSave } = useAddDeal();
 
   return (
     <div className="p-8 max-w-[1600px] mx-auto">
@@ -179,14 +167,14 @@ export default function AddDealPage() {
           <div className="bg-white/2 border border-white/[0.08] rounded-2xl p-6 shadow-xl">
             <h2 className="text-lg font-bold text-white mb-4">Actions</h2>
             <div className="flex flex-col gap-3">
-              <button className="flex items-center justify-center gap-2 w-full py-2.5 bg-[#a855f7] hover:bg-[#9333ea] text-white rounded-lg text-sm font-semibold transition-all active:scale-95 shadow-[0_0_15px_rgba(168,85,247,0.4)]">
+              <Button onClick={handleSave} variant="primary" className="w-full">
                 <Save className="w-4 h-4" />
                 <span>Save Deal</span>
-              </button>
-              <button className="flex items-center justify-center gap-2 w-full py-2.5 bg-[#18181b] hover:bg-white/5 border border-white/10 text-white rounded-lg text-sm font-medium transition-all">
+              </Button>
+              <Button variant="secondary" className="w-full">
                 <FileText className="w-4 h-4 text-white/40" />
                 <span>Save as Draft</span>
-              </button>
+              </Button>
             </div>
           </div>
 
