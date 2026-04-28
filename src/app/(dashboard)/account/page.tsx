@@ -1,35 +1,19 @@
 "use client";
-import { useRouter } from 'next/navigation';
-import { User, Mail, Shield, LogOut, Camera, Key, Bell, CreditCard } from 'lucide-react';
-import Swal from 'sweetalert2';
-import Image from 'next/image';
+
+import React from 'react';
+import { User, Mail, Shield, LogOut, Camera, Bell, CreditCard } from 'lucide-react';
+import { useAccount } from '@/hooks/use-account';
+import { Button } from '@/components/ui/button';
 
 export default function AccountPage() {
-  const router = useRouter();
+  const { handleLogout } = useAccount();
 
-  const handleLogout = () => {
-    Swal.fire({
-      title: 'Sign Out?',
-      text: "Are you sure you want to log out of your account?",
-      icon: 'warning',
-      showCancelButton: true,
-      background: '#111',
-      color: '#fff',
-      confirmButtonColor: '#ef4444',
-      cancelButtonColor: '#3f3f46',
-      confirmButtonText: 'Yes, log out',
-      cancelButtonText: 'Cancel',
-      customClass: {
-        popup: 'rounded-3xl border border-white/10',
-        confirmButton: 'rounded-xl px-6 py-2.5 font-medium',
-        cancelButton: 'rounded-xl px-6 py-2.5 font-medium',
-      }
-    }).then((result) => {
-      if (result.isConfirmed) {
-        router.push('/login');
-      }
-    });
-  };
+  const navItems = [
+    { icon: User, label: 'Personal Info', active: true },
+    { icon: Shield, label: 'Security', active: false },
+    { icon: Bell, label: 'Notifications', active: false },
+    { icon: CreditCard, label: 'Billing', active: false },
+  ];
 
   return (
     <div className="p-4 md:p-8 max-w-6xl mx-auto space-y-8 animate-in fade-in zoom-in-95 duration-500">
@@ -54,9 +38,9 @@ export default function AccountPage() {
             </p>
           </div>
           <div className="md:ml-auto">
-            <button className="px-5 py-2.5 rounded-xl bg-white text-black font-semibold text-sm hover:bg-white/90 transition-all shadow-[0_0_20px_rgba(255,255,255,0.3)] hover:shadow-[0_0_30px_rgba(255,255,255,0.5)]">
+            <Button variant="secondary" className="bg-white text-black hover:bg-white/90">
               Edit Profile
-            </button>
+            </Button>
           </div>
         </div>
       </div>
@@ -64,12 +48,7 @@ export default function AccountPage() {
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
         {/* Navigation Sidebar */}
         <div className="lg:col-span-1 space-y-2">
-          {[
-            { icon: User, label: 'Personal Info', active: true },
-            { icon: Shield, label: 'Security', active: false },
-            { icon: Bell, label: 'Notifications', active: false },
-            { icon: CreditCard, label: 'Billing', active: false },
-          ].map((item, idx) => (
+          {navItems.map((item, idx) => (
             <button
               key={idx}
               className={`w-full flex items-center gap-3 px-5 py-3.5 rounded-2xl text-sm font-medium transition-all ${
@@ -129,9 +108,9 @@ export default function AccountPage() {
               </div>
               
               <div className="pt-4 flex justify-end">
-                <button className="px-6 py-3 rounded-xl bg-indigo-500 hover:bg-indigo-600 text-sm font-semibold text-white transition-all shadow-[0_0_15px_rgba(99,102,241,0.4)] hover:shadow-[0_0_25px_rgba(99,102,241,0.6)]">
+                <Button variant="primary" className="bg-indigo-500 hover:bg-indigo-600 shadow-[0_0_15px_rgba(99,102,241,0.4)] hover:shadow-[0_0_25px_rgba(99,102,241,0.6)]">
                   Save Changes
-                </button>
+                </Button>
               </div>
             </div>
           </div>
@@ -154,13 +133,14 @@ export default function AccountPage() {
                       <h3 className="text-sm font-medium text-white/90">Sign Out Everywhere</h3>
                       <p className="text-xs text-white/40 mt-0.5">End all active sessions on other devices</p>
                     </div>
-                    <button 
+                    <Button 
                       onClick={handleLogout}
-                      className="flex items-center gap-2 px-4 py-2.5 rounded-xl bg-red-500/10 text-red-400 border border-red-500/20 hover:bg-red-500 hover:text-white transition-all text-sm font-medium"
+                      variant="destructive"
+                      className="bg-red-500/10 text-red-400 border border-red-500/20 hover:bg-red-500 hover:text-white"
                     >
                       <LogOut size={16} />
                       Log Out
-                    </button>
+                    </Button>
                   </div>
                 </div>
               </div>
@@ -170,5 +150,5 @@ export default function AccountPage() {
         </div>
       </div>
     </div>
-  )
+  );
 }
