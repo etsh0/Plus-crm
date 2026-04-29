@@ -126,8 +126,8 @@ const navItems = [
     ),
   },
   {
-    label: "Opportunities",
-    href: "/opportunities",
+    label: "Leads Status",
+    href: "/leads-status",
     icon: (
       <svg
         width="18"
