@@ -1,5 +1,6 @@
-"use client"
+"use client";
 
+import React from "react";
 import { DollarSign, TrendingUp, Users } from "lucide-react";
 import { 
   AreaChart, Area, 
@@ -7,6 +8,7 @@ import {
   BarChart, Bar, 
   CartesianGrid, ResponsiveContainer, Tooltip, XAxis, YAxis 
 } from "recharts";
+import { useDashboard } from "@/hooks/use-dashboard";
 
 const stats = [
   { label: "Total Customers", value: "1,284", change: "+12%", up: true, icon:<Users className="w-5 h-5"/> },
@@ -56,17 +58,12 @@ const topCustomers = [
   { rank: 4, initials: 'TS', initialsBg: 'bg-amber-500/20 text-amber-400', name: 'TechCorp Solutions', type: 'B2B', contact: 'Ahmed Hassan', status: 'Active', value: '$145K', deals: '3 deals', barWidth: '30%', barColor: 'bg-amber-500' },
   { rank: 5, initials: 'NR', initialsBg: 'bg-red-500/20 text-red-400', name: 'Nile Retail Group', type: 'Retail', contact: 'Sara Ali', status: 'Active', value: '$78K', deals: '5 deals', barWidth: '15%', barColor: 'bg-red-500' },
 ];
-"use client";
-
-import React from "react";
-import { useDashboard } from "@/hooks/use-dashboard";
 
 export default function DashboardPage() {
-  const { stats, recentActivity } = useDashboard();
+  const dashboardData = useDashboard(); // Hook preserved, but mock data handles UI for now.
 
   return (
     <div className="p-8 pb-24 lg:pb-8">
-
       <div className="mb-8">
         <h1 className="text-2xl font-bold text-white">Dashboard</h1>
         <p className="text-white/40 text-sm mt-1">Welcome back, Ahmed — here&apos;s what&apos;s happening today.</p>
@@ -138,6 +135,7 @@ export default function DashboardPage() {
                   contentStyle={{ backgroundColor: '#1a1a2e', borderColor: 'rgba(255,255,255,0.1)', borderRadius: '8px' }}
                   itemStyle={{ color: '#fff' }}
                   labelStyle={{ color: '#fff', fontWeight: '600' }}
+                  formatter={(value: any, name: any) => name === 'Revenue' ? [`${value}k`, name] : [value, name]}
                 />
                 <Area type="monotone" dataKey="revenue" stroke="#3b82f6" strokeWidth={3} fillOpacity={1} fill="url(#colorRevenue)" name="Revenue" />
                 <Area type="monotone" dataKey="leads" stroke="#8b5cf6" strokeWidth={3} fillOpacity={1} fill="url(#colorLeads)" name="Leads" />
@@ -270,19 +268,6 @@ export default function DashboardPage() {
                   <div className={`h-full rounded-full ${customer.barColor}`} style={{ width: customer.barWidth }}></div>
                 </div>
               </div>
-      {/* Recent Activity */}
-      <div className="rounded-2xl bg-white/5 backdrop-blur-xl border border-white/10 shadow-[0_8px_32px_0_rgba(0,0,0,0.37)] p-6">
-        <h2 className="text-sm font-semibold text-white/70 mb-4">
-          Recent Activity
-        </h2>
-        <div className="flex flex-col gap-3">
-          {recentActivity.map((item, i) => (
-            <div
-              key={i}
-              className="flex items-center gap-3 py-2 border-b border-white/[0.05] last:border-0"
-            >
-              <span className="w-1.5 h-1.5 rounded-full bg-white/20 shrink-0" />
-              <span className="text-sm text-white/50">{item}</span>
             </div>
           ))}
         </div>
