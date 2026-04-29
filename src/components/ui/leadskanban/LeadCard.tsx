@@ -1,12 +1,14 @@
 "use client";
 
 import { useDraggable } from "@dnd-kit/core";
+import { useRouter } from "next/navigation";
 import { Lead } from "@/types/lead";
-
-import { MoreHorizontal } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { ActionDropdown } from "@/components/ui/action-dropdown";
 
-export default function LeadCard({ item }: { item: Lead }) {
+
+export default function LeadCard({ item, onDelete }: { item: Lead; onDelete?: (id: string) => void }) {
+  const router = useRouter();
   const { attributes, listeners, setNodeRef, transform } =
     useDraggable({
       id: item.id,
@@ -63,9 +65,11 @@ export default function LeadCard({ item }: { item: Lead }) {
         <h3 className="font-bold text-[15px] text-gray-900 dark:text-white leading-tight">
           {item.title}
         </h3>
-        <button className="text-gray-400 hover:text-gray-600 dark:hover:text-gray-200">
-          <MoreHorizontal className="w-4 h-4" />
-        </button>
+        <ActionDropdown 
+          onEdit={() => router.push(`/leads/edit/${item.id}`)}
+          onDelete={() => onDelete?.(item.id)}
+          onDetails={() => router.push(`/leads/${item.id}`)}
+        />
       </div>
 
       <div className="flex items-center gap-3 mb-6">

@@ -12,9 +12,11 @@ import DealCard from "./DealCard";
 export default function Column({
   column,
   items,
+  onDelete,
 }: {
   column: { id: string; title: string };
   items: Deal[];
+  onDelete?: (id: string) => void;
 }) {
   const { setNodeRef } = useDroppable({
     id: column.id,
@@ -46,7 +48,7 @@ export default function Column({
 
       <div className="flex-1 space-y-3 mb-4">
         {items.map((item) => (
-          <DealCard key={item.id} item={item} />
+          <DealCard key={item.id} item={item} onDelete={onDelete} />
         ))}
       </div>
 
