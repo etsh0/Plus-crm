@@ -23,7 +23,7 @@ export default function CustomerTypesPage() {
   } = useCustomerTypes(initialCustomerTypes);
 
   return (
-    <div className="space-y-8 max-w-[1600px] mx-auto animate-in fade-in duration-500">
+    <div className="space-y-8 max-w-400 mx-auto animate-in fade-in duration-500">
       {/* Title and Action */}
       <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
         <div>
@@ -50,9 +50,6 @@ export default function CustomerTypesPage() {
               onChange={(e) => setSearchQuery(e.target.value)}
               className="w-full"
             />
-            <Button variant="secondary">
-              Filter
-            </Button>
           </div>
           
           <div className="flex items-center bg-gray-50 dark:bg-[#18181b] border border-gray-200 dark:border-white/10 rounded-lg overflow-hidden">

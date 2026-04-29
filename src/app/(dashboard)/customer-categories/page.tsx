@@ -57,9 +57,6 @@ export default function CustomerCategoriesPage() {
               onChange={(e) => setSearchQuery(e.target.value)}
               className="w-full"
             />
-            <Button variant="secondary">
-              Filter
-            </Button>
           </div>
           
           <div className="flex items-center bg-gray-50 dark:bg-[#18181b] border border-gray-200 dark:border-white/10 rounded-lg overflow-hidden">
