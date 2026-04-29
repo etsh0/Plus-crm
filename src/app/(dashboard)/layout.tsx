@@ -1,4 +1,5 @@
 import Sidebar from "@/components/Dashboard/Sidebar";
+import Topbar from "@/components/Dashboard/Topbar";
 import { Toaster } from 'sonner';
 
 export default function DashboardLayout({
@@ -7,22 +8,19 @@ export default function DashboardLayout({
   children: React.ReactNode;
 }) {
   return (
-    <div className="relative flex h-screen overflow-hidden bg-[#0A0A0A]">
+    <div className="relative flex h-screen overflow-hidden bg-[#f8fafc] dark:bg-[#111111] transition-colors duration-300">
       <Toaster 
-        theme="dark" 
+        theme="system" 
         position="top-center" 
-        toastOptions={{
-          style: {
-            background: '#18181b',
-            border: '1px solid rgba(255, 255, 255, 0.08)',
-            color: '#fff',
-          },
-        }}
+        richColors
       />
       <Sidebar />
-      <main className="flex-1 overflow-y-auto relative z-10 custom-scrollbar">
-        {children}
-      </main>
+      <div className="flex-1 flex flex-col min-w-0 overflow-hidden">
+        <Topbar />
+        <main className="flex-1 overflow-y-auto relative z-10 custom-scrollbar p-6 lg:p-8">
+          {children}
+        </main>
+      </div>
     </div>
   );
 }

@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import { ThemeToggle } from "./ThemeToggle";
 
 const navItems = [
   {
@@ -170,10 +171,10 @@ export default function Sidebar() {
   const pathname = usePathname();
 
   return (
-    <aside className="w-64 shrink-0 flex flex-col border-r border-white/10 bg-[#0A0A0A] h-screen sticky top-0 z-20 shadow-[8px_0_32px_0_rgba(0,0,0,0.3)]">
+    <aside className="w-64 shrink-0 flex flex-col border-r border-white/10 bg-white dark:bg-[#0A0A0A] h-screen sticky top-0 z-20 shadow-[8px_0_32px_0_rgba(0,0,0,0.3)] transition-colors duration-300">
       {/* Brand */}
       <div className="px-6 py-7 border-b border-white/6 shrink-0">
-        <span className="text-xl font-bold tracking-tight text-white select-none">
+        <span className="text-xl font-bold tracking-tight text-gray-900 dark:text-white select-none">
           PLUS <span className='bg-gradient-to-r from-fuchsia-400 via-violet-400 to-purple-400 bg-clip-text text-transparent'>CRM</span>
         </span>
       </div>
@@ -188,11 +189,11 @@ export default function Sidebar() {
               href={item.href}
               className={`flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium transition-all duration-200 ${
                 isActive
-                  ? "bg-white/10 text-white"
-                  : "text-white/40 hover:text-white hover:bg-white/5"
+                  ? "bg-gray-100 dark:bg-white/10 text-gray-900 dark:text-white"
+                  : "text-gray-500 dark:text-white/40 hover:text-gray-900 dark:hover:text-white hover:bg-gray-50 dark:hover:bg-white/5"
               }`}
             >
-              <span className={isActive ? "text-white" : "text-white/40"}>
+              <span className={isActive ? "text-gray-900 dark:text-white" : "text-gray-400 dark:text-white/40"}>
                 {item.icon}
               </span>
               {item.label}
@@ -201,36 +202,9 @@ export default function Sidebar() {
         })}
       </nav>
 
-      {/* Account footer */}
+      {/* Footer - Theme Toggle */}
       <div className="px-3 py-4 border-t border-white/6">
-        <Link
-          href="/account"
-          className={`flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium transition-all duration-200 ${
-            pathname === "/account"
-              ? "bg-white/10 text-white"
-              : "text-white/40 hover:text-white hover:bg-white/5"
-          }`}
-        >
-          <span
-            className={pathname === "/account" ? "text-white" : "text-white/40"}
-          >
-            <svg
-              width="18"
-              height="18"
-              fill="none"
-              viewBox="0 0 24 24"
-              stroke="currentColor"
-              strokeWidth={1.8}
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                d="M15.75 6a3.75 3.75 0 1 1-7.5 0 3.75 3.75 0 0 1 7.5 0ZM4.501 20.118a7.5 7.5 0 0 1 14.998 0A17.933 17.933 0 0 1 12 21.75c-2.676 0-5.216-.584-7.499-1.632Z"
-              />
-            </svg>
-          </span>
-          Account
-        </Link>
+        <ThemeToggle />
       </div>
     </aside>
   );
