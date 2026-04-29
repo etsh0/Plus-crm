@@ -1,6 +1,5 @@
 "use client";
 
-import React from "react";
 import { 
   Plus, 
   DollarSign,
@@ -9,11 +8,11 @@ import {
   Calendar,
 } from "lucide-react";
 import Link from "next/link";
-import { useDeals, Deal } from "@/hooks/use-deals";
+import { useDeals } from "@/hooks/use-deals";
 import { Button } from "@/components/ui/button";
 import { SearchInput } from "@/components/ui/search-input";
-import { StatusBadge } from "@/components/ui/status-badge";
 import { initialDeals } from "@/constants/mock-data";
+import KanbanBoard from "@/components/ui/dealskanban/kanbanBoard";
 
 export default function DealsPage() {
   const { searchQuery, setSearchQuery, filteredDeals } = useDeals(initialDeals);
@@ -26,7 +25,7 @@ export default function DealsPage() {
   ];
 
   return (
-    <div className="space-y-8 max-w-[1600px] mx-auto animate-in fade-in duration-500">
+    <div className="space-y-8 max-w-400 mx-auto animate-in fade-in duration-500">
       {/* Title and Action */}
       <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
         <div>
@@ -58,7 +57,7 @@ export default function DealsPage() {
       </div>
 
       {/* All Deals Section */}
-      <div className="bg-white dark:bg-white/5 border border-gray-200 dark:border-white/10 rounded-2xl shadow-sm p-6 md:p-8">
+      <div className="">
         <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-8">
           <div>
             <h2 className="text-xl font-bold text-gray-900 dark:text-white tracking-tight">All Deals</h2>
@@ -78,42 +77,8 @@ export default function DealsPage() {
         </div>
 
         {/* Deals List */}
-        <div className="flex flex-col gap-4">
-          {filteredDeals.map((deal) => (
-            <div key={deal.id} className="bg-gray-50/50 dark:bg-[#18181b]/50 hover:bg-gray-50 dark:hover:bg-[#18181b] border border-gray-100 dark:border-white/[0.04] hover:border-gray-200 dark:hover:border-white/10 rounded-xl p-6 transition-all group flex flex-col md:flex-row justify-between md:items-center gap-6">
-              
-              <div className="flex items-start md:items-center gap-5">
-                <div className="flex flex-col gap-2">
-                  <div className="flex flex-col md:flex-row md:items-center gap-1 md:gap-2">
-                    <span className="text-base font-bold text-gray-900 dark:text-white group-hover:text-violet-600 dark:group-hover:text-[#a855f7] transition-colors">{deal.title}</span>
-                  </div>
-                  <div className="text-sm text-gray-600 dark:text-white/60 font-medium">
-                    {deal.company}
-                  </div>
-                  
-                  <div className="flex flex-wrap items-center gap-3 mt-1 text-xs text-gray-400 dark:text-white/40">
-                    <StatusBadge status={deal.stage} />
-                    <span className="flex items-center gap-1"><span className="text-gray-400 dark:text-white/30">{deal.probability}</span> probability</span>
-                    <span className="flex items-center gap-1"><span className="text-gray-400 dark:text-white/30">Close:</span> {deal.closeDate}</span>
-                  </div>
-                </div>
-              </div>
-
-              {/* Right Side Info */}
-              <div className="flex items-center justify-between md:flex-row md:items-center gap-6 pt-4 md:pt-0 border-t border-gray-100 dark:border-white/5 md:border-t-0 mt-2 md:mt-0">
-                <div className="text-xl font-bold tracking-tight text-gray-900 dark:text-white">
-                  {deal.value}
-                </div>
-                <div className="flex items-center gap-3">
-                  <div className="w-10 h-10 rounded-full bg-white dark:bg-white/5 border border-gray-200 dark:border-white/10 flex items-center justify-center text-gray-900 dark:text-white text-sm font-bold shadow-sm">
-                    {deal.initials}
-                  </div>
-                  <div className="text-sm font-bold text-gray-600 dark:text-white/80 group-hover:text-gray-900 dark:group-hover:text-white transition-colors hidden sm:block">{deal.owner}</div>
-                </div>
-              </div>
-
-            </div>
-          ))}
+        <div className="">
+          <KanbanBoard />
         </div>
       </div>
     </div>

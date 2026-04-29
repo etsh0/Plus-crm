@@ -1,6 +1,5 @@
 "use client";
 
-import React from "react";
 import { 
   Plus, 
   Target,
@@ -9,11 +8,11 @@ import {
   Users,
 } from "lucide-react";
 import Link from "next/link";
-import { useLeads, Lead } from "@/hooks/use-leads";
+import { useLeads } from "@/hooks/use-leads";
 import { Button } from "@/components/ui/button";
-import { SearchInput } from "@/components/ui/search-input";
-import { StatusBadge } from "@/components/ui/status-badge";
 import { initialLeads } from "@/constants/mock-data";
+import KanbanBoard from "@/components/ui/leadskanban/kanbanBoard";
+import { SearchInput } from "@/components/ui/search-input";
 
 export default function LeadsPage() {
   const { searchQuery, setSearchQuery, filteredLeads } = useLeads(initialLeads);
@@ -26,7 +25,7 @@ export default function LeadsPage() {
   ];
 
   return (
-    <div className="space-y-8 max-w-[1600px] mx-auto animate-in fade-in duration-500">
+    <div className="space-y-8 max-w-400 mx-auto animate-in fade-in duration-500">
       {/* Title and Action */}
       <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
         <div>
@@ -58,11 +57,11 @@ export default function LeadsPage() {
       </div>
 
       {/* All Leads Section */}
-      <div className="bg-white dark:bg-white/5 border border-gray-200 dark:border-white/10 rounded-2xl shadow-sm p-6 md:p-8">
+      <div className="">
         <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-8">
           <div>
             <h2 className="text-xl font-bold text-gray-900 dark:text-white tracking-tight">All Leads</h2>
-            <p className="text-sm text-gray-500 dark:text-white/40 mt-1">Track and manage your potential customers</p>
+            <p className="text-sm text-gray-500 dark:text-white/40 mt-1">Track and manage your sales opportunities</p>
           </div>
           <div className="flex items-center gap-3">
             <SearchInput 
@@ -76,53 +75,7 @@ export default function LeadsPage() {
             </Button>
           </div>
         </div>
-
-        {/* Leads List */}
-        <div className="flex flex-col gap-4">
-          {filteredLeads.map((lead) => (
-            <div key={lead.id} className="bg-gray-50/50 dark:bg-[#18181b]/50 hover:bg-gray-50 dark:hover:bg-[#18181b] border border-gray-100 dark:border-white/[0.04] hover:border-gray-200 dark:hover:border-white/10 rounded-xl p-6 transition-all group flex flex-col md:flex-row justify-between md:items-center gap-6">
-              
-              <div className="flex items-start md:items-center gap-5">
-                {/* Avatar */}
-                <div className="w-12 h-12 rounded-full bg-white dark:bg-white/5 border border-gray-200 dark:border-white/10 flex items-center justify-center text-gray-900 dark:text-white font-bold shrink-0 text-lg shadow-sm">
-                  {lead.initials}
-                </div>
-                
-                {/* Info */}
-                <div className="flex flex-col gap-2">
-                  <div className="flex flex-col md:flex-row md:items-center gap-1 md:gap-2">
-                    <span className="text-base font-bold text-gray-900 dark:text-white group-hover:text-violet-600 dark:group-hover:text-[#a855f7] transition-colors">{lead.name}</span>
-                    <span className="text-sm text-gray-400 dark:text-white/50 hidden md:block">•</span>
-                    <span className="text-sm text-gray-500 dark:text-white/50">{lead.email}</span>
-                  </div>
-                  <div className="text-sm text-gray-600 dark:text-white/60 font-medium">
-                    {lead.company}
-                  </div>
-                  
-                  <div className="flex flex-wrap items-center gap-3 mt-1 text-xs text-gray-400 dark:text-white/40">
-                    <StatusBadge status={lead.status} />
-                    <span className="flex items-center gap-1"><span className="text-gray-400 dark:text-white/30">Source:</span> {lead.source}</span>
-                    <span className="flex items-center gap-1"><span className="text-gray-400 dark:text-white/30">Created:</span> {lead.created}</span>
-                  </div>
-                </div>
-              </div>
-
-              {/* Right Side Info */}
-              <div className="flex items-center justify-between md:flex-col md:items-end gap-3 md:gap-2 pt-4 md:pt-0 border-t border-gray-100 dark:border-white/5 md:border-t-0 mt-2 md:mt-0">
-                <div className={`text-xl font-bold tracking-tight ${
-                  lead.score >= 80 ? 'text-emerald-600 dark:text-emerald-400' : 'text-amber-600 dark:text-amber-400'
-                }`}>
-                  {lead.score}<span className="text-sm text-gray-400 dark:text-white/30">/100</span>
-                </div>
-                <div className="text-right">
-                  <div className="text-sm font-bold text-gray-900 dark:text-white group-hover:text-gray-900 dark:group-hover:text-white/90 transition-colors">{lead.owner}</div>
-                  <div className="text-[11px] font-bold text-gray-400 dark:text-white/30 uppercase tracking-widest mt-0.5">Owner</div>
-                </div>
-              </div>
-
-            </div>
-          ))}
-        </div>
+        <KanbanBoard />
       </div>
     </div>
   );
