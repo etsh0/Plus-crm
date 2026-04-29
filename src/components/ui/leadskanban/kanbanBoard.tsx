@@ -1,15 +1,10 @@
 "use client";
 
-import {
-  DndContext,
-  DragEndEvent,
-  closestCorners,
-} from "@dnd-kit/core";
+import { DndContext, DragEndEvent, closestCorners } from "@dnd-kit/core";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Lead, LeadStatus } from "@/types/lead";
 import Column from "./Column";
-
 
 const initialData: Lead[] = [
   { id: "1", title: "Ahmed Lead", status: "new" },
@@ -27,6 +22,20 @@ const columns: { id: LeadStatus; title: string }[] = [
 export default function KanbanBoard() {
   const [items, setItems] = useState<Lead[]>(initialData);
 
+  useEffect(() => {
+    const savedLeads = localStorage.getItem("leads");
+    if (savedLeads) {
+      const parsedLeads = JSON.parse(savedLeads);
+      const combined = [...initialData];
+      parsedLeads.forEach((l: Lead) => {
+        if (!combined.find((c) => c.id === l.id)) {
+          combined.push(l);
+        }
+      });
+      setItems(combined);
+    }
+  }, []);
+
   const handleDragEnd = (event: DragEndEvent) => {
     const { active, over } = event;
 
@@ -34,13 +43,22 @@ export default function KanbanBoard() {
 
     const newStatus = over.id as LeadStatus;
 
-    setItems((prev) =>
-      prev.map((item) =>
-        item.id === active.id
-          ? { ...item, status: newStatus }
-          : item
-      )
-    );
+    setItems((prev) => {
+      const updated = prev.map((item) =>
+        item.id === active.id ? { ...item, status: newStatus } : item,
+      );
+
+      // Persist to localStorage if it exists
+      const savedLeads = localStorage.getItem("leads");
+      if (savedLeads) {
+        const parsedLeads = JSON.parse(savedLeads);
+        const updatedSaved = parsedLeads.map((l: any) =>
+          l.id === active.id ? { ...l, status: newStatus } : l,
+        );
+        localStorage.setItem("leads", JSON.stringify(updatedSaved));
+      }
+      return updated;
+    });
   };
 
   return (

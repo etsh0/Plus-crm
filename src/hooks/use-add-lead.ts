@@ -21,8 +21,15 @@ export const useAddLead = () => {
   };
 
   const handleSave = () => {
-    // Logic for saving would go here
-    console.log("Saving lead:", formData);
+    const existingLeads = JSON.parse(localStorage.getItem("leads") || "[]");
+    const newLead = {
+      ...formData,
+      id: Math.random().toString(36).substr(2, 9),
+      title: `${formData.firstName} ${formData.lastName}`,
+      status: formData.status || "new",
+    };
+    localStorage.setItem("leads", JSON.stringify([...existingLeads, newLead]));
+    console.log("Saving lead:", newLead);
     toast.success("Lead saved successfully!");
   };
 

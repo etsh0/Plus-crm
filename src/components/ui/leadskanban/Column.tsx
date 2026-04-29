@@ -11,9 +11,11 @@ import LeadCard from "./LeadCard";
 export default function Column({
   column,
   items,
+  onDelete,
 }: {
   column: { id: string; title: string };
   items: Lead[];
+  onDelete?: (id: string) => void;
 }) {
   const { setNodeRef } = useDroppable({
     id: column.id,

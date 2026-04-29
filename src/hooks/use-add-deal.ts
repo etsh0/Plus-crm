@@ -19,7 +19,15 @@ export const useAddDeal = () => {
   };
 
   const handleSave = () => {
-    console.log("Saving deal:", formData);
+    const existingDeals = JSON.parse(localStorage.getItem("deals") || "[]");
+    const newDeal = {
+      ...formData,
+      id: Math.random().toString(36).substr(2, 9),
+      status: formData.stage || "prospect",
+      value: parseFloat(formData.value) || 0,
+    };
+    localStorage.setItem("deals", JSON.stringify([...existingDeals, newDeal]));
+    console.log("Saving deal:", newDeal);
     toast.success("Deal saved successfully!");
   };
 

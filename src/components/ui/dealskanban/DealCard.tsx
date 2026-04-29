@@ -1,11 +1,14 @@
 "use client";
 
 import { useDraggable } from "@dnd-kit/core";
-import { MoreHorizontal, Building2, Calendar } from "lucide-react";
+import { useRouter } from "next/navigation";
+import { Building2, Calendar } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { Deal } from "@/types/deal";
+import { ActionDropdown } from "@/components/ui/action-dropdown";
 
-export default function DealCard({ item }: { item: Deal }) {
+export default function DealCard({ item, onDelete }: { item: Deal; onDelete?: (id: string) => void }) {
+  const router = useRouter();
   const { attributes, listeners, setNodeRef, transform } =
     useDraggable({
       id: item.id,
@@ -69,9 +72,11 @@ export default function DealCard({ item }: { item: Deal }) {
         <h3 className="font-bold text-[15px] text-gray-900 dark:text-white leading-tight">
           {item.title}
         </h3>
-        <button className="text-gray-400 hover:text-gray-600 dark:hover:text-gray-200">
-          <MoreHorizontal className="w-4 h-4" />
-        </button>
+        <ActionDropdown 
+          onEdit={() => router.push(`/deals/edit/${item.id}`)}
+          onDelete={() => onDelete?.(item.id)}
+          onDetails={() => router.push(`/deals/${item.id}`)}
+        />
       </div>
 
       {/* Company/Organization */}
