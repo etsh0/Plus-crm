@@ -2,43 +2,21 @@
 
 import Link from "next/link";
 import Image from "next/image";
-import { useState } from "react";
 import bgImg from "@/assets/light-pillar-1776934798991.png";
-import * as zod from "zod";
-import { Controller, useForm } from "react-hook-form";
-import { zodResolver } from "@hookform/resolvers/zod";
-
-const schema = zod.object({
-  username: zod.string().min(1, "Username is required"),
-  email: zod.string().email("Email is not valid"),
-  password: zod.string().regex(
-    /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/,
-    "Min 8 chars, with uppercase, lowercase, number & special character"
-  ),
-});
-
-type RegisterFormData = zod.infer<typeof schema>;
+import { Controller } from "react-hook-form";
+import { useRegister } from "@/hooks/use-register";
 
 export default function RegisterForm() {
   const {
     handleSubmit,
     control,
-    formState: { errors },
-  } = useForm<RegisterFormData>({
-    defaultValues: {
-      username: "",
-      email: "",
-      password: "",
-    },
-    resolver: zodResolver(schema),
-  });
-
-  function onSubmit(data: RegisterFormData) {
-    console.log("Form submitted:", data);
-    // TODO: call your register API here
-  }
-  const [showPassword, setShowPassword] = useState(false);
-  const [focused, setFocused] = useState<string | null>(null);
+    errors,
+    onSubmit,
+    showPassword,
+    setShowPassword,
+    focused,
+    setFocused,
+  } = useRegister();
 
   return (
     <main className="relative min-h-screen overflow-hidden">

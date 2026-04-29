@@ -2,39 +2,21 @@
 
 import Link from "next/link";
 import Image from "next/image";
-import { useState } from "react";
-import { useRouter } from "next/navigation";
 import bgImg from "@/assets/light-pillar-1776934798991.png";
-import * as zod from "zod";
-import { Controller, useForm } from "react-hook-form";
-import { zodResolver } from "@hookform/resolvers/zod";
-
-const schema = zod.object({
-  email: zod.string().email("Email is not valid"),
-  password: zod.string().min(1, "Password is required"),
-});
-
-type LoginFormData = zod.infer<typeof schema>;
+import { Controller } from "react-hook-form";
+import { useLogin } from "@/hooks/use-login";
 
 export default function LoginForm() {
   const {
     handleSubmit,
     control,
-    formState: { errors },
-  } = useForm<LoginFormData>({
-    defaultValues: { email: "", password: "" },
-    resolver: zodResolver(schema),
-  });
-
-  const router = useRouter();
-
-  function onSubmit(data: LoginFormData) {
-    console.log("Login submitted:", data);
-    // TODO: replace with real API call
-    router.push("/dashboard");
-  }
-  const [showPassword, setShowPassword] = useState(false);
-  const [focused, setFocused] = useState<string | null>(null);
+    errors,
+    onSubmit,
+    showPassword,
+    setShowPassword,
+    focused,
+    setFocused,
+  } = useLogin();
 
   return (
     <main className="relative min-h-screen overflow-hidden">
