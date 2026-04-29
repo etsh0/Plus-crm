@@ -3,6 +3,7 @@
 import React, { useState } from "react";
 import Link from "next/link";
 import { useRouter, useSearchParams } from "next/navigation";
+import { toast } from "sonner";
 
 export default function AddCustomerPage() {
   const router = useRouter();
@@ -98,7 +99,7 @@ export default function AddCustomerPage() {
         return c;
       });
       localStorage.setItem("crm_customers", JSON.stringify(updatedCustomers));
-      alert("Customer updated successfully");
+      toast.success("Customer updated successfully");
     } else {
       // CREATE NEW
       const newCustomer = {
@@ -123,7 +124,7 @@ export default function AddCustomerPage() {
         "crm_customers",
         JSON.stringify([...savedCustomers, newCustomer]),
       );
-      alert("Customer created successfully");
+      toast.success("Customer created successfully");
     }
 
     router.push("/customers");
@@ -139,18 +140,18 @@ export default function AddCustomerPage() {
   };
 
   return (
-    <div className="min-h-screen bg-[#0f0f11] text-white p-4 lg:p-8">
+    <div className="max-w-5xl mx-auto animate-in fade-in duration-500">
       <form
         onSubmit={handleSubmit}
-        className="max-w-5xl mx-auto space-y-6 pb-20"
+        className="space-y-6 pb-20"
       >
         {/* Header Section */}
         <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-8">
           <div>
-            <h1 className="text-2xl font-bold tracking-tight">
+            <h1 className="text-2xl font-bold tracking-tight text-gray-900 dark:text-white">
               {editId ? "Edit Customer" : "Create New Customer"}
             </h1>
-            <p className="text-white/40 text-sm mt-1">
+            <p className="text-gray-500 dark:text-white/40 text-sm mt-1">
               {editId
                 ? "Update existing customer details and contact information."
                 : "Register a new company and its contact persons in the system."}
@@ -159,7 +160,7 @@ export default function AddCustomerPage() {
           <div className="flex items-center gap-3">
             <Link
               href="/customers"
-              className="px-5 py-2.5 rounded-xl bg-white/5 border border-white/10 text-sm font-medium hover:bg-white/10 transition-all flex items-center gap-2"
+              className="px-5 py-2.5 rounded-xl bg-white dark:bg-white/5 border border-gray-200 dark:border-white/10 text-sm font-medium text-gray-700 dark:text-white hover:bg-gray-50 dark:hover:bg-white/10 transition-all flex items-center gap-2"
             >
               <svg
                 width="18"
@@ -179,7 +180,7 @@ export default function AddCustomerPage() {
             </Link>
             <button
               type="submit"
-              className="px-6 py-2.5 rounded-xl bg-[#a855f7] text-sm font-medium hover:bg-[#9333ea] transition-all shadow-lg shadow-blue-600/20 flex items-center gap-2 cursor-pointer"
+              className="px-6 py-2.5 rounded-xl bg-[#a855f7] text-white text-sm font-bold hover:bg-[#9333ea] transition-all shadow-lg shadow-purple-500/20 flex items-center gap-2 cursor-pointer"
             >
               <svg
                 width="18"
@@ -202,8 +203,8 @@ export default function AddCustomerPage() {
 
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
           {/* Section 1: Customer Basic Information */}
-          <div className="bg-[#18181b] border border-white/[0.08] rounded-2xl p-6 space-y-5 shadow-sm">
-            <div className="flex items-center gap-3 pb-2 border-b border-white/[0.04]">
+          <div className="bg-white dark:bg-[#18181b] border border-gray-200 dark:border-white/[0.08] rounded-2xl p-6 space-y-5 shadow-sm transition-colors duration-300">
+            <div className="flex items-center gap-3 pb-2 border-b border-gray-100 dark:border-white/[0.04]">
               <div className="p-2 rounded-lg bg-blue-500/10 text-blue-500">
                 <svg
                   width="20"
@@ -220,12 +221,12 @@ export default function AddCustomerPage() {
                   />
                 </svg>
               </div>
-              <h2 className="text-lg font-semibold">Basic Information</h2>
+              <h2 className="text-lg font-bold text-gray-900 dark:text-white">Basic Information</h2>
             </div>
 
             <div className="grid grid-cols-1 gap-4">
               <div className="space-y-1.5">
-                <label className="text-[11px] text-white/50 font-medium uppercase tracking-wider">
+                <label className="text-[11px] text-gray-500 dark:text-white/50 font-bold uppercase tracking-wider">
                   Company Name
                 </label>
                 <input
@@ -235,12 +236,12 @@ export default function AddCustomerPage() {
                   onChange={handleChange}
                   type="text"
                   placeholder="Enter company legal name"
-                  className="w-full bg-[#0f0f11] border border-white/5 rounded-xl px-4 py-3 text-sm outline-none focus:border-blue-500/50 focus:ring-1 focus:ring-blue-500/50 transition-all placeholder:text-white/20"
+                  className="w-full bg-gray-50 dark:bg-[#0f0f11] border border-gray-200 dark:border-white/5 rounded-xl px-4 py-3 text-sm text-gray-900 dark:text-white outline-none focus:border-blue-500/50 focus:ring-1 focus:ring-blue-500/50 transition-all placeholder:text-gray-400 dark:placeholder:text-white/20"
                 />
               </div>
               <div className="grid grid-cols-2 gap-4">
                 <div className="space-y-1.5">
-                  <label className="text-[11px] text-white/50 font-medium uppercase tracking-wider">
+                  <label className="text-[11px] text-gray-500 dark:text-white/50 font-bold uppercase tracking-wider">
                     Company Email
                   </label>
                   <input
@@ -250,11 +251,11 @@ export default function AddCustomerPage() {
                     onChange={handleChange}
                     type="email"
                     placeholder="corp@company.com"
-                    className="w-full bg-[#0f0f11] border border-white/5 rounded-xl px-4 py-3 text-sm outline-none focus:border-blue-500/50 focus:ring-1 focus:ring-blue-500/50 transition-all placeholder:text-white/20"
+                    className="w-full bg-gray-50 dark:bg-[#0f0f11] border border-gray-200 dark:border-white/5 rounded-xl px-4 py-3 text-sm text-gray-900 dark:text-white outline-none focus:border-blue-500/50 focus:ring-1 focus:ring-blue-500/50 transition-all placeholder:text-gray-400 dark:placeholder:text-white/20"
                   />
                 </div>
                 <div className="space-y-1.5">
-                  <label className="text-[11px] text-white/50 font-medium uppercase tracking-wider">
+                  <label className="text-[11px] text-gray-500 dark:text-white/50 font-bold uppercase tracking-wider">
                     Company Phone
                   </label>
                   <input
@@ -264,12 +265,12 @@ export default function AddCustomerPage() {
                     onChange={handleChange}
                     type="tel"
                     placeholder="+1 (000) 000-0000"
-                    className="w-full bg-[#0f0f11] border border-white/5 rounded-xl px-4 py-3 text-sm outline-none focus:border-blue-500/50 focus:ring-1 focus:ring-blue-500/50 transition-all placeholder:text-white/20"
+                    className="w-full bg-gray-50 dark:bg-[#0f0f11] border border-gray-200 dark:border-white/5 rounded-xl px-4 py-3 text-sm text-gray-900 dark:text-white outline-none focus:border-blue-500/50 focus:ring-1 focus:ring-blue-500/50 transition-all placeholder:text-gray-400 dark:placeholder:text-white/20"
                   />
                 </div>
               </div>
               <div className="space-y-1.5">
-                <label className="text-[11px] text-white/50 font-medium uppercase tracking-wider">
+                <label className="text-[11px] text-gray-500 dark:text-white/50 font-bold uppercase tracking-wider">
                   Tax ID / Commercial Registration
                 </label>
                 <input
@@ -278,15 +279,15 @@ export default function AddCustomerPage() {
                   onChange={handleChange}
                   type="text"
                   placeholder="VAT/TAX Registration Number"
-                  className="w-full bg-[#0f0f11] border border-white/5 rounded-xl px-4 py-3 text-sm outline-none focus:border-blue-500/50 focus:ring-1 focus:ring-blue-500/50 transition-all placeholder:text-white/20"
+                  className="w-full bg-gray-50 dark:bg-[#0f0f11] border border-gray-200 dark:border-white/5 rounded-xl px-4 py-3 text-sm text-gray-900 dark:text-white outline-none focus:border-blue-500/50 focus:ring-1 focus:ring-blue-500/50 transition-all placeholder:text-gray-400 dark:placeholder:text-white/20"
                 />
               </div>
             </div>
           </div>
 
           {/* Section 2: Contact Person */}
-          <div className="bg-[#18181b] border border-white/[0.08] rounded-2xl p-6 space-y-5 shadow-sm">
-            <div className="flex items-center gap-3 pb-2 border-b border-white/[0.04]">
+          <div className="bg-white dark:bg-[#18181b] border border-gray-200 dark:border-white/[0.08] rounded-2xl p-6 space-y-5 shadow-sm transition-colors duration-300">
+            <div className="flex items-center gap-3 pb-2 border-b border-gray-100 dark:border-white/[0.04]">
               <div className="p-2 rounded-lg bg-emerald-500/10 text-emerald-500">
                 <svg
                   width="20"
@@ -303,13 +304,13 @@ export default function AddCustomerPage() {
                   />
                 </svg>
               </div>
-              <h2 className="text-lg font-semibold">Contact Person</h2>
+              <h2 className="text-lg font-bold text-gray-900 dark:text-white">Contact Person</h2>
             </div>
 
             <div className="grid grid-cols-1 gap-4">
               <div className="grid grid-cols-2 gap-4">
                 <div className="space-y-1.5">
-                  <label className="text-[11px] text-white/50 font-medium uppercase tracking-wider">
+                  <label className="text-[11px] text-gray-500 dark:text-white/50 font-bold uppercase tracking-wider">
                     Full Name
                   </label>
                   <input
@@ -319,11 +320,11 @@ export default function AddCustomerPage() {
                     onChange={handleChange}
                     type="text"
                     placeholder="Primary contact name"
-                    className="w-full bg-[#0f0f11] border border-white/5 rounded-xl px-4 py-3 text-sm outline-none focus:border-emerald-500/50 focus:ring-1 focus:ring-emerald-500/50 transition-all placeholder:text-white/20"
+                    className="w-full bg-gray-50 dark:bg-[#0f0f11] border border-gray-200 dark:border-white/5 rounded-xl px-4 py-3 text-sm text-gray-900 dark:text-white outline-none focus:border-emerald-500/50 focus:ring-1 focus:ring-emerald-500/50 transition-all placeholder:text-gray-400 dark:placeholder:text-white/20"
                   />
                 </div>
                 <div className="space-y-1.5">
-                  <label className="text-[11px] text-white/50 font-medium uppercase tracking-wider">
+                  <label className="text-[11px] text-gray-500 dark:text-white/50 font-bold uppercase tracking-wider">
                     Job Title
                   </label>
                   <input
@@ -332,13 +333,13 @@ export default function AddCustomerPage() {
                     onChange={handleChange}
                     type="text"
                     placeholder="e.g. Sales Manager"
-                    className="w-full bg-[#0f0f11] border border-white/5 rounded-xl px-4 py-3 text-sm outline-none focus:border-emerald-500/50 focus:ring-1 focus:ring-emerald-500/50 transition-all placeholder:text-white/20"
+                    className="w-full bg-gray-50 dark:bg-[#0f0f11] border border-gray-200 dark:border-white/5 rounded-xl px-4 py-3 text-sm text-gray-900 dark:text-white outline-none focus:border-emerald-500/50 focus:ring-1 focus:ring-emerald-500/50 transition-all placeholder:text-gray-400 dark:placeholder:text-white/20"
                   />
                 </div>
               </div>
               <div className="grid grid-cols-2 gap-4">
                 <div className="space-y-1.5">
-                  <label className="text-[11px] text-white/50 font-medium uppercase tracking-wider">
+                  <label className="text-[11px] text-gray-500 dark:text-white/50 font-bold uppercase tracking-wider">
                     Mobile Number
                   </label>
                   <input
@@ -347,11 +348,11 @@ export default function AddCustomerPage() {
                     onChange={handleChange}
                     type="tel"
                     placeholder="+1 (000) 000-0000"
-                    className="w-full bg-[#0f0f11] border border-white/5 rounded-xl px-4 py-3 text-sm outline-none focus:border-emerald-500/50 focus:ring-1 focus:ring-emerald-500/50 transition-all placeholder:text-white/20"
+                    className="w-full bg-gray-50 dark:bg-[#0f0f11] border border-gray-200 dark:border-white/5 rounded-xl px-4 py-3 text-sm text-gray-900 dark:text-white outline-none focus:border-emerald-500/50 focus:ring-1 focus:ring-emerald-500/50 transition-all placeholder:text-gray-400 dark:placeholder:text-white/20"
                   />
                 </div>
                 <div className="space-y-1.5">
-                  <label className="text-[11px] text-white/50 font-medium uppercase tracking-wider">
+                  <label className="text-[11px] text-gray-500 dark:text-white/50 font-bold uppercase tracking-wider">
                     Direct Email
                   </label>
                   <input
@@ -360,7 +361,7 @@ export default function AddCustomerPage() {
                     onChange={handleChange}
                     type="email"
                     placeholder="contact@email.com"
-                    className="w-full bg-[#0f0f11] border border-white/5 rounded-xl px-4 py-3 text-sm outline-none focus:border-emerald-500/50 focus:ring-1 focus:ring-emerald-500/50 transition-all placeholder:text-white/20"
+                    className="w-full bg-gray-50 dark:bg-[#0f0f11] border border-gray-200 dark:border-white/5 rounded-xl px-4 py-3 text-sm text-gray-900 dark:text-white outline-none focus:border-emerald-500/50 focus:ring-1 focus:ring-emerald-500/50 transition-all placeholder:text-gray-400 dark:placeholder:text-white/20"
                   />
                 </div>
               </div>
@@ -368,8 +369,8 @@ export default function AddCustomerPage() {
           </div>
 
           {/* Section 3: Address Information */}
-          <div className="bg-[#18181b] border border-white/[0.08] rounded-2xl p-6 space-y-5 shadow-sm">
-            <div className="flex items-center gap-3 pb-2 border-b border-white/[0.04]">
+          <div className="bg-white dark:bg-[#18181b] border border-gray-200 dark:border-white/[0.08] rounded-2xl p-6 space-y-5 shadow-sm transition-colors duration-300">
+            <div className="flex items-center gap-3 pb-2 border-b border-gray-100 dark:border-white/[0.04]">
               <div className="p-2 rounded-lg bg-orange-500/10 text-orange-500">
                 <svg
                   width="20"
@@ -392,12 +393,12 @@ export default function AddCustomerPage() {
                   />
                 </svg>
               </div>
-              <h2 className="text-lg font-semibold">Address Information</h2>
+              <h2 className="text-lg font-bold text-gray-900 dark:text-white">Address Information</h2>
             </div>
 
             <div className="grid grid-cols-1 gap-4">
               <div className="space-y-1.5">
-                <label className="text-[11px] text-white/50 font-medium uppercase tracking-wider">
+                <label className="text-[11px] text-gray-500 dark:text-white/50 font-bold uppercase tracking-wider">
                   City
                 </label>
                 <input
@@ -407,11 +408,11 @@ export default function AddCustomerPage() {
                   onChange={handleChange}
                   type="text"
                   placeholder="e.g. New York, London"
-                  className="w-full bg-[#0f0f11] border border-white/5 rounded-xl px-4 py-3 text-sm outline-none focus:border-orange-500/50 focus:ring-1 focus:ring-orange-500/50 transition-all placeholder:text-white/20"
+                  className="w-full bg-gray-50 dark:bg-[#0f0f11] border border-gray-200 dark:border-white/5 rounded-xl px-4 py-3 text-sm text-gray-900 dark:text-white outline-none focus:border-orange-500/50 focus:ring-1 focus:ring-orange-500/50 transition-all placeholder:text-gray-400 dark:placeholder:text-white/20"
                 />
               </div>
               <div className="space-y-1.5">
-                <label className="text-[11px] text-white/50 font-medium uppercase tracking-wider">
+                <label className="text-[11px] text-gray-500 dark:text-white/50 font-bold uppercase tracking-wider">
                   Full Detailed Address
                 </label>
                 <input
@@ -421,15 +422,15 @@ export default function AddCustomerPage() {
                   onChange={handleChange}
                   type="text"
                   placeholder="Street name, Building No, Office No"
-                  className="w-full bg-[#0f0f11] border border-white/5 rounded-xl px-4 py-3 text-sm outline-none focus:border-orange-500/50 focus:ring-1 focus:ring-orange-500/50 transition-all placeholder:text-white/20"
+                  className="w-full bg-gray-50 dark:bg-[#0f0f11] border border-gray-200 dark:border-white/5 rounded-xl px-4 py-3 text-sm text-gray-900 dark:text-white outline-none focus:border-orange-500/50 focus:ring-1 focus:ring-orange-500/50 transition-all placeholder:text-gray-400 dark:placeholder:text-white/20"
                 />
               </div>
             </div>
           </div>
 
           {/* Section 4: Credit Classification */}
-          <div className="bg-[#18181b] border border-white/[0.08] rounded-2xl p-6 space-y-5 shadow-sm">
-            <div className="flex items-center gap-3 pb-2 border-b border-white/[0.04]">
+          <div className="bg-white dark:bg-[#18181b] border border-gray-200 dark:border-white/[0.08] rounded-2xl p-6 space-y-5 shadow-sm transition-colors duration-300">
+            <div className="flex items-center gap-3 pb-2 border-b border-gray-100 dark:border-white/[0.04]">
               <div className="p-2 rounded-lg bg-purple-500/10 text-purple-500">
                 <svg
                   width="20"
@@ -446,13 +447,13 @@ export default function AddCustomerPage() {
                   />
                 </svg>
               </div>
-              <h2 className="text-lg font-semibold">Credit Classification</h2>
+              <h2 className="text-lg font-bold text-gray-900 dark:text-white">Credit Classification</h2>
             </div>
 
             <div className="grid grid-cols-1 gap-4">
               <div className="grid grid-cols-2 gap-4">
                 <div className="space-y-1.5">
-                  <label className="text-[11px] text-white/50 font-medium uppercase tracking-wider">
+                  <label className="text-[11px] text-gray-500 dark:text-white/50 font-bold uppercase tracking-wider">
                     Credit Limit ($)
                   </label>
                   <input
@@ -461,18 +462,18 @@ export default function AddCustomerPage() {
                     onChange={handleChange}
                     type="number"
                     placeholder="0.00"
-                    className="w-full bg-[#0f0f11] border border-white/5 rounded-xl px-4 py-3 text-sm outline-none focus:border-purple-500/50 focus:ring-1 focus:ring-purple-500/50 transition-all placeholder:text-white/20"
+                    className="w-full bg-gray-50 dark:bg-[#0f0f11] border border-gray-200 dark:border-white/5 rounded-xl px-4 py-3 text-sm text-gray-900 dark:text-white outline-none focus:border-purple-500/50 focus:ring-1 focus:ring-purple-500/50 transition-all placeholder:text-gray-400 dark:placeholder:text-white/20"
                   />
                 </div>
                 <div className="space-y-1.5">
-                  <label className="text-[11px] text-white/50 font-medium uppercase tracking-wider">
+                  <label className="text-[11px] text-gray-500 dark:text-white/50 font-bold uppercase tracking-wider">
                     Payment Terms
                   </label>
                   <select
                     name="paymentTerms"
                     value={formData.paymentTerms}
                     onChange={handleChange}
-                    className="w-full bg-[#0f0f11] border border-white/5 rounded-xl px-4 py-3 text-sm outline-none focus:border-purple-500/50 focus:ring-1 focus:ring-purple-500/50 transition-all appearance-none cursor-pointer text-white/70"
+                    className="w-full bg-gray-50 dark:bg-[#0f0f11] border border-gray-200 dark:border-white/5 rounded-xl px-4 py-3 text-sm text-gray-900 dark:text-white outline-none focus:border-purple-500/50 focus:ring-1 focus:ring-purple-500/50 transition-all appearance-none cursor-pointer placeholder:text-gray-400 dark:placeholder:text-white/20"
                   >
                     <option value="">Select terms</option>
                     <option value="Net 30">Net 30</option>
@@ -483,14 +484,14 @@ export default function AddCustomerPage() {
               </div>
               <div className="grid grid-cols-2 gap-4">
                 <div className="space-y-1.5">
-                  <label className="text-[11px] text-white/50 font-medium uppercase tracking-wider">
+                  <label className="text-[11px] text-gray-500 dark:text-white/50 font-bold uppercase tracking-wider">
                     Customer Category
                   </label>
                   <select
                     name="category"
                     value={formData.category}
                     onChange={handleChange}
-                    className="w-full bg-[#0f0f11] border border-white/5 rounded-xl px-4 py-3 text-sm outline-none focus:border-purple-500/50 focus:ring-1 focus:ring-purple-500/50 transition-all appearance-none cursor-pointer text-white/70"
+                    className="w-full bg-gray-50 dark:bg-[#0f0f11] border border-gray-200 dark:border-white/5 rounded-xl px-4 py-3 text-sm text-gray-900 dark:text-white outline-none focus:border-purple-500/50 focus:ring-1 focus:ring-purple-500/50 transition-all appearance-none cursor-pointer placeholder:text-gray-400 dark:placeholder:text-white/20"
                   >
                     <option value="General">General</option>
                     <option value="Enterprise">Enterprise</option>
@@ -499,7 +500,7 @@ export default function AddCustomerPage() {
                   </select>
                 </div>
                 <div className="space-y-1.5">
-                  <label className="text-[11px] text-white/50 font-medium uppercase tracking-wider">
+                  <label className="text-[11px] text-gray-500 dark:text-white/50 font-bold uppercase tracking-wider">
                     Rating
                   </label>
                   <div className="flex gap-2">
@@ -513,7 +514,7 @@ export default function AddCustomerPage() {
                         className={`flex-1 py-3 rounded-xl text-sm font-bold border transition-all ${
                           formData.rating === r
                             ? "bg-[#a855f7] border-[#a855f7] text-white shadow-lg shadow-[#a855f7]/20"
-                            : "bg-[#0f0f11] border-white/5 text-white/40 hover:border-white/10"
+                            : "bg-gray-50 dark:bg-[#0f0f11] border-gray-200 dark:border-white/5 text-gray-400 dark:text-white/40 hover:border-gray-300 dark:hover:border-white/10"
                         }`}
                       >
                         {r}
@@ -526,8 +527,8 @@ export default function AddCustomerPage() {
           </div>
 
           {/* Section 5: Additional Notes */}
-          <div className="bg-[#18181b] border border-white/[0.08] rounded-2xl p-6 space-y-5 shadow-sm col-span-1 lg:col-span-2">
-            <div className="flex items-center gap-3 pb-2 border-b border-white/[0.04]">
+          <div className="bg-white dark:bg-[#18181b] border border-gray-200 dark:border-white/[0.08] rounded-2xl p-6 space-y-5 shadow-sm col-span-1 lg:col-span-2 transition-colors duration-300">
+            <div className="flex items-center gap-3 pb-2 border-b border-gray-100 dark:border-white/[0.04]">
               <div className="p-2 rounded-lg bg-gray-500/10 text-gray-500">
                 <svg
                   width="20"
@@ -544,11 +545,11 @@ export default function AddCustomerPage() {
                   />
                 </svg>
               </div>
-              <h2 className="text-lg font-semibold">Additional Notes</h2>
+              <h2 className="text-lg font-bold text-gray-900 dark:text-white">Additional Notes</h2>
             </div>
 
             <div className="space-y-1.5">
-              <label className="text-[11px] text-white/50 font-medium uppercase tracking-wider">
+              <label className="text-[11px] text-gray-500 dark:text-white/50 font-bold uppercase tracking-wider">
                 Internal Notes
               </label>
               <textarea
@@ -557,7 +558,7 @@ export default function AddCustomerPage() {
                 onChange={handleChange}
                 rows={4}
                 placeholder="Add any specific instructions or internal comments regarding this customer..."
-                className="w-full bg-[#0f0f11] border border-white/5 rounded-xl px-4 py-3 text-sm outline-none focus:border-blue-500/50 focus:ring-1 focus:ring-blue-500/50 transition-all placeholder:text-white/20 resize-none"
+                className="w-full bg-gray-50 dark:bg-[#0f0f11] border border-gray-200 dark:border-white/5 rounded-xl px-4 py-3 text-sm text-gray-900 dark:text-white outline-none focus:border-blue-500/50 focus:ring-1 focus:ring-blue-500/50 transition-all placeholder:text-gray-400 dark:placeholder:text-white/20 resize-none"
               />
             </div>
           </div>

@@ -14,7 +14,7 @@ export const SearchInput: React.FC<SearchInputProps> = ({
   return (
     <div className={cn("relative max-w-xl", containerClassName)}>
       <svg
-        className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-white/30"
+        className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400 dark:text-white/30"
         fill="none"
         viewBox="0 0 24 24"
         stroke="currentColor"
@@ -29,7 +29,7 @@ export const SearchInput: React.FC<SearchInputProps> = ({
       <input
         type="text"
         className={cn(
-          "w-full bg-[#27272a]/50 border border-white/5 rounded-lg pl-9 pr-4 py-2 text-sm text-white placeholder-white/30 outline-none focus:border-white/20 transition-colors",
+          "w-full bg-gray-100 dark:bg-[#27272a]/50 border border-gray-200 dark:border-white/5 rounded-lg pl-9 pr-4 py-2 text-sm text-gray-900 dark:text-white placeholder-gray-400 dark:placeholder-white/30 outline-none focus:border-gray-300 dark:focus:border-white/20 transition-colors",
           className
         )}
         {...props}

@@ -33,7 +33,7 @@ const statusConfig: Record<string, { className: string }> = {
 
 export const StatusBadge: React.FC<StatusBadgeProps> = ({ status, className }) => {
   const config = statusConfig[status] || {
-    className: "bg-white/5 text-white/50 border-white/10",
+    className: "bg-gray-100 dark:bg-white/5 text-gray-500 dark:text-white/50 border-gray-200 dark:border-white/10",
   };
 
   return (

@@ -12,11 +12,11 @@ export default function ContactsPage() {
   const { search, setSearch, handleDelete, filteredContacts } = useContacts(initialContacts);
 
   return (
-    <div className="p-8 max-w-[1600px] mx-auto">
-      <div className="mb-8 flex items-center justify-between">
+    <div className="space-y-8 max-w-[1600px] mx-auto animate-in fade-in duration-500">
+      <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
         <div>
-          <h1 className="text-2xl font-bold text-white">Contacts</h1>
-          <p className="text-white/40 text-sm mt-1">
+          <h1 className="text-2xl font-bold text-gray-900 dark:text-white">Contacts</h1>
+          <p className="text-gray-500 dark:text-white/40 text-sm mt-1">
             Manage your professional network and leads
           </p>
         </div>
@@ -41,9 +41,9 @@ export default function ContactsPage() {
         </Button>
       </div>
 
-      <div className="rounded-xl bg-[#18181b] border border-white/[0.08] shadow-2xl overflow-hidden">
+      <div className="rounded-2xl bg-white dark:bg-white/5 border border-gray-200 dark:border-white/10 shadow-sm overflow-hidden transition-colors duration-300">
         {/* Toolbar */}
-        <div className="p-4 border-b border-white/[0.04]">
+        <div className="p-4 border-b border-gray-100 dark:border-white/5 bg-gray-50/50 dark:bg-white/5">
           <SearchInput
             placeholder="Search contacts by name, email, or company..."
             value={search}
@@ -52,50 +52,50 @@ export default function ContactsPage() {
         </div>
 
         {/* Table */}
-        <div className="overflow-x-auto [&::-webkit-scrollbar]:h-1.5 [&::-webkit-scrollbar-thumb]:bg-white/10 [&::-webkit-scrollbar-thumb]:rounded-full hover:[&::-webkit-scrollbar-thumb]:bg-white/20 [&::-webkit-scrollbar-track]:bg-white/[0.02] [&::-webkit-scrollbar-track]:rounded-full pb-2">
+        <div className="overflow-x-auto custom-scrollbar pb-2">
           <table className="w-full text-xs text-left whitespace-nowrap">
             <thead>
-              <tr className="border-b border-white/[0.04] bg-[#18181b]">
-                <th className="px-4 py-3 text-[11px] font-medium text-white/50 uppercase tracking-wider">
+              <tr className="border-b border-gray-100 dark:border-white/5 bg-gray-50/50 dark:bg-white/5">
+                <th className="px-6 py-4 text-[11px] font-bold text-gray-400 dark:text-white/30 uppercase tracking-wider">
                   Contact
                 </th>
-                <th className="px-4 py-3 text-[11px] font-medium text-white/50 uppercase tracking-wider">
+                <th className="px-6 py-4 text-[11px] font-bold text-gray-400 dark:text-white/30 uppercase tracking-wider">
                   Company
                 </th>
-                <th className="px-4 py-3 text-[11px] font-medium text-white/50 uppercase tracking-wider">
+                <th className="px-6 py-4 text-[11px] font-bold text-gray-400 dark:text-white/30 uppercase tracking-wider">
                   Contact Info
                 </th>
-                <th className="px-4 py-3 text-[11px] font-medium text-white/50 uppercase tracking-wider">
+                <th className="px-6 py-4 text-[11px] font-bold text-gray-400 dark:text-white/30 uppercase tracking-wider">
                   Location
                 </th>
-                <th className="px-4 py-3 text-[11px] font-medium text-white/50 uppercase tracking-wider">
+                <th className="px-6 py-4 text-[11px] font-bold text-gray-400 dark:text-white/30 uppercase tracking-wider">
                   Status
                 </th>
-                <th className="px-4 py-3 text-[11px] font-medium text-white/50 uppercase tracking-wider">
+                <th className="px-6 py-4 text-[11px] font-bold text-gray-400 dark:text-white/30 uppercase tracking-wider">
                   Last Contact
                 </th>
-                <th className="px-4 py-3 text-[11px] font-medium text-white/50 uppercase tracking-wider text-right">
+                <th className="px-6 py-4 text-[11px] font-bold text-gray-400 dark:text-white/30 uppercase tracking-wider text-right">
                   Actions
                 </th>
               </tr>
             </thead>
-            <tbody className="divide-y divide-white/[0.04]">
+            <tbody className="divide-y divide-gray-100 dark:divide-white/5">
               {filteredContacts.length > 0 ? (
                 filteredContacts.map((c) => (
                   <tr
                     key={c.id}
-                    className="hover:bg-white/[0.02] transition-colors"
+                    className="hover:bg-gray-50 dark:hover:bg-white/[0.02] transition-colors"
                   >
-                    <td className="px-4 py-3">
+                    <td className="px-6 py-4">
                       <div className="flex items-center gap-3">
                         {c.avatar ? (
                           <img
                             src={c.avatar}
                             alt={c.name}
-                            className="w-8 h-8 rounded-full object-cover border border-white/10"
+                            className="w-8 h-8 rounded-full object-cover border border-gray-200 dark:border-white/10"
                           />
                         ) : (
-                          <div className="w-8 h-8 rounded-full bg-[#a855f7]/20 border border-[#a855f7]/30 flex items-center justify-center text-[#a855f7] text-[10px] font-bold">
+                          <div className="w-8 h-8 rounded-full bg-violet-500/10 border border-violet-500/20 flex items-center justify-center text-violet-500 text-[10px] font-bold">
                             {c.name
                               .split(" ")
                               .map((n) => n[0])
@@ -105,19 +105,19 @@ export default function ContactsPage() {
                           </div>
                         )}
                         <div>
-                          <div className="font-medium text-white/90">
+                          <div className="font-semibold text-gray-900 dark:text-white">
                             {c.name}
                           </div>
-                          <div className="text-[10px] text-white/40 mt-0.5">
+                          <div className="text-[10px] text-gray-500 dark:text-white/40 mt-0.5">
                             {c.role}
                           </div>
                         </div>
                       </div>
                     </td>
-                    <td className="px-4 py-3">
-                      <div className="flex items-center gap-2 text-white/70">
+                    <td className="px-6 py-4">
+                      <div className="flex items-center gap-2 text-gray-600 dark:text-white/70">
                         <svg
-                          className="w-3.5 h-3.5 text-white/30"
+                          className="w-3.5 h-3.5 text-gray-400 dark:text-white/30"
                           fill="none"
                           viewBox="0 0 24 24"
                           stroke="currentColor"
@@ -132,8 +132,8 @@ export default function ContactsPage() {
                         {c.company}
                       </div>
                     </td>
-                    <td className="px-4 py-3">
-                      <div className="flex flex-col gap-1 text-[11px] text-white/50">
+                    <td className="px-6 py-4">
+                      <div className="flex flex-col gap-1 text-[11px] text-gray-500 dark:text-white/50">
                         <div className="flex items-center gap-1.5">
                           <svg
                             className="w-3 h-3"
@@ -168,10 +168,10 @@ export default function ContactsPage() {
                         </div>
                       </div>
                     </td>
-                    <td className="px-4 py-3">
-                      <div className="flex items-center gap-1.5 text-white/60 text-[11px]">
+                    <td className="px-6 py-4">
+                      <div className="flex items-center gap-1.5 text-gray-600 dark:text-white/60 text-[11px]">
                         <svg
-                          className="w-3.5 h-3.5 text-white/30"
+                          className="w-3.5 h-3.5 text-gray-400 dark:text-white/30"
                           fill="none"
                           viewBox="0 0 24 24"
                           stroke="currentColor"
@@ -192,13 +192,13 @@ export default function ContactsPage() {
                         {c.location}
                       </div>
                     </td>
-                    <td className="px-4 py-3">
+                    <td className="px-6 py-4">
                       <StatusBadge status={c.status} />
                     </td>
-                    <td className="px-4 py-3 text-white/50 text-[11px]">
+                    <td className="px-6 py-4 text-gray-500 dark:text-white/50 text-[11px]">
                       {c.lastContact}
                     </td>
-                    <td className="px-4 py-3 text-right">
+                    <td className="px-6 py-4 text-right">
                       <div className="flex items-center justify-end gap-2">
                         <Button asChild variant="secondary" size="sm">
                           <Link href={`/contacts/add?edit=${c.id}`}>
@@ -248,7 +248,7 @@ export default function ContactsPage() {
                 <tr>
                   <td
                     colSpan={7}
-                    className="px-4 py-8 text-center text-white/40"
+                    className="px-6 py-8 text-center text-gray-400 dark:text-white/40"
                   >
                     No contacts found matching your search.
                   </td>
