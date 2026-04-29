@@ -1,14 +1,11 @@
 "use client";
 
-import React from "react";
+import { LineChart } from "@/components/ui/LineChart";
+import { PieChart } from "@/components/ui/PieChart";
+import { PiplineChart } from "@/components/ui/PiplineChart";
 import { DollarSign, TrendingUp, Users } from "lucide-react";
-import { 
-  AreaChart, Area, 
-  PieChart, Pie, Cell, 
-  BarChart, Bar, 
-  CartesianGrid, ResponsiveContainer, Tooltip, XAxis, YAxis 
-} from "recharts";
-import { useDashboard } from "@/hooks/use-dashboard";
+import { Bar, BarChart, Cell, ResponsiveContainer, Tooltip, XAxis, YAxis } from "recharts";
+
 
 const stats = [
   { label: "Total Customers", value: "1,284", change: "+12%", up: true, icon:<Users className="w-5 h-5"/> },
@@ -60,7 +57,7 @@ const topCustomers = [
 ];
 
 export default function DashboardPage() {
-  const dashboardData = useDashboard(); // Hook preserved, but mock data handles UI for now.
+
 
   return (
     <div className="p-8 pb-24 lg:pb-8">
@@ -96,9 +93,9 @@ export default function DashboardPage() {
       </div>
 
       {/* Charts Row 1 */}
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-6">
+      <div className="grid grid-cols-1 mb-6">
         {/* Revenue & Leads Overview */}
-        <div className="lg:col-span-2 rounded-2xl bg-white/5 backdrop-blur-xl border border-white/10 shadow-[0_8px_32px_0_rgba(0,0,0,0.37)] p-6">
+        <div className="rounded-2xl bg-white/5 backdrop-blur-xl border border-white/10 shadow-[0_8px_32px_0_rgba(0,0,0,0.37)] p-6">
           <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-6 gap-4">
             <div>
               <h2 className="text-lg font-semibold text-white">Revenue & Leads Overview</h2>
@@ -116,74 +113,45 @@ export default function DashboardPage() {
             </div>
           </div>
           <div className="h-75 w-full">
-            <ResponsiveContainer width="100%" height="100%">
-              <AreaChart data={revenueData} margin={{ top: 10, right: 10, left: -20, bottom: 0 }}>
-                <defs>
-                  <linearGradient id="colorRevenue" x1="0" y1="0" x2="0" y2="1">
-                    <stop offset="5%" stopColor="#3b82f6" stopOpacity={0.3}/>
-                    <stop offset="95%" stopColor="#3b82f6" stopOpacity={0}/>
-                  </linearGradient>
-                  <linearGradient id="colorLeads" x1="0" y1="0" x2="0" y2="1">
-                    <stop offset="5%" stopColor="#8b5cf6" stopOpacity={0.3}/>
-                    <stop offset="95%" stopColor="#8b5cf6" stopOpacity={0}/>
-                  </linearGradient>
-                </defs>
-                <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="rgba(255,255,255,0.05)" />
-                <XAxis dataKey="name" axisLine={false} tickLine={false} tick={{ fill: 'rgba(255,255,255,0.4)', fontSize: 12 }} dy={10} />
-                <YAxis axisLine={false} tickLine={false} tick={{ fill: 'rgba(255,255,255,0.4)', fontSize: 12 }} />
-                <Tooltip
-                  contentStyle={{ backgroundColor: '#1a1a2e', borderColor: 'rgba(255,255,255,0.1)', borderRadius: '8px' }}
-                  itemStyle={{ color: '#fff' }}
-                  labelStyle={{ color: '#fff', fontWeight: '600' }}
-                  formatter={(value: any, name: any) => name === 'Revenue' ? [`${value}k`, name] : [value, name]}
-                />
-                <Area type="monotone" dataKey="revenue" stroke="#3b82f6" strokeWidth={3} fillOpacity={1} fill="url(#colorRevenue)" name="Revenue" />
-                <Area type="monotone" dataKey="leads" stroke="#8b5cf6" strokeWidth={3} fillOpacity={1} fill="url(#colorLeads)" name="Leads" />
-              </AreaChart>
-            </ResponsiveContainer>
+            <LineChart data={revenueData} />
+          </div>
+        </div>
+      </div>
+
+      {/* Customer Categories Row */}
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-6">
+        {/* Visual Distribution */}
+        <div className="rounded-2xl bg-white/5 backdrop-blur-xl border border-white/10 shadow-[0_8px_32px_0_rgba(0,0,0,0.37)] p-6">
+          <div className="mb-6">
+            <h2 className="text-lg font-semibold text-white">Visual Distribution</h2>
+          </div>
+          <div className="h-64 w-full">
+            <PieChart data={customerCategoriesData} />
           </div>
         </div>
 
-        {/* Customer Categories */}
+        {/* Customers per Category */}
         <div className="rounded-2xl bg-white/5 backdrop-blur-xl border border-white/10 shadow-[0_8px_32px_0_rgba(0,0,0,0.37)] p-6">
           <div className="mb-6">
-            <h2 className="text-lg font-semibold text-white">Customer Categories</h2>
-            <p className="text-sm text-white/40 mt-1">Distribution by type</p>
+            <h2 className="text-lg font-semibold text-white">Customers per Category</h2>
           </div>
-          <div className="h-50 w-full">
+          <div className="h-64 w-full">
             <ResponsiveContainer width="100%" height="100%">
-              <PieChart>
-                <Pie
-                  data={customerCategoriesData}
-                  cx="50%"
-                  cy="50%"
-                  innerRadius={60}
-                  outerRadius={80}
-                  paddingAngle={5}
-                  dataKey="value"
-                  stroke="none"
-                >
-                  {customerCategoriesData.map((entry, index) => (
-                    <Cell key={`cell-${index}`} fill={entry.color} />
-                  ))}
-                </Pie>
-                <Tooltip 
+              <BarChart data={customerCategoriesData} margin={{ top: 10, right: 10, left: -20, bottom: 0 }} barSize={32}>
+                <XAxis dataKey="name" axisLine={false} tickLine={false} tick={{ fill: 'rgba(255,255,255,0.4)', fontSize: 12 }} dy={10} tickFormatter={(value) => value.split(' ')[0]} />
+                <YAxis axisLine={false} tickLine={false} tick={{ fill: 'rgba(255,255,255,0.4)', fontSize: 12 }} />
+                <Tooltip
+                  cursor={{ fill: 'rgba(255,255,255,0.05)' }}
                   contentStyle={{ backgroundColor: '#1a1a2e', borderColor: 'rgba(255,255,255,0.1)', borderRadius: '8px' }}
                   itemStyle={{ color: '#fff' }}
                 />
-              </PieChart>
+                <Bar dataKey="value" radius={[4, 4, 0, 0]}>
+                  {customerCategoriesData.map((entry, index) => (
+                    <Cell key={`cell-${index}`} fill={entry.color} />
+                  ))}
+                </Bar>
+              </BarChart>
             </ResponsiveContainer>
-          </div>
-          <div className="grid grid-cols-1 gap-y-4 mt-6">
-            {customerCategoriesData.map((category) => (
-              <div key={category.name} className="flex items-center text-xs">
-                <span className="w-2.5 h-2.5 rounded-sm mr-2" style={{ backgroundColor: category.color }}></span>
-                <div className="flex items-center justify-between w-full">
-                  <span className="text-white/70">{category.name}</span>
-                  <strong className="text-white font-medium">{category.value}%</strong>
-                </div>
-              </div>
-            ))}
           </div>
         </div>
       </div>
@@ -196,23 +164,8 @@ export default function DashboardPage() {
             <h2 className="text-lg font-semibold text-white">Deal Pipeline</h2>
             <p className="text-sm text-white/40 mt-1">By stage — total value</p>
           </div>
-          <div className="h-[250px] w-full">
-            <ResponsiveContainer width="100%" height="100%">
-              <BarChart data={pipelineData} margin={{ top: 10, right: 10, left: -20, bottom: 0 }} barSize={32}>
-                <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="rgba(255,255,255,0.05)" />
-                <XAxis dataKey="name" axisLine={false} tickLine={false} tick={{ fill: 'rgba(255,255,255,0.4)', fontSize: 12 }} dy={10} />
-                <YAxis axisLine={false} tickLine={false} tick={{ fill: 'rgba(255,255,255,0.4)', fontSize: 12 }} />
-                <Tooltip
-                  cursor={{ fill: 'rgba(255,255,255,0.05)' }}
-                  contentStyle={{ backgroundColor: '#1a1a2e', borderColor: 'rgba(255,255,255,0.1)', borderRadius: '8px' }}
-                />
-                <Bar dataKey="value" radius={[4, 4, 0, 0]}>
-                  {pipelineData.map((entry, index) => (
-                    <Cell key={`cell-${index}`} fill={entry.color} />
-                  ))}
-                </Bar>
-              </BarChart>
-            </ResponsiveContainer>
+          <div className="h-62.5 w-full">
+            <PiplineChart data={pipelineData} />
           </div>
         </div>
 
@@ -234,7 +187,7 @@ export default function DashboardPage() {
                     <p className="text-xs text-white/40 sm:hidden mt-0.5">{activity.detail}</p>
                   </div>
                 </div>
-                <span className="text-xs text-white/40 flex-shrink-0 ml-4">{activity.time}</span>
+                <span className="text-xs text-white/40 shrink-0 ml-4">{activity.time}</span>
               </div>
             ))}
           </div>
