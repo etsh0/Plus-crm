@@ -1,6 +1,5 @@
 "use client";
 
-import React from "react";
 import { 
   Plus, 
   MoreHorizontal, 
@@ -8,10 +7,11 @@ import {
   Printer,
   X
 } from "lucide-react";
-import { useCustomerCategories, CustomerCategory } from "@/hooks/use-customer-categories";
+import { useCustomerCategories } from "@/hooks/use-customer-categories";
 import { Button } from "@/components/ui/button";
 import { SearchInput } from "@/components/ui/search-input";
 import { initialCategories } from "@/constants/mock-data";
+import { PiplineChart } from "@/components/ui/PiplineChart";
 
 export default function CustomerCategoriesPage() {
   const { 
@@ -22,11 +22,18 @@ export default function CustomerCategoriesPage() {
     filteredCategories 
   } = useCustomerCategories(initialCategories);
 
+  const customerCategoriesData = [
+  { name: 'Enterprise Companies', value: 42, color: '#3b82f6' },
+  { name: 'Individual Professionals', value: 28, color: '#8b5cf6' },
+  { name: 'E-commerce Partners', value: 18, color: '#10b981' },
+  { name: 'Educational Institutions', value: 12, color: '#f59e0b' },
+];
+
   return (
-    <div className="p-8 max-w-[1600px] mx-auto">
+    <div className="p-8 max-w-400 mx-auto">
       {/* Title and Tabs */}
       <div className="mb-8">
-        <div className="flex items-end justify-between border-b border-white/[0.08]">
+        <div className="flex items-end justify-between border-b border-white/8">
           <div className="pb-4">
             <h1 className="text-3xl font-bold text-white tracking-tight">Customer Categories</h1>
           </div>
@@ -42,7 +49,7 @@ export default function CustomerCategoriesPage() {
       </div>
 
       {/* Main Container */}
-      <div className="bg-white/2 border border-white/[0.08] rounded-2xl overflow-hidden shadow-2xl">
+      <div className="bg-white/2 border border-white/8 rounded-2xl overflow-hidden shadow-2xl">
         {/* Toolbar */}
         <div className="p-5 flex flex-wrap items-center justify-between gap-4">
           <div className="flex items-center gap-3 flex-1 max-w-2xl">
@@ -78,7 +85,7 @@ export default function CustomerCategoriesPage() {
           <table className="w-full text-left border-collapse">
             <thead>
               <tr className="border-y border-white/[0.04] bg-white/1">
-                <th className="px-6 py-4 text-[11px] font-bold text-white/40 uppercase tracking-[0.1em]">ID</th>
+                <th className="px-6 py-4 text-[11px] font-bold text-white/40 uppercase tracking-widest">ID</th>
                 <th className="px-6 py-4 text-[11px] font-bold text-white/40 uppercase tracking-[0.1em]">Category Name</th>
                 <th className="px-6 py-4 text-[11px] font-bold text-white/40 uppercase tracking-[0.1em]">Description</th>
                 <th className="px-6 py-4 text-[11px] font-bold text-white/40 uppercase tracking-[0.1em] text-center">Customers</th>
@@ -119,6 +126,18 @@ export default function CustomerCategoriesPage() {
           <div className="flex items-center gap-2">
             <button className="px-5 py-2 rounded-lg border border-white/10 text-xs font-semibold text-white/20 disabled:opacity-50 cursor-not-allowed transition-all">Previous</button>
             <button className="px-5 py-2 rounded-lg border border-white/10 text-xs font-semibold text-white hover:bg-white/5 transition-all">Next</button>
+          </div>
+        </div>
+      </div>
+
+      {/* charts grid */}
+      <div className="grid grid-cols-1 gap-6 mt-6">
+        <div className="rounded-2xl bg-white/5 backdrop-blur-xl border border-white/10 shadow-[0_8px_32px_0_rgba(0,0,0,0.37)] p-6">
+          <div className="mb-6">
+            <h2 className="text-lg font-semibold text-white">Customers per Category</h2>
+          </div>
+          <div className="h-50 w-full">
+            <PiplineChart data={customerCategoriesData} />
           </div>
         </div>
       </div>
