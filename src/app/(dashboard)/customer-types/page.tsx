@@ -79,7 +79,6 @@ const handleDelete = (id: string) => {
 };
 
 
-
   return (
     <div className="space-y-8 max-w-400 mx-auto animate-in fade-in duration-500">
       {/* Title and Action */}

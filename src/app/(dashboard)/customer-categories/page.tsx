@@ -1,6 +1,6 @@
 "use client";
 
-import { Plus, FileText, Printer, X } from "lucide-react";
+import { Plus, FileText, Printer, X, Users } from "lucide-react";
 import {
   CustomerCategory,
   useCustomerCategories,
@@ -150,64 +150,95 @@ export default function CustomerCategoriesPage() {
               </tr>
             </thead>
             <tbody className="divide-y divide-gray-100 dark:divide-white/[0.04]">
-              {filterCategory?.map((category: any) => (
-                <tr
-                  key={category.id}
-                  className="hover:bg-gray-50 dark:hover:bg-white/1 transition-colors group"
-                >
-                  <td className="px-6 py-5 text-sm text-gray-500 dark:text-white/60 font-medium">
-                    {category.id}
-                  </td>
-                  <td className="px-6 py-5">
-                    <span className="text-sm font-bold text-gray-900 dark:text-white">
-                      {category.name}
-                    </span>
-                  </td>
-                  <td className="px-6 py-5 text-sm text-gray-500 dark:text-white/40">
-                    {category.description}
-                  </td>
-                  <td className="px-6 py-5 text-center">
-                    <span className="inline-flex items-center px-3 py-1 rounded-full bg-gray-100 dark:bg-white/5 text-[11px] font-bold text-gray-600 dark:text-white/60 border border-gray-200 dark:border-white/[0.05]">
-                      {category?.customers?.toLocaleString()}
-                    </span>
-                  </td>
-                  <td className="px-6 py-5 text-sm text-gray-500 dark:text-white/60">
-                    {category.date}
-                  </td>
-                  <td className="px-6 py-5 text-right">
-                    <div className="flex items-center justify-end gap-2">
-                      <Button
-                        variant="secondary"
-                        size="sm"
-                        onClick={() => handleEdit(category)}
-                      >
-                        <svg
-                          width="12"
-                          height="12"
-                          fill="none"
-                          viewBox="0 0 24 24"
-                          stroke="currentColor"
+              {filterCategory && filterCategory.length > 0 ? (
+                filterCategory.map((category: any) => (
+                  <tr
+                    key={category.id}
+                    className="hover:bg-gray-50 dark:hover:bg-white/1 transition-colors group"
+                  >
+                    <td className="px-6 py-5 text-sm text-gray-500 dark:text-white/60 font-medium">
+                      {category.id}
+                    </td>
+                    <td className="px-6 py-5">
+                      <span className="text-sm font-bold text-gray-900 dark:text-white">
+                        {category.name}
+                      </span>
+                    </td>
+                    <td className="px-6 py-5 text-sm text-gray-500 dark:text-white/40">
+                      {category.description}
+                    </td>
+                    <td className="px-6 py-5 text-center">
+                      <span className="inline-flex items-center px-3 py-1 rounded-full bg-gray-100 dark:bg-white/5 text-[11px] font-bold text-gray-600 dark:text-white/60 border border-gray-200 dark:border-white/[0.05]">
+                        {category?.customers?.toLocaleString()}
+                      </span>
+                    </td>
+                    <td className="px-6 py-5 text-sm text-gray-500 dark:text-white/60">
+                      {category.date}
+                    </td>
+                    <td className="px-6 py-5 text-right">
+                      <div className="flex items-center justify-end gap-2">
+                        <Button
+                          variant="secondary"
+                          size="sm"
+                          onClick={() => handleEdit(category)}
                         >
-                          <path
-                            strokeLinecap="round"
-                            strokeLinejoin="round"
-                            strokeWidth={2}
-                            d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"
-                          />
-                        </svg>
-                        Edit
-                      </Button>
+                          <svg
+                            width="12"
+                            height="12"
+                            fill="none"
+                            viewBox="0 0 24 24"
+                            stroke="currentColor"
+                          >
+                            <path
+                              strokeLinecap="round"
+                              strokeLinejoin="round"
+                              strokeWidth={2}
+                              d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"
+                            />
+                          </svg>
+                          Edit
+                        </Button>
+                        <Button
+                          variant="destructive"
+                          size="sm"
+                          onClick={() => handleDelete(category.id)}
+                        >
+                          Delete
+                        </Button>
+                      </div>
+                    </td>
+                  </tr>
+                ))
+              ) : (
+                <tr>
+                  <td colSpan={6} className="px-6 py-20 text-center">
+                    <div className="flex flex-col items-center justify-center gap-4 animate-in fade-in slide-in-from-bottom-4 duration-500">
+                      <div className="w-16 h-16 rounded-2xl bg-gray-50 dark:bg-white/5 flex items-center justify-center border border-gray-100 dark:border-white/5 shadow-inner">
+                        <Users className="w-8 h-8 text-gray-400 dark:text-white/20" />
+                      </div>
+                      <div className="space-y-1.5">
+                        <h3 className="text-base font-bold text-gray-900 dark:text-white">
+                          No customer categories found
+                        </h3>
+                        <p className="text-sm text-gray-500 dark:text-white/40 max-w-xs mx-auto">
+                          You haven&apos;t created any customer categories yet.
+                          Categorize your customers to better organize your
+                          workflow.
+                        </p>
+                      </div>
                       <Button
-                        variant="destructive"
-                        size="sm"
-                        onClick={() => handleDelete(category.id)}
+                        variant="primary"
+                        size="default"
+                        className="mt-2"
+                        onClick={() => setIsModalOpen(true)}
                       >
-                        Delete
+                        <Plus className="w-4 h-4 mr-2" />
+                        Create Your First Category
                       </Button>
                     </div>
                   </td>
                 </tr>
-              ))}
+              )}
             </tbody>
           </table>
         </div>
