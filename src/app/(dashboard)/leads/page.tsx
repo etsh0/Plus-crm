@@ -8,14 +8,11 @@ import {
   Users,
 } from "lucide-react";
 import Link from "next/link";
-import { useLeads } from "@/hooks/use-leads";
 import { Button } from "@/components/ui/button";
-import { initialLeads } from "@/constants/mock-data";
 import KanbanBoard from "@/components/ui/leadskanban/kanbanBoard";
 import { SearchInput } from "@/components/ui/search-input";
 
 export default function LeadsPage() {
-  const { searchQuery, setSearchQuery, filteredLeads } = useLeads(initialLeads);
 
   const stats = [
     { title: "Total Leads", value: "3", change: "+8 new this week", icon: Target },
@@ -66,13 +63,8 @@ export default function LeadsPage() {
           <div className="flex items-center gap-3">
             <SearchInput 
               placeholder="Search leads..." 
-              value={searchQuery}
-              onChange={(e) => setSearchQuery(e.target.value)}
               className="md:w-64"
             />
-            <Button variant="secondary">
-              Filter
-            </Button>
           </div>
         </div>
         <KanbanBoard />

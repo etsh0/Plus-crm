@@ -1,15 +1,12 @@
 "use client";
 
-import React from "react";
 import Link from "next/link";
-import { useCustomers } from "@/hooks/use-customers";
 import { Button } from "@/components/ui/button";
 import { StatusBadge } from "@/components/ui/status-badge";
 import { SearchInput } from "@/components/ui/search-input";
 import { initialCustomers } from "@/constants/mock-data";
 
 export default function CustomersPage() {
-  const { search, setSearch, handleDelete, filteredCustomers } = useCustomers(initialCustomers);
 
   return (
     <div className="space-y-8 max-w-[1600px] mx-auto animate-in fade-in duration-500">
@@ -46,8 +43,7 @@ export default function CustomersPage() {
         <div className="p-4 border-b border-gray-100 dark:border-white/5 bg-gray-50/50 dark:bg-white/5">
           <SearchInput
             placeholder="Search customers by name, email, or company..."
-            value={search}
-            onChange={(e) => setSearch(e.target.value)}
+
           />
         </div>
 
@@ -80,8 +76,8 @@ export default function CustomersPage() {
               </tr>
             </thead>
             <tbody className="divide-y divide-gray-100 dark:divide-white/5">
-              {filteredCustomers.length > 0 ? (
-                filteredCustomers.map((c) => (
+              {initialCustomers.length > 0 ? (
+                initialCustomers.map((c) => (
                   <tr
                     key={c.id}
                     className="hover:bg-gray-50 dark:hover:bg-white/[0.02] transition-colors"

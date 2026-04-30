@@ -2,7 +2,6 @@
 
 import { 
   Plus, 
-  MoreHorizontal, 
   FileText,
   Printer,
   X
@@ -12,6 +11,7 @@ import { Button } from "@/components/ui/button";
 import { SearchInput } from "@/components/ui/search-input";
 import { initialCategories } from "@/constants/mock-data";
 import { PiplineChart } from "@/components/ui/PiplineChart";
+import Link from "next/link";
 
 export default function CustomerCategoriesPage() {
   const { 
@@ -105,9 +105,34 @@ export default function CustomerCategoriesPage() {
                   </td>
                   <td className="px-6 py-5 text-sm text-gray-500 dark:text-white/60">{type.date}</td>
                   <td className="px-6 py-5 text-right">
-                    <button className="p-2 hover:bg-gray-100 dark:hover:bg-white/5 rounded-lg text-gray-400 dark:text-white/20 hover:text-gray-900 dark:hover:text-white transition-all">
-                      <MoreHorizontal className="w-5 h-5" />
-                    </button>
+                      <div className="flex items-center justify-end gap-2">
+                        <Button asChild variant="secondary" size="sm">
+                          <Link href={''}>
+                            <svg
+                              width="12"
+                              height="12"
+                              fill="none"
+                              viewBox="0 0 24 24"
+                              stroke="currentColor"
+                            >
+                              <path
+                                strokeLinecap="round"
+                                strokeLinejoin="round"
+                                strokeWidth={2}
+                                d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"
+                              />
+                            </svg>
+                            Edit
+                          </Link>
+                        </Button>
+                        <Button
+                          variant="destructive"
+                          size="sm"
+                          className="cursor-pointer"
+                        >
+                          Delete
+                        </Button>
+                      </div>
                   </td>
                 </tr>
               ))}

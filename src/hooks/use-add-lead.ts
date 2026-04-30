@@ -3,17 +3,13 @@ import { toast } from "sonner";
 
 export const useAddLead = () => {
   const [formData, setFormData] = useState({
-    firstName: "",
-    lastName: "",
-    email: "",
-    phone: "",
-    company: "",
-    jobTitle: "",
-    status: "",
+    title: "",
+    customer_id: "",
+    expected_value: "",
     source: "",
-    leadScore: "85",
-    owner: "",
-    notes: ""
+    follow_up_manager_id: "",
+    assigned_user_id: "",
+    description: ""
   });
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>) => {
@@ -25,11 +21,10 @@ export const useAddLead = () => {
     const newLead = {
       ...formData,
       id: Math.random().toString(36).substr(2, 9),
-      title: `${formData.firstName} ${formData.lastName}`,
-      status: formData.status || "new",
+      status: "new",
+      created: new Date().toLocaleDateString(),
     };
     localStorage.setItem("leads", JSON.stringify([...existingLeads, newLead]));
-    console.log("Saving lead:", newLead);
     toast.success("Lead saved successfully!");
   };
 

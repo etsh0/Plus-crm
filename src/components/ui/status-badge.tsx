@@ -8,10 +8,10 @@ interface StatusBadgeProps {
 }
 
 const statusConfig: Record<string, { className: string }> = {
-  "Hot Lead": {
+  "Lead": {
     className: "bg-red-500/10 text-red-500 border-red-500/20",
   },
-  "Warm Lead": {
+  "Deal": {
     className: "bg-amber-500/10 text-amber-500 border-amber-500/20",
   },
   "Customer": {

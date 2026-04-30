@@ -1,218 +1,245 @@
 "use client";
 
-import React from "react";
-import { ChevronLeft, Save, User, Mail, Building2, Star, Zap, Info, Target } from "lucide-react";
+import { useEffect, useRef } from "react";
+import { ChevronLeft, Save, Target, DollarSign, Users, Info, ArrowRightLeft, Globe, Search, User } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useAddLead } from "@/hooks/use-add-lead";
 import { Button } from "@/components/ui/button";
-import { cn } from "@/lib/utils";
 
 export default function AddLeadPage() {
   const router = useRouter();
-  const { formData, handleChange, handleSave } = useAddLead();
+  const { formData, handleChange } = useAddLead();
+  
+  const dropdownRef = useRef<HTMLDivElement>(null);
 
-  const onSave = () => {
-    handleSave();
-    router.push("/leads");
-  };
+
+
+  // Handle click outside dropdown
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (dropdownRef.current && !dropdownRef.current.contains(event.target as Node)) {
+        setIsSearching(false);
+      }
+    };
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
+  }, []);
+
+
 
   return (
-    <div className="max-w-6xl mx-auto animate-in fade-in duration-500 pb-12 space-y-8">
+    <div className="max-w-6xl mx-auto animate-in fade-in slide-in-from-bottom-4 duration-700 pb-12 space-y-8">
       {/* Header */}
-      <div className="flex items-center justify-between">
+      <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
         <div className="flex items-center gap-4">
           <button 
             onClick={() => router.back()}
-            className="p-2.5 rounded-xl bg-white dark:bg-white/5 border border-gray-200 dark:border-white/10 hover:border-gray-300 dark:hover:border-white/20 transition-all text-gray-500 dark:text-white/40 hover:text-gray-900 dark:hover:text-white group"
+            className="p-2.5 rounded-xl bg-white dark:bg-[#18181b] border border-gray-200 dark:border-white/10 hover:border-purple-500/50 transition-all text-gray-500 dark:text-white/40 hover:text-purple-500 group shadow-sm"
           >
             <ChevronLeft size={20} className="group-hover:-translate-x-0.5 transition-transform" />
           </button>
           <div>
-            <h1 className="text-3xl font-bold text-gray-900 dark:text-white tracking-tight">Add New Lead</h1>
-            <p className="text-gray-500 dark:text-white/40 text-sm mt-1 font-medium">Capture a new potential customer</p>
+            <h1 className="text-3xl font-bold text-gray-900 dark:text-white tracking-tight">Create Opportunity</h1>
+            <p className="text-gray-500 dark:text-white/40 text-sm mt-1 font-medium">Capture and track a new sales lead</p>
           </div>
         </div>
 
         <div className="flex items-center gap-3">
-          <Button variant="secondary" onClick={() => router.back()}>
+          <Button 
+            variant="secondary" 
+            onClick={() => router.back()}
+            className="rounded-xl border-gray-200 dark:border-white/10 hover:bg-gray-50 dark:hover:bg-white/5"
+          >
             Cancel
           </Button>
-          <Button onClick={onSave} variant="primary" className="gap-2 shadow-lg shadow-blue-500/20 bg-blue-600 hover:bg-blue-700">
+          <Button 
+            variant="outline" 
+            className="rounded-xl gap-2 border-purple-500/30 text-purple-600 dark:text-purple-400 hover:bg-purple-500/10"
+          >
+            <ArrowRightLeft size={18} />
+            <span>Convert to Deal</span>
+          </Button>
+          <Button 
+            className="rounded-xl gap-2 bg-purple-600 hover:bg-purple-700 text-white shadow-lg shadow-purple-500/20 px-6"
+          >
             <Save size={18} />
-            <span>Save Lead</span>
+            <span>Save Opportunity</span>
           </Button>
         </div>
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+        {/* Main Form Content */}
         <div className="lg:col-span-2 space-y-8">
-          {/* Contact Information Card */}
-          <div className="bg-white dark:bg-[#1c1c1f] rounded-3xl p-8 border border-gray-200 dark:border-white/5 shadow-sm relative overflow-hidden">
-            <div className="absolute top-0 right-0 w-64 h-64 bg-blue-500/5 blur-3xl -mr-32 -mt-32 rounded-full" />
+          <div className="bg-white dark:bg-[#18181b] rounded-3xl p-8 border border-gray-200 dark:border-white/8 shadow-sm space-y-8 relative overflow-hidden">
+            <div className="absolute top-0 right-0 w-64 h-64 bg-purple-500/5 blur-3xl -mr-32 -mt-32 rounded-full" />
             
             <div className="relative z-10 space-y-8">
               <div className="flex items-center gap-3">
-                <div className="w-10 h-10 rounded-xl bg-blue-500/10 flex items-center justify-center text-blue-500">
-                  <User size={20} />
+                <div className="w-10 h-10 rounded-xl bg-purple-500/10 flex items-center justify-center text-purple-500 shadow-inner">
+                  <Target size={20} />
                 </div>
-                <h2 className="text-xl font-bold text-gray-900 dark:text-white">Contact Information</h2>
+                <h2 className="text-xl font-bold text-gray-900 dark:text-white tracking-tight">Opportunity Details</h2>
               </div>
 
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              <div className="space-y-6">
+                {/* Title */}
                 <div className="space-y-2">
-                  <label className="text-[11px] font-black text-gray-400 uppercase tracking-widest ml-1">First Name</label>
+                  <label className="text-[11px] font-black text-gray-400 dark:text-white/30 uppercase tracking-widest ml-1">
+                    Opportunity Title <span className="text-red-500">*</span>
+                  </label>
                   <input 
                     type="text" 
-                    name="firstName"
-                    placeholder="Enter first name"
-                    value={formData.firstName}
+                    name="title"
+                    placeholder="e.g. Enterprise License Expansion"
+                    value={formData.title}
                     onChange={handleChange}
-                    className="w-full bg-gray-50 dark:bg-white/5 border border-gray-200 dark:border-white/10 rounded-2xl px-5 py-4 text-sm text-gray-900 dark:text-white outline-none focus:ring-2 focus:ring-blue-500/20 transition-all"
+                    className="w-full bg-gray-50 dark:bg-[#0f0f11] border border-gray-200 dark:border-white/5 rounded-2xl px-5 py-4 text-sm text-gray-900 dark:text-white outline-none focus:ring-2 focus:ring-purple-500/20 focus:border-purple-500/50 transition-all shadow-sm"
                   />
                 </div>
-                <div className="space-y-2">
-                  <label className="text-[11px] font-black text-gray-400 uppercase tracking-widest ml-1">Last Name</label>
-                  <input 
-                    type="text" 
-                    name="lastName"
-                    placeholder="Enter last name"
-                    value={formData.lastName}
-                    onChange={handleChange}
-                    className="w-full bg-gray-50 dark:bg-white/5 border border-gray-200 dark:border-white/10 rounded-2xl px-5 py-4 text-sm text-gray-900 dark:text-white outline-none focus:ring-2 focus:ring-blue-500/20 transition-all"
-                  />
+
+                {/* Customer (Searchable Select) */}
+                <div className="space-y-2 relative" ref={dropdownRef}>
+                  <label className="text-[11px] font-black text-gray-400 dark:text-white/30 uppercase tracking-widest ml-1">
+                    Customer / Account <span className="text-red-500">*</span>
+                  </label>
+                  <div className="relative">
+                    <div className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400">
+                      <Search size={18} />
+                    </div>
+                    <input 
+                      type="text" 
+                      placeholder="Search customers..."
+                      onChange={(e) => {
+
+                      }}
+                      className="w-full bg-gray-50 dark:bg-[#0f0f11] border border-gray-200 dark:border-white/5 rounded-2xl pl-12 pr-5 py-4 text-sm text-gray-900 dark:text-white outline-none focus:ring-2 focus:ring-purple-500/20 focus:border-purple-500/50 transition-all shadow-sm"
+                    />
+                  </div>
+                  
+
                 </div>
-                <div className="space-y-2">
-                  <label className="text-[11px] font-black text-gray-400 uppercase tracking-widest ml-1 flex items-center gap-2"><Mail size={12}/> Email Address</label>
-                  <input 
-                    type="email" 
-                    name="email"
-                    placeholder="name@company.com"
-                    value={formData.email}
-                    onChange={handleChange}
-                    className="w-full bg-gray-50 dark:bg-white/5 border border-gray-200 dark:border-white/10 rounded-2xl px-5 py-4 text-sm text-gray-900 dark:text-white outline-none focus:ring-2 focus:ring-blue-500/20 transition-all"
-                  />
-                </div>
-                <div className="space-y-2">
-                  <label className="text-[11px] font-black text-gray-400 uppercase tracking-widest ml-1">Phone Number</label>
-                  <input 
-                    type="tel" 
-                    name="phone"
-                    placeholder="+1 (555) 000-0000"
-                    value={formData.phone}
-                    onChange={handleChange}
-                    className="w-full bg-gray-50 dark:bg-white/5 border border-gray-200 dark:border-white/10 rounded-2xl px-5 py-4 text-sm text-gray-900 dark:text-white outline-none focus:ring-2 focus:ring-blue-500/20 transition-all"
-                  />
+
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                  {/* Expected Value */}
+                  <div className="space-y-2">
+                    <label className="text-[11px] font-black text-gray-400 dark:text-white/30 uppercase tracking-widest ml-1 flex items-center gap-2">
+                      <DollarSign size={12}/> Expected Value
+                    </label>
+                    <div className="relative">
+                      <div className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400 font-bold">$</div>
+                      <input 
+                        type="number" 
+                        name="expected_value"
+                        placeholder="0.00"
+                        value={formData.expected_value}
+                        onChange={handleChange}
+                        className="w-full bg-gray-50 dark:bg-[#0f0f11] border border-gray-200 dark:border-white/5 rounded-2xl pl-10 pr-5 py-4 text-sm text-gray-900 dark:text-white outline-none focus:ring-2 focus:ring-purple-500/20 focus:border-purple-500/50 transition-all shadow-sm"
+                      />
+                    </div>
+                  </div>
+
+                  {/* Source */}
+                  <div className="space-y-2">
+                    <label className="text-[11px] font-black text-gray-400 dark:text-white/30 uppercase tracking-widest ml-1 flex items-center gap-2">
+                      <Globe size={12}/> Opportunity Source
+                    </label>
+                    <select 
+                      name="source"
+                      value={formData.source}
+                      onChange={handleChange}
+                      className="w-full bg-gray-50 dark:bg-[#0f0f11] border border-gray-200 dark:border-white/5 rounded-2xl px-5 py-4 text-sm text-gray-900 dark:text-white outline-none focus:ring-2 focus:ring-purple-500/20 focus:border-purple-500/50 transition-all appearance-none cursor-pointer shadow-sm"
+                    >
+                      <option value="">Select source</option>
+                      <option value="Website">Website</option>
+                      <option value="LinkedIn">LinkedIn</option>
+                      <option value="Referral">Referral</option>
+                      <option value="Cold Call">Cold Call</option>
+                      <option value="Event">Event</option>
+                    </select>
+                  </div>
                 </div>
               </div>
             </div>
           </div>
 
-          {/* Company & Source Card */}
-          <div className="bg-white dark:bg-[#1c1c1f] rounded-3xl p-8 border border-gray-200 dark:border-white/5 shadow-sm">
-            <div className="flex items-center gap-3 mb-8">
-              <div className="w-10 h-10 rounded-xl bg-indigo-500/10 flex items-center justify-center text-indigo-500">
-                <Building2 size={20} />
+          {/* Description Card */}
+          <div className="bg-white dark:bg-[#18181b] rounded-3xl p-8 border border-gray-200 dark:border-white/8 shadow-sm">
+             <div className="flex items-center gap-3 mb-8">
+                <div className="w-10 h-10 rounded-xl bg-blue-500/10 flex items-center justify-center text-blue-500 shadow-inner">
+                  <Info size={20} />
+                </div>
+                <h2 className="text-xl font-bold text-gray-900 dark:text-white tracking-tight">Additional Information</h2>
               </div>
-              <h2 className="text-xl font-bold text-gray-900 dark:text-white">Professional Details</h2>
-            </div>
-
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              
               <div className="space-y-2">
-                <label className="text-[11px] font-black text-gray-400 uppercase tracking-widest ml-1">Company Name</label>
-                <input 
-                  type="text" 
-                  name="company"
-                  placeholder="e.g. Acme Corp"
-                  value={formData.company}
+                <label className="text-[11px] font-black text-gray-400 dark:text-white/30 uppercase tracking-widest ml-1">
+                  Description / Opportunity Notes
+                </label>
+                <textarea 
+                  name="description"
+                  rows={5}
+                  placeholder="Describe the opportunity details, pain points, and next steps..."
+                  value={formData.description}
                   onChange={handleChange}
-                  className="w-full bg-gray-50 dark:bg-white/5 border border-gray-200 dark:border-white/10 rounded-2xl px-5 py-4 text-sm text-gray-900 dark:text-white outline-none focus:ring-2 focus:ring-indigo-500/20 transition-all"
+                  className="w-full bg-gray-50 dark:bg-[#0f0f11] border border-gray-200 dark:border-white/5 rounded-2xl px-5 py-4 text-sm text-gray-900 dark:text-white outline-none focus:ring-2 focus:ring-purple-500/20 focus:border-purple-500/50 transition-all resize-none shadow-sm"
                 />
               </div>
-              <div className="space-y-2">
-                <label className="text-[11px] font-black text-gray-400 uppercase tracking-widest ml-1">Job Title</label>
-                <input 
-                  type="text" 
-                  name="jobTitle"
-                  placeholder="e.g. Purchasing Manager"
-                  value={formData.jobTitle}
-                  onChange={handleChange}
-                  className="w-full bg-gray-50 dark:bg-white/5 border border-gray-200 dark:border-white/10 rounded-2xl px-5 py-4 text-sm text-gray-900 dark:text-white outline-none focus:ring-2 focus:ring-indigo-500/20 transition-all"
-                />
-              </div>
-              <div className="space-y-2">
-                <label className="text-[11px] font-black text-gray-400 uppercase tracking-widest ml-1">Lead Source</label>
-                <select 
-                  name="source"
-                  value={formData.source}
-                  onChange={handleChange}
-                  className="w-full bg-gray-50 dark:bg-white/5 border border-gray-200 dark:border-white/10 rounded-2xl px-5 py-4 text-sm text-gray-900 dark:text-white outline-none focus:ring-2 focus:ring-indigo-500/20 transition-all appearance-none cursor-pointer"
-                >
-                  <option value="">Select source</option>
-                  <option value="website">Website</option>
-                  <option value="linkedin">LinkedIn</option>
-                  <option value="referral">Referral</option>
-                </select>
-              </div>
-              <div className="space-y-2">
-                <label className="text-[11px] font-black text-gray-400 uppercase tracking-widest ml-1 flex items-center gap-2"><Star size={12}/> Lead Score (0-100)</label>
-                <input 
-                  type="number" 
-                  name="leadScore"
-                  placeholder="85"
-                  value={formData.leadScore}
-                  onChange={handleChange}
-                  className="w-full bg-gray-50 dark:bg-white/5 border border-gray-200 dark:border-white/10 rounded-2xl px-5 py-4 text-sm text-gray-900 dark:text-white outline-none focus:ring-2 focus:ring-indigo-500/20 transition-all"
-                />
-              </div>
-            </div>
           </div>
         </div>
 
         {/* Sidebar */}
         <div className="space-y-6">
-          <div className="bg-white dark:bg-[#1c1c1f] rounded-3xl p-6 border border-gray-200 dark:border-white/5 shadow-sm">
-            <h3 className="text-sm font-bold text-gray-900 dark:text-white mb-6 uppercase tracking-widest">Classification</h3>
+          <div className="bg-white dark:bg-[#18181b] rounded-3xl p-8 border border-gray-200 dark:border-white/8 shadow-sm">
+            <div className="flex items-center gap-3 mb-8">
+              <div className="w-10 h-10 rounded-xl bg-amber-500/10 flex items-center justify-center text-amber-500 shadow-inner">
+                <Users size={20} />
+              </div>
+              <h3 className="text-sm font-bold text-gray-900 dark:text-white uppercase tracking-widest">Ownership</h3>
+            </div>
             
             <div className="space-y-6">
               <div className="space-y-2">
-                <label className="text-[10px] font-bold text-gray-400 uppercase tracking-widest ml-1">Initial Status</label>
+                <label className="text-[10px] font-bold text-gray-400 dark:text-white/40 uppercase tracking-widest ml-1">Follow-up Manager</label>
                 <select 
-                  name="status"
-                  value={formData.status}
+                  name="follow_up_manager_id"
+                  value={formData.follow_up_manager_id}
                   onChange={handleChange}
-                  className="w-full bg-gray-50 dark:bg-white/5 border border-gray-200 dark:border-white/10 rounded-xl px-4 py-3 text-sm text-gray-900 dark:text-white outline-none focus:ring-2 focus:ring-blue-500/20 transition-all appearance-none cursor-pointer"
+                  className="w-full bg-gray-50 dark:bg-[#0f0f11] border border-gray-200 dark:border-white/5 rounded-xl px-4 py-3.5 text-sm text-gray-900 dark:text-white outline-none focus:ring-2 focus:ring-purple-500/20 focus:border-purple-500/50 transition-all appearance-none cursor-pointer"
                 >
-                  <option value="">Select status</option>
-                  <option value="new">New</option>
-                  <option value="contacted">Contacted</option>
-                  <option value="qualified">Qualified</option>
+                  <option value="">Select Manager</option>
+                  <option value="1">Ahmed Hassan</option>
+                  <option value="2">Sarah Johnson</option>
                 </select>
               </div>
+
               <div className="space-y-2">
-                <label className="text-[10px] font-bold text-gray-400 uppercase tracking-widest ml-1">Lead Owner</label>
+                <label className="text-[10px] font-bold text-gray-400 dark:text-white/40 uppercase tracking-widest ml-1">Responsible User</label>
                 <select 
-                  name="owner"
-                  value={formData.owner}
+                  name="assigned_user_id"
+                  value={formData.assigned_user_id}
                   onChange={handleChange}
-                  className="w-full bg-gray-50 dark:bg-white/5 border border-gray-200 dark:border-white/10 rounded-xl px-4 py-3 text-sm text-gray-900 dark:text-white outline-none focus:ring-2 focus:ring-blue-500/20 transition-all appearance-none cursor-pointer"
+                  className="w-full bg-gray-50 dark:bg-[#0f0f11] border border-gray-200 dark:border-white/5 rounded-xl px-4 py-3.5 text-sm text-gray-900 dark:text-white outline-none focus:ring-2 focus:ring-purple-500/20 focus:border-purple-500/50 transition-all appearance-none cursor-pointer"
                 >
-                  <option value="">Select owner</option>
-                  <option value="john">Ahmed Hassan</option>
-                  <option value="sarah">Sarah Johnson</option>
+                  <option value="">Select User</option>
+                  <option value="1">Ahmed Hassan</option>
+                  <option value="2">Sarah Johnson</option>
+                  <option value="3">John Smith</option>
                 </select>
+              </div>
+
+              <div className="p-4 rounded-2xl bg-purple-500/5 border border-purple-500/10">
+                <div className="flex items-center gap-2 mb-2">
+                  <User size={14} className="text-purple-500" />
+                  <span className="text-[10px] font-bold text-purple-500 uppercase tracking-widest">Active Manager</span>
+                </div>
+                <p className="text-xs text-gray-500 dark:text-white/40 leading-relaxed">
+                  Assigning a manager ensures the opportunity is tracked and followed up within 24 hours.
+                </p>
               </div>
             </div>
           </div>
 
-          <div className="bg-gradient-to-br from-blue-600 to-indigo-700 rounded-3xl p-6 text-white shadow-xl shadow-blue-500/20">
-            <div className="flex items-center gap-2 mb-3">
-              <Zap size={18} className="text-yellow-400" />
-              <h3 className="font-bold">Lightning Fast</h3>
-            </div>
-            <p className="text-xs text-white/70 leading-relaxed">
-              Leads contacted within the first 5 minutes are 9x more likely to convert. Add your leads quickly!
-            </p>
-          </div>
         </div>
       </div>
     </div>

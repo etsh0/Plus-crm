@@ -8,14 +8,11 @@ import {
   Calendar,
 } from "lucide-react";
 import Link from "next/link";
-import { useDeals } from "@/hooks/use-deals";
 import { Button } from "@/components/ui/button";
 import { SearchInput } from "@/components/ui/search-input";
-import { initialDeals } from "@/constants/mock-data";
 import KanbanBoard from "@/components/ui/dealskanban/kanbanBoard";
 
 export default function DealsPage() {
-  const { searchQuery, setSearchQuery, filteredDeals } = useDeals(initialDeals);
 
   const stats = [
     { title: "Total Pipeline Value", value: "$425,000", change: "+12% from last month", icon: DollarSign },
@@ -66,13 +63,8 @@ export default function DealsPage() {
           <div className="flex items-center gap-3">
             <SearchInput 
               placeholder="Search deals..." 
-              value={searchQuery}
-              onChange={(e) => setSearchQuery(e.target.value)}
               className="md:w-64"
             />
-            <Button variant="secondary">
-              Filter
-            </Button>
           </div>
         </div>
 

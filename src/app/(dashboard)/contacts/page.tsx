@@ -1,6 +1,5 @@
 "use client";
 
-import React from "react";
 import Link from "next/link";
 import { useContacts } from "@/hooks/use-contacts";
 import { Button } from "@/components/ui/button";
@@ -12,7 +11,7 @@ export default function ContactsPage() {
   const { search, setSearch, handleDelete, filteredContacts } = useContacts(initialContacts);
 
   return (
-    <div className="space-y-8 max-w-[1600px] mx-auto animate-in fade-in duration-500">
+    <div className="space-y-8 max-w-400 mx-auto animate-in fade-in duration-500">
       <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
         <div>
           <h1 className="text-2xl font-bold text-gray-900 dark:text-white">Contacts</h1>
@@ -69,7 +68,7 @@ export default function ContactsPage() {
                   Location
                 </th>
                 <th className="px-6 py-4 text-[11px] font-bold text-gray-400 dark:text-white/30 uppercase tracking-wider">
-                  Status
+                  Related To
                 </th>
                 <th className="px-6 py-4 text-[11px] font-bold text-gray-400 dark:text-white/30 uppercase tracking-wider">
                   Last Contact
@@ -80,11 +79,11 @@ export default function ContactsPage() {
               </tr>
             </thead>
             <tbody className="divide-y divide-gray-100 dark:divide-white/5">
-              {filteredContacts.length > 0 ? (
-                filteredContacts.map((c) => (
+              {initialContacts.length > 0 ? (
+                initialContacts.map((c) => (
                   <tr
                     key={c.id}
-                    className="hover:bg-gray-50 dark:hover:bg-white/[0.02] transition-colors"
+                    className="hover:bg-gray-50 dark:hover:bg-white/2 transition-colors"
                   >
                     <td className="px-6 py-4">
                       <div className="flex items-center gap-3">
@@ -192,8 +191,9 @@ export default function ContactsPage() {
                         {c.location}
                       </div>
                     </td>
-                    <td className="px-6 py-4">
-                      <StatusBadge status={c.status} />
+                    <td className="px-6 py-4 text-white">
+                      <StatusBadge status={c.related_to} />
+                      {/* {c.related_to} */}
                     </td>
                     <td className="px-6 py-4 text-gray-500 dark:text-white/50 text-[11px]">
                       {c.lastContact}

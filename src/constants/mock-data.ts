@@ -42,7 +42,7 @@ export const initialContacts: Contact[] = [
     email: "sarah.j@acmecorp.com",
     phone: "+1 (555) 123-4567",
     location: "New York, NY",
-    status: "Hot Lead",
+    related_to: "Lead",
     lastContact: "2 days ago",
   },
   {
@@ -54,7 +54,7 @@ export const initialContacts: Contact[] = [
     email: "m.chen@techstart.io",
     phone: "+1 (555) 234-5678",
     location: "San Francisco, CA",
-    status: "Customer",
+    related_to: "Customer",
     lastContact: "1 week ago",
   },
   {
@@ -66,7 +66,7 @@ export const initialContacts: Contact[] = [
     email: "emily@globalsol.com",
     phone: "+1 (555) 345-6789",
     location: "Austin, TX",
-    status: "Warm Lead",
+    related_to: "Deal",
     lastContact: "3 days ago",
   },
 ];

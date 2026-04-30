@@ -7,7 +7,7 @@ export interface Contact {
   email: string;
   phone: string;
   location: string;
-  status: string;
+  related_to: string;
   lastContact: string;
 }
 

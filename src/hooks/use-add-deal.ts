@@ -4,14 +4,14 @@ import { toast } from "sonner";
 export const useAddDeal = () => {
   const [formData, setFormData] = useState({
     title: "",
-    company: "",
-    value: "0",
-    stage: "",
+    customer_id: "",
+    value: "",
     probability: "50",
-    description: "",
-    closeDate: "",
-    owner: "",
-    contact: ""
+    status: "pending",
+    close_date: "",
+    assigned_user_id: "",
+    source: "lead",
+    description: ""
   });
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>) => {
@@ -23,11 +23,9 @@ export const useAddDeal = () => {
     const newDeal = {
       ...formData,
       id: Math.random().toString(36).substr(2, 9),
-      status: formData.stage || "prospect",
-      value: parseFloat(formData.value) || 0,
+      created: new Date().toLocaleDateString(),
     };
     localStorage.setItem("deals", JSON.stringify([...existingDeals, newDeal]));
-    console.log("Saving deal:", newDeal);
     toast.success("Deal saved successfully!");
   };
 
