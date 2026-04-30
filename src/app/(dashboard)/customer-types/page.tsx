@@ -1,6 +1,5 @@
 "use client";
 
-import React from "react";
 import { 
   Plus, 
   FileText,
@@ -10,18 +9,41 @@ import {
 import { useCustomerTypes } from "@/hooks/use-customer-types";
 import { Button } from "@/components/ui/button";
 import { SearchInput } from "@/components/ui/search-input";
-import { initialCustomerTypes } from "@/constants/mock-data";
 import Link from "next/link";
+import { initialCustomerTypes } from "@/redux/slice/customer-types/customer-types";
+import { useState } from "react";
+import { useSelector, useDispatch } from "react-redux";
+import { addNewType } from "../../../redux/slice/customer-types/customer-types"
 
 export default function CustomerTypesPage() {
+  const dispatch = useDispatch();
+  const [name, setName] = useState("")
+  const [description, setDescription] = useState("")
+
   const { 
-    searchQuery, 
-    setSearchQuery, 
     isModalOpen, 
     setIsModalOpen, 
-    filteredTypes 
-  } = useCustomerTypes(initialCustomerTypes);
+  } = useCustomerTypes(initialCustomerTypes); 
 
+  // Select types from Redux state
+  const types = useSelector((state: any) => state.types);
+
+  const handleSaveType = () => {
+    if (!name.trim()) return;
+
+    const newCustomerType = {
+      id: `#${Math.floor(Math.random() * 1000).toString().padStart(3, '0')}`,
+      name: name,
+      description: description,
+      customers : 0,
+      date: new Date().toLocaleDateString('en-US', { month: 'short', day: '2-digit', year: 'numeric' })
+    }
+
+    dispatch(addNewType(newCustomerType))
+    setIsModalOpen(false);
+    setName("");
+    setDescription("");
+  }
   return (
     <div className="space-y-8 max-w-400 mx-auto animate-in fade-in duration-500">
       {/* Title and Action */}
@@ -46,8 +68,7 @@ export default function CustomerTypesPage() {
           <div className="flex items-center gap-3 flex-1 max-w-2xl">
             <SearchInput 
               placeholder="Search customer types..." 
-              value={searchQuery}
-              onChange={(e) => setSearchQuery(e.target.value)}
+
               className="w-full"
             />
           </div>
@@ -81,13 +102,12 @@ export default function CustomerTypesPage() {
                 <th className="px-6 py-4 text-[11px] font-bold text-gray-400 dark:text-white/40 uppercase tracking-[0.1em] text-right">Actions</th>
               </tr>
             </thead>
-            <tbody className="divide-y divide-gray-100 dark:divide-white/[0.04]">
-              {filteredTypes.map((type) => (
+            <tbody className="divide-y divide-gray-100 dark:divide-white/4">
+              {types.map((type: any) => (
                 <tr key={type.id} className="hover:bg-gray-50 dark:hover:bg-white/1 transition-colors group">
                   <td className="px-6 py-5 text-sm text-gray-500 dark:text-white/60 font-medium">{type.id}</td>
                   <td className="px-6 py-5">
                     <div className="flex items-center gap-3">
-                      <div className={`w-2 h-2 rounded-full ${type.color}`} />
                       <span className="text-sm font-bold text-gray-900 dark:text-white">{type.name}</span>
                     </div>
                   </td>
@@ -136,7 +156,7 @@ export default function CustomerTypesPage() {
         
         {/* Pagination */}
         <div className="px-6 py-5 border-t border-gray-100 dark:border-white/[0.04] flex items-center justify-between bg-gray-50/30 dark:bg-white/1">
-          <p className="text-sm text-gray-500 dark:text-white/40">Showing 1 to {filteredTypes.length} of {filteredTypes.length} entries</p>
+          <p className="text-sm text-gray-500 dark:text-white/40">Showing 1 to {types.length} of {types.length} entries</p>
           <div className="flex items-center gap-2">
             <button className="px-5 py-2 rounded-lg border border-gray-200 dark:border-white/10 text-xs font-semibold text-gray-400 dark:text-white/20 disabled:opacity-50 cursor-not-allowed transition-all">Previous</button>
             <button className="px-5 py-2 rounded-lg border border-gray-200 dark:border-white/10 text-xs font-semibold text-gray-900 dark:text-white hover:bg-gray-100 dark:hover:bg-white/5 transition-all">Next</button>
@@ -148,7 +168,7 @@ export default function CustomerTypesPage() {
       {isModalOpen && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 dark:bg-black/60 backdrop-blur-sm p-4">
           <div className="bg-white dark:bg-[#18181b] border border-gray-200 dark:border-white/10 rounded-2xl w-full max-w-md overflow-hidden shadow-xl animate-in zoom-in-95 duration-200">
-            <div className="px-6 py-5 border-b border-gray-100 dark:border-white/[0.04] flex items-center justify-between">
+            <div className="px-6 py-5 border-b border-gray-100 dark:border-white/4 flex items-center justify-between">
               <h2 className="text-lg font-bold text-gray-900 dark:text-white">Add Customer Type</h2>
               <button onClick={() => setIsModalOpen(false)} className="text-gray-400 hover:text-gray-900 dark:text-white/40 dark:hover:text-white transition-colors">
                 <X className="w-5 h-5" />
@@ -157,18 +177,18 @@ export default function CustomerTypesPage() {
             <div className="p-6 flex flex-col gap-4">
               <div className="flex flex-col gap-1.5">
                 <label className="text-xs text-gray-500 dark:text-white/50 font-bold uppercase tracking-wider">Type Name</label>
-                <input type="text" placeholder="e.g. Enterprise" className="bg-gray-50 dark:bg-[#27272a]/50 border border-gray-200 dark:border-white/5 rounded-lg px-4 py-2.5 text-sm text-gray-900 dark:text-white outline-none focus:border-violet-500/50 dark:focus:border-[#a855f7]/50 transition-all" />
+                <input type="text" value={name} onChange={(e) => setName(e.target.value)} placeholder="e.g. Enterprise" className="bg-gray-50 dark:bg-[#27272a]/50 border border-gray-200 dark:border-white/5 rounded-lg px-4 py-2.5 text-sm text-gray-900 dark:text-white outline-none focus:border-violet-500/50 dark:focus:border-[#a855f7]/50 transition-all" />
               </div>
               <div className="flex flex-col gap-1.5">
                 <label className="text-xs text-gray-500 dark:text-white/50 font-bold uppercase tracking-wider">Description</label>
-                <textarea rows={3} placeholder="Describe this customer category..." className="bg-gray-50 dark:bg-[#27272a]/50 border border-gray-200 dark:border-white/5 rounded-lg px-4 py-2.5 text-sm text-gray-900 dark:text-white outline-none focus:border-violet-500/50 dark:focus:border-[#a855f7]/50 transition-all resize-none" />
+                <textarea rows={3} value={description} onChange={(e) => setDescription(e.target.value)} placeholder="Describe this customer category..." className="bg-gray-50 dark:bg-[#27272a]/50 border border-gray-200 dark:border-white/5 rounded-lg px-4 py-2.5 text-sm text-gray-900 dark:text-white outline-none focus:border-violet-500/50 dark:focus:border-[#a855f7]/50 transition-all resize-none" />
               </div>
             </div>
             <div className="px-6 py-4 border-t border-gray-100 dark:border-white/[0.04] flex items-center justify-end gap-3 bg-gray-50/50 dark:bg-[#18181b]/50">
               <Button variant="secondary" onClick={() => setIsModalOpen(false)}>
                 Cancel
               </Button>
-              <Button variant="primary" onClick={() => setIsModalOpen(false)}>
+              <Button variant="primary" onClick={handleSaveType}>
                 Save Type
               </Button>
             </div>
