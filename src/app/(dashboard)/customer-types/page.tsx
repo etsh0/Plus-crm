@@ -4,26 +4,25 @@ import {
   Plus, 
   FileText,
   Printer,
-  X
+  X,
+  Trash,
+  Eye
 } from "lucide-react";
-import { useCustomerTypes } from "@/hooks/use-customer-types";
+
 import { Button } from "@/components/ui/button";
 import { SearchInput } from "@/components/ui/search-input";
 import Link from "next/link";
-import { initialCustomerTypes } from "@/redux/slice/customer-types/customer-types";
 import { useState } from "react";
+
 import { useSelector, useDispatch } from "react-redux";
-import { addNewType } from "../../../redux/slice/customer-types/customer-types"
+import { addNewType, deleteType } from "../../../redux/slice/customer-types/customer-types"
 
 export default function CustomerTypesPage() {
   const dispatch = useDispatch();
   const [name, setName] = useState("")
   const [description, setDescription] = useState("")
+  const [isModalOpen, setIsModalOpen] = useState(false);
 
-  const { 
-    isModalOpen, 
-    setIsModalOpen, 
-  } = useCustomerTypes(initialCustomerTypes); 
 
   // Select types from Redux state
   const types = useSelector((state: any) => state.types);
@@ -44,6 +43,11 @@ export default function CustomerTypesPage() {
     setName("");
     setDescription("");
   }
+
+  const handleDelete = (id: string) => {
+    dispatch(deleteType(id))
+  }
+
   return (
     <div className="space-y-8 max-w-400 mx-auto animate-in fade-in duration-500">
       {/* Title and Action */}
@@ -54,6 +58,7 @@ export default function CustomerTypesPage() {
         </div>
         <Button 
           variant="primary"
+          className="cursor-pointer"
           onClick={() => setIsModalOpen(true)}
         >
           <Plus className="w-4 h-4" />
@@ -68,7 +73,6 @@ export default function CustomerTypesPage() {
           <div className="flex items-center gap-3 flex-1 max-w-2xl">
             <SearchInput 
               placeholder="Search customer types..." 
-
               className="w-full"
             />
           </div>
@@ -93,7 +97,7 @@ export default function CustomerTypesPage() {
         <div className="overflow-x-auto">
           <table className="w-full text-left border-collapse">
             <thead>
-              <tr className="border-y border-gray-100 dark:border-white/[0.04] bg-gray-50/50 dark:bg-white/1">
+              <tr className="border-y border-gray-100 dark:border-white/4 bg-gray-50/50 dark:bg-white/1">
                 <th className="px-6 py-4 text-[11px] font-bold text-gray-400 dark:text-white/40 uppercase tracking-[0.1em]">ID</th>
                 <th className="px-6 py-4 text-[11px] font-bold text-gray-400 dark:text-white/40 uppercase tracking-[0.1em]">Type Name</th>
                 <th className="px-6 py-4 text-[11px] font-bold text-gray-400 dark:text-white/40 uppercase tracking-[0.1em]">Description</th>
@@ -136,15 +140,27 @@ export default function CustomerTypesPage() {
                                 d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"
                               />
                             </svg>
-                            Edit
                           </Link>
                         </Button>
                         <Button
                           variant="destructive"
                           size="sm"
                           className="cursor-pointer"
+                          onClick={() => handleDelete(type.id)}
                         >
-                          Delete
+                          <Link href={""}>
+                            <Trash />
+                          </Link>
+                        </Button>
+                        <Button
+                          variant="secondary"
+                          size="sm"
+                          className="cursor-pointer"
+                          onClick={() => handleDelete(type.id)}
+                        >
+                          <Link href={""}>
+                            <Eye />
+                          </Link>
                         </Button>
                       </div>
                   </td>
@@ -152,15 +168,6 @@ export default function CustomerTypesPage() {
               ))}
             </tbody>
           </table>
-        </div>
-        
-        {/* Pagination */}
-        <div className="px-6 py-5 border-t border-gray-100 dark:border-white/[0.04] flex items-center justify-between bg-gray-50/30 dark:bg-white/1">
-          <p className="text-sm text-gray-500 dark:text-white/40">Showing 1 to {types.length} of {types.length} entries</p>
-          <div className="flex items-center gap-2">
-            <button className="px-5 py-2 rounded-lg border border-gray-200 dark:border-white/10 text-xs font-semibold text-gray-400 dark:text-white/20 disabled:opacity-50 cursor-not-allowed transition-all">Previous</button>
-            <button className="px-5 py-2 rounded-lg border border-gray-200 dark:border-white/10 text-xs font-semibold text-gray-900 dark:text-white hover:bg-gray-100 dark:hover:bg-white/5 transition-all">Next</button>
-          </div>
         </div>
       </div>
 
