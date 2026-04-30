@@ -1,12 +1,19 @@
-import { createSlice } from "@reduxjs/toolkit";
+import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 
 
-export const initialCustomerTypes = [
-  { id: "#001", name: "VIP", description: "High-value enterprise clients with dedic...", customers: 0, date: "Oct 24, 2023" },
-  { id: "#002", name: "Regular", description: "Standard active accounts on monthly o...", customers: 0, date: "Nov 12, 2023" },
-  { id: "#003", name: "New", description: "Onboarding phase accounts (first 30 d...", customers: 0, date: "Dec 01, 2023" },
-  { id: "#004", name: "Returning", description: "Previously churned customers who hav...", customers: 0, date: "Jan 15, 2024" },
-];
+export interface CustomerType {
+    id:string,
+    name:string,
+    description:string,
+    customers: number,
+    date:string
+}
+
+const savedData = localStorage.getItem("customer-types")
+
+export const initialCustomerTypes: CustomerType[] = savedData ? JSON.parse(savedData) : [] ;
+
+
 
 const customerTypes = createSlice({
     name: "customer-types",
@@ -14,11 +21,19 @@ const customerTypes = createSlice({
         types : initialCustomerTypes
     },
     reducers: {
-        addNewType: (state, action) => {
+        addNewType: (state, action: PayloadAction<CustomerType>) => {
             state.types.push(action.payload)
+            localStorage.setItem("customer-types", JSON.stringify(state.types));
+        },
+        deleteType: (state, action: PayloadAction<string>) => {
+            state.types = state.types.filter( type => type.id !== action.payload)
+            localStorage.setItem("customer-types", JSON.stringify(state.types));
         }
     }
 })
 
-export const { addNewType } = customerTypes.actions;
+export const { addNewType, deleteType } = customerTypes.actions;
 export default customerTypes.reducer;
+
+
+
