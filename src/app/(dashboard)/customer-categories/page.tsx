@@ -188,11 +188,11 @@ const handleDelete = (id: string) => {
             <div className="p-6 flex flex-col gap-4">
               <div className="flex flex-col gap-1.5">
                 <label className="text-xs text-gray-500 dark:text-white/50 font-bold uppercase tracking-wider">Category Name</label>
-                <input type="text" placeholder="e.g. Enterprise" className="bg-gray-50 dark:bg-[#27272a]/50 border border-gray-200 dark:border-white/5 rounded-lg px-4 py-2.5 text-sm text-gray-900 dark:text-white outline-none focus:border-violet-500/50 dark:focus:border-[#a855f7]/50 transition-all" />
+                <input onChange={(e) => setName(e.target.value)} type="text" placeholder="e.g. Enterprise" className="bg-gray-50 dark:bg-[#27272a]/50 border border-gray-200 dark:border-white/5 rounded-lg px-4 py-2.5 text-sm text-gray-900 dark:text-white outline-none focus:border-violet-500/50 dark:focus:border-[#a855f7]/50 transition-all" />
               </div>
               <div className="flex flex-col gap-1.5">
                 <label className="text-xs text-gray-500 dark:text-white/50 font-bold uppercase tracking-wider">Description</label>
-                <textarea rows={3} placeholder="Describe this customer category..." className="bg-gray-50 dark:bg-[#27272a]/50 border border-gray-200 dark:border-white/5 rounded-lg px-4 py-2.5 text-sm text-gray-900 dark:text-white outline-none focus:border-violet-500/50 dark:focus:border-[#a855f7]/50 transition-all resize-none" />
+                <textarea onChange={(e) => setDescription(e.target.value)} rows={3} placeholder="Describe this customer category..." className="bg-gray-50 dark:bg-[#27272a]/50 border border-gray-200 dark:border-white/5 rounded-lg px-4 py-2.5 text-sm text-gray-900 dark:text-white outline-none focus:border-violet-500/50 dark:focus:border-[#a855f7]/50 transition-all resize-none" />
               </div>
             </div>
             <div className="px-6 py-4 border-t border-gray-100 dark:border-white/[0.04] flex items-center justify-end gap-3 bg-gray-50/50 dark:bg-[#18181b]/50">
