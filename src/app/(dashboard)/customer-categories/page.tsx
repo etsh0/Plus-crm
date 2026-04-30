@@ -1,7 +1,7 @@
 "use client";
 
-import { 
-  Plus, 
+import {
+  Plus,
   FileText,
   Printer,
   X
@@ -12,22 +12,42 @@ import { SearchInput } from "@/components/ui/search-input";
 import { initialCategories } from "@/constants/mock-data";
 import { PiplineChart } from "@/components/ui/PiplineChart";
 import Link from "next/link";
+import { useSelector, useDispatch } from "react-redux";
+import { addNewCategory, deleteCategory } from "@/redux/slice/customerCategory/customerCategory";
+import { useState } from "react";
 
 export default function CustomerCategoriesPage() {
-  const { 
-    searchQuery, 
-    setSearchQuery, 
-    isModalOpen, 
-    setIsModalOpen, 
-    filteredCategories 
+  const dispatch = useDispatch();
+  const [name, setName] = useState("")
+  const [description, setDescription] = useState("")
+
+  const {
+    isModalOpen,
+    setIsModalOpen,
   } = useCustomerCategories(initialCategories);
 
-  const customerCategoriesData = [
-    { name: 'Enterprise Companies', value: 42, color: '#3b82f6' },
-    { name: 'Individual Professionals', value: 28, color: '#8b5cf6' },
-    { name: 'E-commerce Partners', value: 18, color: '#10b981' },
-    { name: 'Educational Institutions', value: 12, color: '#f59e0b' },
-  ];
+  // Select types from Redux state
+  const categories = useSelector((state: any) => state.customerCategory.categories) || [];
+
+  const handleSaveCategory = () => {
+    if (!name.trim()) return;
+
+    const newCustomerCategory = {
+      id: `#${Math.floor(Math.random() * 1000).toString().padStart(3, '0')}`,
+      name: name,
+      description: description,
+      customers: 0,
+      date: new Date().toLocaleDateString('en-US', { month: 'short', day: '2-digit', year: 'numeric' })
+    }
+
+    dispatch(addNewCategory(newCustomerCategory))
+    setIsModalOpen(false);
+    setName("");
+    setDescription("");
+  }
+const handleDelete = (id: string) => {
+  dispatch(deleteCategory(id));
+};
 
   return (
     <div className="space-y-8 max-w-[1600px] mx-auto animate-in fade-in duration-500">
@@ -37,7 +57,7 @@ export default function CustomerCategoriesPage() {
           <h1 className="text-3xl font-bold text-gray-900 dark:text-white tracking-tight">Customer Categories</h1>
           <p className="text-gray-500 dark:text-white/40 text-sm mt-1">Manage and track your primary customer business segments.</p>
         </div>
-        <Button 
+        <Button
           variant="primary"
           onClick={() => setIsModalOpen(true)}
         >
@@ -51,14 +71,14 @@ export default function CustomerCategoriesPage() {
         {/* Toolbar */}
         <div className="p-5 flex flex-wrap items-center justify-between gap-4">
           <div className="flex items-center gap-3 flex-1 max-w-2xl">
-            <SearchInput 
-              placeholder="Search customer category..." 
-              value={searchQuery}
-              onChange={(e) => setSearchQuery(e.target.value)}
+            <SearchInput
+              placeholder="Search customer category..."
+              value={name}
+              onChange={(e) => setName(e.target.value)}
               className="w-full"
             />
           </div>
-          
+
           <div className="flex items-center bg-gray-50 dark:bg-[#18181b] border border-gray-200 dark:border-white/10 rounded-lg overflow-hidden">
             <button className="flex items-center gap-2 px-4 py-2.5 hover:bg-gray-100 dark:hover:bg-white/5 text-sm font-medium text-gray-600 dark:text-white/70 border-r border-gray-200 dark:border-white/10 transition-all">
               <FileText className="w-4 h-4" />
@@ -89,64 +109,57 @@ export default function CustomerCategoriesPage() {
               </tr>
             </thead>
             <tbody className="divide-y divide-gray-100 dark:divide-white/[0.04]">
-              {filteredCategories.map((type) => (
-                <tr key={type.id} className="hover:bg-gray-50 dark:hover:bg-white/1 transition-colors group">
-                  <td className="px-6 py-5 text-sm text-gray-500 dark:text-white/60 font-medium">{type.id}</td>
+              {categories?.map((category: any) => (
+                <tr key={category.id} className="hover:bg-gray-50 dark:hover:bg-white/1 transition-colors group">
+                  <td className="px-6 py-5 text-sm text-gray-500 dark:text-white/60 font-medium">{category.id}</td>
                   <td className="px-6 py-5">
                     <div className="flex items-center gap-3">
-                      <span className="text-sm font-bold text-gray-900 dark:text-white">{type.name}</span>
+                      <span className="text-sm font-bold text-gray-900 dark:text-white">{category.name}</span>
                     </div>
                   </td>
-                  <td className="px-6 py-5 text-sm text-gray-500 dark:text-white/40">{type.description}</td>
+                  <td className="px-6 py-5 text-sm text-gray-500 dark:text-white/40">{category.description}</td>
                   <td className="px-6 py-5 text-center">
                     <span className="inline-flex items-center px-3 py-1 rounded-full bg-gray-100 dark:bg-white/5 text-[11px] font-bold text-gray-600 dark:text-white/60 border border-gray-200 dark:border-white/[0.05]">
-                      {type.customers.toLocaleString()}
+                      {category?.customers?.toLocaleString()}
                     </span>
                   </td>
-                  <td className="px-6 py-5 text-sm text-gray-500 dark:text-white/60">{type.date}</td>
+                  <td className="px-6 py-5 text-sm text-gray-500 dark:text-white/60">{category.date}</td>
                   <td className="px-6 py-5 text-right">
-                      <div className="flex items-center justify-end gap-2">
-                        <Button asChild variant="secondary" size="sm">
-                          <Link href={''}>
-                            <svg
-                              width="12"
-                              height="12"
-                              fill="none"
-                              viewBox="0 0 24 24"
-                              stroke="currentColor"
-                            >
-                              <path
-                                strokeLinecap="round"
-                                strokeLinejoin="round"
-                                strokeWidth={2}
-                                d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"
-                              />
-                            </svg>
-                            Edit
-                          </Link>
-                        </Button>
-                        <Button
-                          variant="destructive"
-                          size="sm"
-                          className="cursor-pointer"
-                        >
-                          Delete
-                        </Button>
-                      </div>
+                    <div className="flex items-center justify-end gap-2">
+                      <Button asChild variant="secondary" size="sm">
+                        <Link href={`/customer-categories/${category.id}`}>
+                          <svg
+
+                            width="12"
+                            height="12"
+                            fill="none"
+                            viewBox="0 0 24 24"
+                            stroke="currentColor"
+                          >
+                            <path
+                              strokeLinecap="round"
+                              strokeLinejoin="round"
+                              strokeWidth={2}
+                              d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"
+                            />
+                          </svg>
+                          Edit
+                        </Link>
+                      </Button>
+                      <Button
+                        variant="destructive"
+                        size="sm"
+                        className="cursor-pointer"
+                        onClick={() => handleDelete(category.id)}
+                      >
+                        Delete
+                      </Button>
+                    </div>
                   </td>
                 </tr>
               ))}
             </tbody>
           </table>
-        </div>
-        
-        {/* Pagination */}
-        <div className="px-6 py-5 border-t border-gray-100 dark:border-white/[0.04] flex items-center justify-between bg-gray-50/30 dark:bg-white/1">
-          <p className="text-sm text-gray-500 dark:text-white/40">Showing 1 to {filteredCategories.length} of {filteredCategories.length} entries</p>
-          <div className="flex items-center gap-2">
-            <button className="px-5 py-2 rounded-lg border border-gray-200 dark:border-white/10 text-xs font-semibold text-gray-400 dark:text-white/20 disabled:opacity-50 cursor-not-allowed transition-all">Previous</button>
-            <button className="px-5 py-2 rounded-lg border border-gray-200 dark:border-white/10 text-xs font-semibold text-gray-900 dark:text-white hover:bg-gray-100 dark:hover:bg-white/5 transition-all">Next</button>
-          </div>
         </div>
       </div>
 
@@ -157,7 +170,7 @@ export default function CustomerCategoriesPage() {
             <h2 className="text-lg font-bold text-gray-900 dark:text-white">Customers per Category</h2>
           </div>
           <div className="h-[300px] w-full">
-            <PiplineChart data={customerCategoriesData} />
+            <PiplineChart data={categories} />
           </div>
         </div>
       </div>
@@ -186,7 +199,7 @@ export default function CustomerCategoriesPage() {
               <Button onClick={() => setIsModalOpen(false)} variant="secondary">
                 Cancel
               </Button>
-              <Button onClick={() => setIsModalOpen(false)} variant="primary">
+              <Button onClick={() => handleSaveCategory()} variant="primary">
                 Save Category
               </Button>
             </div>

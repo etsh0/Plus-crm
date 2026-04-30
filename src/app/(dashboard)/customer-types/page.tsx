@@ -25,28 +25,36 @@ export default function CustomerTypesPage() {
 
 
   // Select types from Redux state
-  const types = useSelector((state: any) => state.types);
+ const types = useSelector(
+  (state: any) => state.customerTypes.types
+);
 
-  const handleSaveType = () => {
-    if (!name.trim()) return;
+const handleSaveType = () => {
+  if (!name.trim()) return;
 
-    const newCustomerType = {
-      id: `#${Math.floor(Math.random() * 1000).toString().padStart(3, '0')}`,
-      name: name,
-      description: description,
-      customers : 0,
-      date: new Date().toLocaleDateString('en-US', { month: 'short', day: '2-digit', year: 'numeric' })
-    }
+  const newCustomerType = {
+    id: `#${Math.floor(Math.random() * 1000)
+      .toString()
+      .padStart(3, "0")}`,
+    name: name,
+    description: description,
+    customers: 0,
+    date: new Date().toLocaleDateString("en-US", {
+      month: "short",
+      day: "2-digit",
+      year: "numeric",
+    }),
+  };
 
-    dispatch(addNewType(newCustomerType))
-    setIsModalOpen(false);
-    setName("");
-    setDescription("");
-  }
+  dispatch(addNewType(newCustomerType));
+  setIsModalOpen(false);
+  setName("");
+  setDescription("");
+};
 
-  const handleDelete = (id: string) => {
-    dispatch(deleteType(id))
-  }
+const handleDelete = (id: string) => {
+  dispatch(deleteType(id));
+};
 
   return (
     <div className="space-y-8 max-w-400 mx-auto animate-in fade-in duration-500">
@@ -107,7 +115,7 @@ export default function CustomerTypesPage() {
               </tr>
             </thead>
             <tbody className="divide-y divide-gray-100 dark:divide-white/4">
-              {types.map((type: any) => (
+              {types?.map((type: any) => (
                 <tr key={type.id} className="hover:bg-gray-50 dark:hover:bg-white/1 transition-colors group">
                   <td className="px-6 py-5 text-sm text-gray-500 dark:text-white/60 font-medium">{type.id}</td>
                   <td className="px-6 py-5">
@@ -156,7 +164,7 @@ export default function CustomerTypesPage() {
                           variant="secondary"
                           size="sm"
                           className="cursor-pointer"
-                          onClick={() => handleDelete(type.id)}
+                          
                         >
                           <Link href={""}>
                             <Eye />
