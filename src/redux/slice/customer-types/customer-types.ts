@@ -28,11 +28,18 @@ const customerTypes = createSlice({
         deleteType: (state, action: PayloadAction<string>) => {
             state.types = state.types.filter( type => type.id !== action.payload)
             localStorage.setItem("customer-types", JSON.stringify(state.types));
-        }
+        },
+        updateType: (state, action: PayloadAction<CustomerType>) => {
+            const index = state.types.findIndex(type => type.id === action.payload.id);
+            if (index !== -1) {
+                state.types[index] = action.payload;
+                localStorage.setItem("customer-types", JSON.stringify(state.types));
+            }
+        },
     }
 })
 
-export const { addNewType, deleteType } = customerTypes.actions;
+export const { addNewType, deleteType, updateType } = customerTypes.actions;
 export default customerTypes.reducer;
 
 
