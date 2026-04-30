@@ -153,13 +153,6 @@ export const initialCategories: CustomerCategory[] = [
   { id: "#004", name: "Educational Institutions", description: "Universities, schools, and ed-tech platforms...", customers: 34, date: "Jan 15, 2024" },
 ];
 
-export const initialCustomerTypes: CustomerType[] = [
-  { id: "#001", name: "VIP", color: "bg-purple-500 shadow-[0_0_10px_rgba(168,85,247,0.8)]", description: "High-value enterprise clients with dedic...", customers: 142, date: "Oct 24, 2023" },
-  { id: "#002", name: "Regular", color: "bg-blue-400 shadow-[0_0_10px_rgba(96,165,250,0.8)]", description: "Standard active accounts on monthly o...", customers: 2845, date: "Nov 12, 2023" },
-  { id: "#003", name: "New", color: "bg-amber-400 shadow-[0_0_10px_rgba(251,191,36,0.8)]", description: "Onboarding phase accounts (first 30 d...", customers: 89, date: "Dec 01, 2023" },
-  { id: "#004", name: "Returning", color: "bg-emerald-400 shadow-[0_0_10px_rgba(52,211,153,0.8)]", description: "Previously churned customers who hav...", customers: 34, date: "Jan 15, 2024" },
-];
-
 export const dashboardStats = [
   { label: "Total Customers", value: "1,284", change: "+12%", up: true, data: [30, 40, 45, 50, 49, 60, 70, 91] },
   { label: "Active Leads", value: "347", change: "+5%", up: true, data: [20, 25, 20, 30, 28, 35, 40, 45] },
