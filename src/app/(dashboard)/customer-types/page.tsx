@@ -10,7 +10,6 @@ import {
 
 import { Button } from "@/components/ui/button";
 import { SearchInput } from "@/components/ui/search-input";
-import Link from "next/link";
 import { useState } from "react";
 
 import { useSelector, useDispatch } from "react-redux";

@@ -83,7 +83,7 @@ export default function CustomerCategoriesPage() {
   };
 
   return (
-    <div className="space-y-8 max-w-[1600px] mx-auto animate-in fade-in duration-500">
+    <div className="space-y-8 max-w-400 mx-auto animate-in fade-in duration-500">
       <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
         <div>
           <h1 className="text-3xl font-bold text-gray-900 dark:text-white tracking-tight">
