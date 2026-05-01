@@ -13,14 +13,25 @@ export interface Contact {
 
 export interface Customer {
   id: number;
-  name: string;
-  role: string;
+  name: string; // Contact Person Full Name
+  role: string; // Job Title
   avatar: string;
   initials?: string;
-  company: string;
+  company: string; // Facility Name
   email: string;
-  phone: string;
-  location: string;
-  status: string;
+  phone: string; // Primary Phone
+  additionalPhone?: string;
+  location: string; // Main Address
+  addressDetails?: string; // Additional Details
+  customerType: string; // VIP, Regular, New, Returning
+  customerCategory: string; // Enterprise, Individual, etc.
+  assignedUser: string;
+  isActive: boolean;
+  notes?: string;
+  commercialRegister?: string;
+  taxId?: string;
+  contactPersonMobile?: string;
   lastContact: string;
 }
+
+
