@@ -1,8 +1,7 @@
-import { Customer, Contact } from "@/types";
+import { Contact, Customer } from "@/types";
 import { Lead } from "@/hooks/use-leads";
 import { Deal } from "@/hooks/use-deals";
 import { Opportunity } from "@/hooks/use-opportunities";
-import { CustomerCategory } from "@/hooks/use-customer-categories";
 
 export const initialCustomers: Customer[] = [
   {
@@ -14,7 +13,10 @@ export const initialCustomers: Customer[] = [
     email: "sarah.j@acmecorp.com",
     phone: "+1 (555) 123-4567",
     location: "New York, NY",
-    status: "Active",
+    customerType: "VIP",
+    customerCategory: "Enterprise Companies",
+    assignedUser: "John Smith",
+    isActive: true,
     lastContact: "2 days ago",
   },
   {
@@ -26,10 +28,15 @@ export const initialCustomers: Customer[] = [
     email: "m.chen@techstart.io",
     phone: "+1 (555) 234-5678",
     location: "San Francisco, CA",
-    status: "Premium",
+    customerType: "VIP",
+    customerCategory: "Enterprise Companies",
+    assignedUser: "Sarah Johnson",
+    isActive: false,
     lastContact: "1 week ago",
   },
 ];
+
+
 
 export const initialContacts: Contact[] = [
   {
