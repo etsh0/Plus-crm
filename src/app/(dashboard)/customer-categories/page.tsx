@@ -1,17 +1,13 @@
 "use client";
 
 import { Plus, FileText, Printer, X, Users } from "lucide-react";
-import {
-  CustomerCategory,
-  useCustomerCategories,
-} from "@/hooks/use-customer-categories";
 import { Button } from "@/components/ui/button";
 import { SearchInput } from "@/components/ui/search-input";
-import { initialCategories } from "@/constants/mock-data";
 import { PiplineChart } from "@/components/ui/PiplineChart";
 import { useSelector, useDispatch } from "react-redux";
 import {
   addNewCategory,
+  CustomerCategory,
   deleteCategory,
   editCategory,
 } from "@/redux/slice/customerCategory/customerCategory";
@@ -22,11 +18,10 @@ export default function CustomerCategoriesPage() {
   const [search, setSearch] = useState("");
   const [name, setName] = useState("");
   const [description, setDescription] = useState("");
-  const [editingCategory, setEditingCategory] =
-    useState<CustomerCategory | null>(null);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [editingCategory, setEditingCategory] = useState<CustomerCategory | null>(null);
 
-  const { isModalOpen, setIsModalOpen } =
-    useCustomerCategories(initialCategories);
+
 
   const categories =
     useSelector((state: any) => state.customerCategory.categories) || [];
@@ -47,9 +42,7 @@ export default function CustomerCategoriesPage() {
       dispatch(editCategory(updatedCategory));
     } else {
       const newCustomerCategory: CustomerCategory = {
-        id: `#${Math.floor(Math.random() * 1000)
-          .toString()
-          .padStart(3, "0")}`,
+        id: Date.now(),
         name,
         description,
         customers: 0,
@@ -78,7 +71,7 @@ export default function CustomerCategoriesPage() {
     setDescription(category.description);
     setIsModalOpen(true);
   };
-  const handleDelete = (id: string) => {
+  const handleDelete = (id: number) => {
     dispatch(deleteCategory(id));
   };
 
@@ -149,7 +142,7 @@ export default function CustomerCategoriesPage() {
                 </th>
               </tr>
             </thead>
-            <tbody className="divide-y divide-gray-100 dark:divide-white/[0.04]">
+            <tbody className="divide-y divide-gray-100 dark:divide-white/4">
               {filterCategory && filterCategory.length > 0 ? (
                 filterCategory.map((category: any) => (
                   <tr
@@ -157,7 +150,7 @@ export default function CustomerCategoriesPage() {
                     className="hover:bg-gray-50 dark:hover:bg-white/1 transition-colors group"
                   >
                     <td className="px-6 py-5 text-sm text-gray-500 dark:text-white/60 font-medium">
-                      {category.id}
+                      #{category.id.toString().slice(-2).padStart(3, "0")}
                     </td>
                     <td className="px-6 py-5">
                       <span className="text-sm font-bold text-gray-900 dark:text-white">
@@ -220,21 +213,7 @@ export default function CustomerCategoriesPage() {
                         <h3 className="text-base font-bold text-gray-900 dark:text-white">
                           No customer categories found
                         </h3>
-                        <p className="text-sm text-gray-500 dark:text-white/40 max-w-xs mx-auto">
-                          You haven&apos;t created any customer categories yet.
-                          Categorize your customers to better organize your
-                          workflow.
-                        </p>
                       </div>
-                      <Button
-                        variant="primary"
-                        size="default"
-                        className="mt-2"
-                        onClick={() => setIsModalOpen(true)}
-                      >
-                        <Plus className="w-4 h-4 mr-2" />
-                        Create Your First Category
-                      </Button>
                     </div>
                   </td>
                 </tr>

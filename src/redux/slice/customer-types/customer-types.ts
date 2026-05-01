@@ -2,7 +2,7 @@ import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 
 
 export interface CustomerType {
-    id:string,
+    id:number,
     name:string,
     description:string,
     customers: number,
@@ -25,7 +25,7 @@ const customerTypes = createSlice({
             state.types.push(action.payload)
             localStorage.setItem("customer-types", JSON.stringify(state.types));
         },
-        deleteType: (state, action: PayloadAction<string>) => {
+        deleteType: (state, action: PayloadAction<number>) => {
             state.types = state.types.filter( type => type.id !== action.payload)
             localStorage.setItem("customer-types", JSON.stringify(state.types));
         },

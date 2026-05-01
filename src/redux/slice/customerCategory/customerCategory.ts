@@ -1,7 +1,7 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 
 export interface CustomerCategory {
-  id: string;
+  id: number;
   name: string;
   description: string;
   customers: number;
@@ -37,7 +37,7 @@ const customerCategory = createSlice({
 
     deleteCategory: (
       state,
-      action: PayloadAction<string>
+      action: PayloadAction<number>
     ) => {
       state.categories = state.categories.filter(
         (category) => category.id !== action.payload

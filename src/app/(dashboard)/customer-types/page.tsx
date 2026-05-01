@@ -43,7 +43,7 @@ const handleSaveType = () => {
     dispatch(updateType(updatedType));
   } else {
     const newCustomerType: CustomerType = {
-      id: `#${Math.floor(Math.random() * 1000).toString().padStart(3, "0")}`,
+      id: Date.now(),
       name: name,
       description: description,
       customers: 0,
@@ -73,7 +73,7 @@ const handleCloseModal = () => {
   setDescription("");
 };
 
-const handleDelete = (id: string) => {
+const handleDelete = (id: number) => {
   dispatch(deleteType(id));
 };
 
@@ -146,7 +146,7 @@ const handleDelete = (id: string) => {
               {filterTypes && filterTypes.length > 0 ? (
                 filterTypes.map((type: any) => (
                   <tr key={type.id} className="hover:bg-gray-50 dark:hover:bg-white/1 transition-colors group">
-                    <td className="px-6 py-5 text-sm text-gray-500 dark:text-white/60 font-medium">{type.id}</td>
+                    <td className="px-6 py-5 text-sm text-gray-500 dark:text-white/60 font-medium">#{type.id.toString().slice(-2).padStart(3, "0")}</td>
                     <td className="px-6 py-5">
                       <div className="flex items-center gap-3">
                         <span className="text-sm font-bold text-gray-900 dark:text-white">{type.name}</span>
@@ -200,19 +200,7 @@ const handleDelete = (id: string) => {
                       </div>
                       <div className="space-y-1.5">
                         <h3 className="text-base font-bold text-gray-900 dark:text-white">No customer types found</h3>
-                        <p className="text-sm text-gray-500 dark:text-white/40 max-w-xs mx-auto">
-                          You haven&apos;t created any customer Types yet. Types your customers to better organize your workflow.
-                        </p>
                       </div>
-                      <Button 
-                        variant="primary" 
-                        size="default"
-                        className="mt-2"
-                        onClick={() => setIsModalOpen(true)}
-                      >
-                        <Plus className="w-4 h-4 mr-2" />
-                        Create Your First Type
-                      </Button>
                     </div>
                   </td>
                 </tr>
