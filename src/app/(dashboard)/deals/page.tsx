@@ -11,8 +11,16 @@ import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { SearchInput } from "@/components/ui/search-input";
 import KanbanBoard from "@/components/ui/dealskanban/kanbanBoard";
+import { useEffect, useState } from "react";
+import { CardSkeleton } from "@/components/ui/loaders/CardSkeleton";
 
 export default function DealsPage() {
+  const [isInitialLoading, setIsInitialLoading] = useState(true);
+
+  useEffect(() => {
+    const timer = setTimeout(() => setIsInitialLoading(false), 800);
+    return () => clearTimeout(timer);
+  }, []);
 
   const stats = [
     { title: "Total Pipeline Value", value: "$425,000", change: "+12% from last month", icon: DollarSign },
@@ -20,6 +28,26 @@ export default function DealsPage() {
     { title: "Avg. Probability", value: "60%", change: "+5% from last month", icon: Percent },
     { title: "This Month", value: "5", change: "deals closing", icon: Calendar },
   ];
+
+  if (isInitialLoading) {
+    return (
+      <div className="space-y-8 max-w-400 mx-auto animate-in fade-in duration-500">
+        <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
+          <div>
+            <h1 className="text-3xl font-bold text-gray-900 dark:text-white tracking-tight">Deals</h1>
+            <p className="text-gray-500 dark:text-white/40 text-sm mt-1">Manage your sales pipeline and opportunities</p>
+          </div>
+          <div className="h-10 w-28 bg-gray-200 dark:bg-white/10 rounded-lg animate-pulse" />
+        </div>
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+          <CardSkeleton />
+          <CardSkeleton />
+          <CardSkeleton />
+          <CardSkeleton />
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="space-y-8 max-w-400 mx-auto animate-in fade-in duration-500">

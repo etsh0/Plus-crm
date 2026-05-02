@@ -6,6 +6,7 @@ import bgImg from "@/assets/light-pillar-1776934798991.png";
 import { Controller } from "react-hook-form";
 import { useLogin } from "@/hooks/use-login";
 import { Spinner } from "@/components/ui/spinner";
+import { FullScreenLoader } from "@/components/ui/loaders/FullScreenLoader";
 
 export default function LoginForm() {
   const {
@@ -21,8 +22,10 @@ export default function LoginForm() {
   } = useLogin();
 
   return (
-    <main className="relative min-h-screen overflow-hidden">
-      {/* ── Login Page background image ── */}
+    <>
+      {isLoading && <FullScreenLoader message="Signing in..." />}
+      <main className="relative min-h-screen overflow-hidden">
+        {/* ── Login Page background image ── */}
       <Image
         src={bgImg}
         alt=""
@@ -279,5 +282,6 @@ export default function LoginForm() {
         </div>
       </div>
     </main>
+    </>
   );
 }

@@ -4,6 +4,7 @@ import customerCategory from "../slice/customerCategory/customerCategory"
 import leadStatus from "../slice/lead-status/lead-status"
 import customers from "../slice/customers/customers"
 import contacts from "../slice/contacts/contacts"
+import auth from "../slice/auth/authSlice"
 
 export const myStore = configureStore({
     reducer:{
@@ -11,7 +12,8 @@ export const myStore = configureStore({
         customerCategory:customerCategory,
         leadStatus: leadStatus,
         customers: customers,
-        contacts: contacts
+        contacts: contacts,
+        auth: auth
     }
 });
 

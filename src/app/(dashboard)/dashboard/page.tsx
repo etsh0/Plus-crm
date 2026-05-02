@@ -4,6 +4,8 @@ import { LineChart } from "@/components/ui/LineChart";
 import { PieChart } from "@/components/ui/PieChart";
 import { PiplineChart } from "@/components/ui/PiplineChart";
 import { DollarSign, TrendingUp, Users } from "lucide-react";
+import { useEffect, useState } from "react";
+import { CardSkeleton } from "@/components/ui/loaders/CardSkeleton";
 
 
 const stats = [
@@ -57,9 +59,29 @@ const topCustomers = [
 
 
 export default function DashboardPage() {
+  const [isLoading, setIsLoading] = useState(true);
 
+  useEffect(() => {
+    const timer = setTimeout(() => setIsLoading(false), 800);
+    return () => clearTimeout(timer);
+  }, []);
 
-  return (
+  if (isLoading) {
+    return (
+      <div className="p-8 pb-24 lg:pb-8 animate-in fade-in duration-500">
+        <div className="mb-8">
+          <h1 className="text-2xl font-bold text-gray-900 dark:text-white">Dashboard</h1>
+          <p className="text-gray-500 dark:text-white/40 text-sm mt-1">Welcome back, Ahmed — here&apos;s what&apos;s happening today.</p>
+        </div>
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
+          <CardSkeleton />
+          <CardSkeleton />
+          <CardSkeleton />
+          <CardSkeleton />
+        </div>
+      </div>
+    );
+  }  return (
     <div className="p-8 pb-24 lg:pb-8 animate-in fade-in duration-500">
       <div className="mb-8">
         <h1 className="text-2xl font-bold text-gray-900 dark:text-white">Dashboard</h1>
