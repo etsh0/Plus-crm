@@ -38,9 +38,10 @@ export interface customers {
   createdAt: string;
 }
 
-const savedData = localStorage.getItem("customers")
+const savedData =
+  typeof window !== "undefined" ? localStorage.getItem("customers") : null;
 
-export const initialCustomers: customers[] = savedData ? JSON.parse(savedData) :[];
+export const initialCustomers: customers[] = savedData ? JSON.parse(savedData) : [];
 
 const customers = createSlice({
     name: "customer",

@@ -217,8 +217,8 @@ export default function CustomersPage() {
                     <td className="px-6 py-4 text-right">
                       <div className="flex items-center justify-end gap-2">
                         <Button asChild variant="secondary" size="sm">
-                          <Link href={''}>
-                          <Pencil />
+                          <Link href={`/customers/edit/${c.id}`}>
+                            <Pencil />
                           </Link>
                         </Button>
                         <Button

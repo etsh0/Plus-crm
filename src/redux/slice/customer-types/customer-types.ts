@@ -9,9 +9,10 @@ export interface CustomerType {
     date:string
 }
 
-const savedData = localStorage.getItem("customer-types")
+const savedData =
+  typeof window !== "undefined" ? localStorage.getItem("customer-types") : null;
 
-export const initialCustomerTypes: CustomerType[] = savedData ? JSON.parse(savedData) : [] ;
+export const initialCustomerTypes: CustomerType[] = savedData ? JSON.parse(savedData) : [];
 
 
 
