@@ -2,7 +2,7 @@ import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 
 
 export interface CustomerType {
-    id:number,
+    id:string,
     name:string,
     description:string,
     customers: number,
@@ -25,21 +25,14 @@ const customerTypes = createSlice({
             state.types.push(action.payload)
             localStorage.setItem("customer-types", JSON.stringify(state.types));
         },
-        deleteType: (state, action: PayloadAction<number>) => {
+        deleteType: (state, action: PayloadAction<string>) => {
             state.types = state.types.filter( type => type.id !== action.payload)
             localStorage.setItem("customer-types", JSON.stringify(state.types));
-        },
-        updateType: (state, action: PayloadAction<CustomerType>) => {
-            const index = state.types.findIndex(type => type.id === action.payload.id);
-            if (index !== -1) {
-                state.types[index] = action.payload;
-                localStorage.setItem("customer-types", JSON.stringify(state.types));
-            }
-        },
+        }
     }
 })
 
-export const { addNewType, deleteType, updateType } = customerTypes.actions;
+export const { addNewType, deleteType } = customerTypes.actions;
 export default customerTypes.reducer;
 
 

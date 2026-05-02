@@ -49,12 +49,11 @@ const recentActivity = [
 
 const topCustomers = [
   { rank: 1, initials: 'AE', initialsBg: 'bg-blue-500/10 dark:bg-blue-500/20 text-blue-600 dark:text-blue-400', name: 'Alexandria Exports', type: 'Wholesale', contact: 'Omar Fathy', status: 'Active', value: '$380K', deals: '4 deals', barWidth: '80%', barColor: 'bg-blue-500' },
-  { rank: 2, initials: 'DW', initialsBg: 'bg-violet-500/10 dark:bg-violet-500/20 text-violet-600 dark:text-violet-400', name: 'Delta Wholesale Ltd', type: 'Wholesale', contact: 'Mohamed Karim', status: 'Not Active', value: '$230K', deals: '2 deals', barWidth: '50%', barColor: 'bg-violet-500' },
+  { rank: 2, initials: 'DW', initialsBg: 'bg-violet-500/10 dark:bg-violet-500/20 text-violet-600 dark:text-violet-400', name: 'Delta Wholesale Ltd', type: 'Wholesale', contact: 'Mohamed Karim', status: 'Active', value: '$230K', deals: '2 deals', barWidth: '50%', barColor: 'bg-violet-500' },
   { rank: 3, initials: 'OH', initialsBg: 'bg-emerald-500/10 dark:bg-emerald-500/20 text-emerald-600 dark:text-emerald-400', name: 'Oasis Hospitality', type: 'B2B', contact: 'Sara Ali', status: 'Active', value: '$200K', deals: '2 deals', barWidth: '40%', barColor: 'bg-emerald-500' },
   { rank: 4, initials: 'TS', initialsBg: 'bg-amber-500/10 dark:bg-amber-500/20 text-amber-600 dark:text-amber-400', name: 'TechCorp Solutions', type: 'B2B', contact: 'Ahmed Hassan', status: 'Active', value: '$145K', deals: '3 deals', barWidth: '30%', barColor: 'bg-amber-500' },
-  { rank: 5, initials: 'NR', initialsBg: 'bg-red-500/10 dark:bg-red-500/20 text-red-600 dark:text-red-400', name: 'Nile Retail Group', type: 'Retail', contact: 'Sara Ali', status: 'Not Active', value: '$78K', deals: '5 deals', barWidth: '15%', barColor: 'bg-red-500' },
+  { rank: 5, initials: 'NR', initialsBg: 'bg-red-500/10 dark:bg-red-500/20 text-red-600 dark:text-red-400', name: 'Nile Retail Group', type: 'Retail', contact: 'Sara Ali', status: 'Active', value: '$78K', deals: '5 deals', barWidth: '15%', barColor: 'bg-red-500' },
 ];
-
 
 export default function DashboardPage() {
 
