@@ -1,14 +1,31 @@
 "use client";
 
 import Link from "next/link";
-import { useContacts } from "@/hooks/use-contacts";
 import { Button } from "@/components/ui/button";
 import { StatusBadge } from "@/components/ui/status-badge";
 import { SearchInput } from "@/components/ui/search-input";
-import { initialContacts } from "@/constants/mock-data";
+import { useDispatch, useSelector } from "react-redux";
+import { RootState } from "@/redux/store/store";
+import { deleteContact } from "@/redux/slice/contacts/contacts";
+import { useState } from "react";
 
 export default function ContactsPage() {
-  const { search, setSearch, handleDelete, filteredContacts } = useContacts(initialContacts);
+
+  const contacts = useSelector((state: RootState) => state.contacts.contacts)
+  const { customers } = useSelector((state: RootState) => state.customers);
+  const [searchQuery, setSearchQuery] = useState("")
+  const dispatch = useDispatch()
+
+    const handleDeleteContact = (id : any) => {
+      dispatch(deleteContact(id))
+    }
+
+  const filterContacts = contacts.filter((c: any) => 
+    (c.name?.toLowerCase() || "").includes(searchQuery.toLowerCase()) ||
+    (c.email?.toLowerCase() || "").includes(searchQuery.toLowerCase()) ||
+    (customers.find(customer => customer.id === c.customer_id)?.company_name.toLowerCase() || "")
+    .includes(searchQuery.toLowerCase())
+  )
 
   return (
     <div className="space-y-8 max-w-400 mx-auto animate-in fade-in duration-500">
@@ -44,9 +61,8 @@ export default function ContactsPage() {
         {/* Toolbar */}
         <div className="p-4 border-b border-gray-100 dark:border-white/5 bg-gray-50/50 dark:bg-white/5">
           <SearchInput
+            onChange={(e) => setSearchQuery(e.target.value)}
             placeholder="Search contacts by name, email, or company..."
-            value={search}
-            onChange={(e) => setSearch(e.target.value)}
           />
         </div>
 
@@ -65,10 +81,10 @@ export default function ContactsPage() {
                   Contact Info
                 </th>
                 <th className="px-6 py-4 text-[11px] font-bold text-gray-400 dark:text-white/30 uppercase tracking-wider">
-                  Location
+                  Contact Method
                 </th>
                 <th className="px-6 py-4 text-[11px] font-bold text-gray-400 dark:text-white/30 uppercase tracking-wider">
-                  Related To
+                  Job Title
                 </th>
                 <th className="px-6 py-4 text-[11px] font-bold text-gray-400 dark:text-white/30 uppercase tracking-wider">
                   Last Contact
@@ -79,21 +95,14 @@ export default function ContactsPage() {
               </tr>
             </thead>
             <tbody className="divide-y divide-gray-100 dark:divide-white/5">
-              {initialContacts.length > 0 ? (
-                initialContacts.map((c) => (
+              {filterContacts.length > 0 ? (
+                filterContacts.map((c) => (
                   <tr
                     key={c.id}
                     className="hover:bg-gray-50 dark:hover:bg-white/2 transition-colors"
                   >
                     <td className="px-6 py-4">
                       <div className="flex items-center gap-3">
-                        {c.avatar ? (
-                          <img
-                            src={c.avatar}
-                            alt={c.name}
-                            className="w-8 h-8 rounded-full object-cover border border-gray-200 dark:border-white/10"
-                          />
-                        ) : (
                           <div className="w-8 h-8 rounded-full bg-violet-500/10 border border-violet-500/20 flex items-center justify-center text-violet-500 text-[10px] font-bold">
                             {c.name
                               .split(" ")
@@ -102,13 +111,9 @@ export default function ContactsPage() {
                               .toUpperCase()
                               .slice(0, 2)}
                           </div>
-                        )}
                         <div>
                           <div className="font-semibold text-gray-900 dark:text-white">
                             {c.name}
-                          </div>
-                          <div className="text-[10px] text-gray-500 dark:text-white/40 mt-0.5">
-                            {c.role}
                           </div>
                         </div>
                       </div>
@@ -128,7 +133,9 @@ export default function ContactsPage() {
                             d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"
                           />
                         </svg>
-                        {c.company}
+                        {
+                          customers.find( (customer) => Number(customer.id) === Number(c.customer_id))?.company_name || "N/A"
+                        }
                       </div>
                     </td>
                     <td className="px-6 py-4">
@@ -168,40 +175,26 @@ export default function ContactsPage() {
                       </div>
                     </td>
                     <td className="px-6 py-4">
-                      <div className="flex items-center gap-1.5 text-gray-600 dark:text-white/60 text-[11px]">
-                        <svg
-                          className="w-3.5 h-3.5 text-gray-400 dark:text-white/30"
-                          fill="none"
-                          viewBox="0 0 24 24"
-                          stroke="currentColor"
-                        >
-                          <path
-                            strokeLinecap="round"
-                            strokeLinejoin="round"
-                            strokeWidth={1.5}
-                            d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"
-                          />
-                          <path
-                            strokeLinecap="round"
-                            strokeLinejoin="round"
-                            strokeWidth={1.5}
-                            d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"
-                          />
-                        </svg>
-                        {c.location}
-                      </div>
+                      <span
+                        className={`inline-flex items-center px-2 py-0.5 rounded text-[11px] font-medium border ${
+                          c.contact_method === "phone"
+                            ? "bg-emerald-500/10 text-emerald-500 border-emerald-500/20"
+                            : "bg-indigo-500/10 text-indigo-500 border-indigo-500/20"
+                        }`}
+                      >
+                        {c.contact_method === "phone" ? "📞 Phone" : "📧 Email"}
+                      </span>
                     </td>
                     <td className="px-6 py-4 text-white">
-                      <StatusBadge status={c.related_to} />
-                      {/* {c.related_to} */}
+                      <StatusBadge status={c.job_title} />
                     </td>
                     <td className="px-6 py-4 text-gray-500 dark:text-white/50 text-[11px]">
-                      {c.lastContact}
+                      {c.createdAt}
                     </td>
                     <td className="px-6 py-4 text-right">
                       <div className="flex items-center justify-end gap-2">
                         <Button asChild variant="secondary" size="sm">
-                          <Link href={`/contacts/add?edit=${c.id}`}>
+                          <Link href={''}>
                             <svg
                               width="12"
                               height="12"
@@ -220,9 +213,10 @@ export default function ContactsPage() {
                           </Link>
                         </Button>
                         <Button
+                          onClick={() => handleDeleteContact(c.id)}
+                          className="cursor-pointer"
                           variant="destructive"
                           size="sm"
-                          onClick={() => handleDelete(c.id, c.name)}
                         >
                           <svg
                             width="12"

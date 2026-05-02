@@ -3,13 +3,15 @@ import customerTypes from "../slice/customer-types/customer-types"
 import customerCategory from "../slice/customerCategory/customerCategory"
 import leadStatus from "../slice/lead-status/lead-status"
 import customers from "../slice/customers/customers"
+import contacts from "../slice/contacts/contacts"
 
 export const myStore = configureStore({
     reducer:{
         customerTypes:customerTypes,
         customerCategory:customerCategory,
         leadStatus: leadStatus,
-        customers: customers
+        customers: customers,
+        contacts: contacts
     }
 });
 
