@@ -194,7 +194,7 @@ export default function ContactsPage() {
                     <td className="px-6 py-4 text-right">
                       <div className="flex items-center justify-end gap-2">
                         <Button asChild variant="secondary" size="sm">
-                          <Link href={''}>
+                          <Link href={`/contacts/edit/${c.id}`}>
                             <svg
                               width="12"
                               height="12"

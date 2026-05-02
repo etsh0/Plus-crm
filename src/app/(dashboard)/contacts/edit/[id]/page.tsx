@@ -1,44 +1,71 @@
 "use client";
 
 import Link from "next/link";
+import { useParams, useRouter } from "next/navigation";
+import { useState } from "react";
 import { Formik, Form, Field } from "formik";
-import { addNewContact, contacts } from "@/redux/slice/contacts/contacts";
+import { updateContact, contacts } from "@/redux/slice/contacts/contacts";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "@/redux/store/store";
-import { useRouter } from "next/navigation";
-import { useState } from "react";
 import { toast } from "sonner";
+import { ArrowLeft, Save } from "lucide-react";
 
-export default function AddContactPage() {
-  const { customers } = useSelector((state: RootState) => state.customers);
-  const dispatch = useDispatch();
+export default function EditContactPage() {
+  const params = useParams();
   const router = useRouter();
+  const dispatch = useDispatch();
   const [isLoading, setIsLoading] = useState(false);
+  const contactId = Number(params.id);
+
+  const { customers } = useSelector((state: RootState) => state.customers);
+  const allContacts = useSelector((state: RootState) => state.contacts.contacts);
+
+  const contact = allContacts.find((c: contacts) => c.id === contactId);
+
+  if (!contact) {
+    return (
+      <div className="flex flex-col items-center justify-center min-h-[60vh] gap-6 animate-in fade-in duration-500">
+        <div className="p-6 rounded-2xl bg-red-500/10 text-red-500">
+          <svg width="48" height="48" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
+          </svg>
+        </div>
+        <h2 className="text-xl font-bold text-gray-900 dark:text-white">Contact Not Found</h2>
+        <p className="text-gray-500 dark:text-white/40 text-sm">The contact you are trying to edit does not exist.</p>
+        <Link
+          href="/contacts"
+          className="px-6 py-2.5 rounded-xl bg-purple-600 text-white text-sm font-bold hover:bg-purple-700 transition-all"
+        >
+          Back to Contacts
+        </Link>
+      </div>
+    );
+  }
 
   const initialValues: Partial<contacts> = {
-      name: "",
-      phone: "",
-      email: "",
-      contact_method: "email",
-      job_title: "",
-      customer_id: 0,
-      createdAt: new Date().toLocaleDateString("en-US", {
+      name: contact.name || "",
+      phone: contact.phone || "",
+      email: contact.email || "",
+      contact_method: contact.contact_method || "email",
+      job_title: contact.job_title || "",
+      customer_id: contact.customer_id || 0,
+      createdAt: contact.createdAt || new Date().toLocaleDateString("en-US", {
         month: "short",
         day: "2-digit",
         year: "numeric",
       }),
   };
 
-  const handleSaveContact = (values: any) => {
+  const handleUpdateContact = (values: any) => {
     setIsLoading(true);
     const data: contacts = {
+      ...contact,
       ...values,
-      id: Date.now(),
       customer_id: Number(values.customer_id)
     }
-    dispatch(addNewContact(data));
-    toast.success("Contact added successfully", {
-      description: `${values.name} has been added.`,
+    dispatch(updateContact(data));
+    toast.success("Contact updated successfully", {
+      description: `${values.name} has been saved.`,
     });
     setTimeout(() => {
       router.push("/contacts");
@@ -47,20 +74,31 @@ export default function AddContactPage() {
 
   return (
     <div className="max-w-250 mx-auto animate-in fade-in duration-500 pb-20">
-      <Formik initialValues={initialValues} onSubmit={handleSaveContact}>
+      <Formik initialValues={initialValues} onSubmit={handleUpdateContact}>
         {({ values, setFieldValue }) => (
           <Form className="space-y-8">
             {/* Header Section */}
             <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-8">
-              <div>
-                <h1 className="text-2xl font-bold tracking-tight text-gray-900 dark:text-white">
-                  Create New Contact
-                </h1>
-                <p className="text-gray-500 dark:text-white/40 text-sm mt-1">
-                  Add a new professional contact to your CRM database.
-                </p>
+              <div className="flex items-center gap-4">
+                <Link
+                  href="/contacts"
+                  className="p-2 rounded-xl bg-white dark:bg-white/5 border border-gray-200 dark:border-white/10 text-gray-500 dark:text-white/50 hover:text-gray-900 dark:hover:text-white transition-all"
+                >
+                  <ArrowLeft className="w-5 h-5" />
+                </Link>
+                <div>
+                  <h1 className="text-2xl font-bold tracking-tight text-gray-900 dark:text-white">
+                    Edit Contact
+                  </h1>
+                  <p className="text-gray-500 dark:text-white/40 text-sm mt-1">
+                    Update details for <span className="text-purple-500 font-semibold">{contact.name}</span>
+                  </p>
+                </div>
               </div>
               <div className="flex items-center gap-3">
+                <span className="px-3 py-1.5 rounded-lg bg-purple-500/10 border border-purple-500/20 text-purple-500 text-xs font-bold uppercase tracking-wider">
+                  ID #{contact.id.toString().slice(-4)}
+                </span>
                 <Link
                   href="/contacts"
                   className="px-6 py-2.5 rounded-xl bg-white dark:bg-white/5 border border-gray-200 dark:border-white/10 text-sm font-medium text-gray-700 dark:text-white hover:bg-gray-50 dark:hover:bg-white/10 transition-all flex items-center gap-2"
@@ -82,10 +120,8 @@ export default function AddContactPage() {
                     </>
                   ) : (
                     <>
-                      <svg width="18" height="18" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 7H5a2 2 0 00-2 2v9a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-3m-1 4l-3 3m0 0l-3-3m3 3V4" />
-                      </svg>
-                      Save Contact
+                      <Save className="w-5 h-5" />
+                      Save Changes
                     </>
                   )}
                 </button>
@@ -117,7 +153,7 @@ export default function AddContactPage() {
                   >
                     <option value={0} disabled>Select Company</option>
                     {
-                      customers.map( (customer) => (
+                      customers.map( (customer: any) => (
                         <option key={customer.id} value={customer.id}>
                           {
                             customer.company_name
