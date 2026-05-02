@@ -1,10 +1,13 @@
 import { useRouter } from 'next/navigation';
 import Swal from 'sweetalert2';
 import { useTheme } from 'next-themes';
+import { useDispatch } from 'react-redux';
+import { logoutUser } from '@/redux/slice/auth/authSlice';
 
 export const useAccount = () => {
   const router = useRouter();
   const { resolvedTheme } = useTheme();
+  const dispatch = useDispatch();
 
   const handleLogout = () => {
     const isDark = resolvedTheme === 'dark';
@@ -27,6 +30,7 @@ export const useAccount = () => {
       }
     }).then((result) => {
       if (result.isConfirmed) {
+        dispatch(logoutUser());
         router.push('/login');
       }
     });

@@ -13,6 +13,8 @@ import Link from "next/link";
 import { SearchInput } from '@/components/ui/search-input';
 import { useDispatch, useSelector } from 'react-redux';
 import { addNewStatus, deleteStatus, leadStatus, updateStatus } from '@/redux/slice/lead-status/lead-status';
+import { useEffect } from "react";
+import { TableSkeleton } from "@/components/ui/loaders/TableSkeleton";
 
 
 export default function LeadsStatusPage() {
@@ -22,7 +24,13 @@ export default function LeadsStatusPage() {
   const [color, setColor] = useState("#a855f7")
   const [isLoading, setIsLoading] = useState(false);
   const [editingStatus, setEditingStatus] = useState<leadStatus | null>(null);
-    const dispatch = useDispatch();
+  const dispatch = useDispatch();
+  const [isInitialLoading, setIsInitialLoading] = useState(true);
+
+  useEffect(() => {
+    const timer = setTimeout(() => setIsInitialLoading(false), 800);
+    return () => clearTimeout(timer);
+  }, []);
 
   const status = useSelector(
     (state: any) => state.leadStatus.status
@@ -75,6 +83,17 @@ export default function LeadsStatusPage() {
     dispatch(deleteStatus(id));
   };
 
+  if (isInitialLoading) {
+    return (
+      <div className="p-6 space-y-6">
+        <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
+          <h1 className="text-2xl font-bold text-gray-900 dark:text-white">Leads Status</h1>
+          <div className="h-10 w-28 bg-gray-200 dark:bg-white/10 rounded-lg animate-pulse" />
+        </div>
+        <TableSkeleton rows={4} />
+      </div>
+    );
+  }
 
   return (
     <div className="p-6 space-y-6">

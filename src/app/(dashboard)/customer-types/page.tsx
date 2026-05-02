@@ -10,7 +10,8 @@ import {
 
 import { Button } from "@/components/ui/button";
 import { SearchInput } from "@/components/ui/search-input";
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import { TableSkeleton } from "@/components/ui/loaders/TableSkeleton";
 
 import { useSelector, useDispatch } from "react-redux";
 import { addNewType, deleteType, updateType, CustomerType } from "../../../redux/slice/customer-types/customer-types"
@@ -23,6 +24,12 @@ export default function CustomerTypesPage() {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [searchQuery, setSearchQury] = useState("")
   const [editingType, setEditingType] = useState<CustomerType | null>(null);
+  const [isInitialLoading, setIsInitialLoading] = useState(true);
+
+  useEffect(() => {
+    const timer = setTimeout(() => setIsInitialLoading(false), 800);
+    return () => clearTimeout(timer);
+  }, []);
 
 
   // Select types from Redux state
@@ -78,10 +85,24 @@ const handleCloseModal = () => {
   setDescription("");
 };
 
-const handleDelete = (id: number) => {
-  dispatch(deleteType(id));
-};
+  const handleDelete = (id: number) => {
+    dispatch(deleteType(id));
+  };
 
+  if (isInitialLoading) {
+    return (
+      <div className="space-y-8 max-w-400 mx-auto animate-in fade-in duration-500">
+        <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
+          <div>
+            <h1 className="text-3xl font-bold text-gray-900 dark:text-white tracking-tight">Customer Types</h1>
+            <p className="text-gray-500 dark:text-white/40 text-sm mt-1">Manage and organize your customer categorization hierarchy.</p>
+          </div>
+          <div className="h-10 w-36 bg-gray-200 dark:bg-white/10 rounded-lg animate-pulse" />
+        </div>
+        <TableSkeleton rows={4} />
+      </div>
+    );
+  }
 
   return (
     <div className="space-y-8 max-w-400 mx-auto animate-in fade-in duration-500">

@@ -6,8 +6,9 @@ import { StatusBadge } from "@/components/ui/status-badge";
 import { SearchInput } from "@/components/ui/search-input";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "@/redux/store/store";
+import { useState, useEffect } from "react";
+import { TableSkeleton } from "@/components/ui/loaders/TableSkeleton";
 import { deleteContact } from "@/redux/slice/contacts/contacts";
-import { useState } from "react";
 
 export default function ContactsPage() {
 
@@ -15,6 +16,12 @@ export default function ContactsPage() {
   const { customers } = useSelector((state: RootState) => state.customers);
   const [searchQuery, setSearchQuery] = useState("")
   const dispatch = useDispatch()
+  const [isInitialLoading, setIsInitialLoading] = useState(true);
+
+  useEffect(() => {
+    const timer = setTimeout(() => setIsInitialLoading(false), 800);
+    return () => clearTimeout(timer);
+  }, []);
 
     const handleDeleteContact = (id : any) => {
       dispatch(deleteContact(id))
@@ -26,6 +33,23 @@ export default function ContactsPage() {
     (customers.find(customer => customer.id === c.customer_id)?.company_name.toLowerCase() || "")
     .includes(searchQuery.toLowerCase())
   )
+
+  if (isInitialLoading) {
+    return (
+      <div className="space-y-8 max-w-400 mx-auto animate-in fade-in duration-500">
+        <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
+          <div>
+            <h1 className="text-2xl font-bold text-gray-900 dark:text-white">Contacts</h1>
+            <p className="text-gray-500 dark:text-white/40 text-sm mt-1">
+              Manage your professional network and leads
+            </p>
+          </div>
+          <div className="h-10 w-36 bg-gray-200 dark:bg-white/10 rounded-lg animate-pulse" />
+        </div>
+        <TableSkeleton rows={5} />
+      </div>
+    );
+  }
 
   return (
     <div className="space-y-8 max-w-400 mx-auto animate-in fade-in duration-500">

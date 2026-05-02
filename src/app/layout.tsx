@@ -5,6 +5,7 @@ import "./globals.css";
 import { cn } from "@/lib/utils";
 import { ThemeProvider } from "@/components/theme-provider";
 import MySession from './../components/mySession/MySession';
+import { Toaster } from 'sonner';
 
 const inter = Inter({subsets:['latin'],variable:'--font-sans'});
 
@@ -41,7 +42,8 @@ export default function RootLayout({
             enableSystem
             disableTransitionOnChange
           >
-          {children}
+            <Toaster theme="system" position="top-center" richColors />
+            {children}
           </ThemeProvider>
         </MySession>
       </body>

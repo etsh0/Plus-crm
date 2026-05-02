@@ -12,11 +12,20 @@ import {
 } from "lucide-react";
 import Link from "next/link";
 import { useAccount } from "@/hooks/use-account";
+import { useDispatch, useSelector } from "react-redux";
+import { RootState } from "@/redux/store/store";
+import { loadAuthData } from "@/redux/slice/auth/authSlice";
 
 export function AccountDropdown() {
   const [isOpen, setIsOpen] = React.useState(false);
   const containerRef = React.useRef<HTMLDivElement>(null);
   const { handleLogout } = useAccount();
+  const dispatch = useDispatch();
+  const currentUser = useSelector((state: RootState) => state.auth.currentUser);
+
+  React.useEffect(() => {
+    dispatch(loadAuthData());
+  }, [dispatch]);
 
   React.useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
@@ -28,6 +37,13 @@ export function AccountDropdown() {
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, []);
 
+  const displayInitials = currentUser?.name
+    ? currentUser.name.split(' ').map(n => n[0]).join('').substring(0, 2).toUpperCase()
+    : 'AH';
+
+  const displayName = currentUser?.name || 'Ahmed Hassan';
+  const displayEmail = currentUser?.email || 'ahmed@pulse-crm.com';
+
   return (
     <div className="relative" ref={containerRef}>
       <button
@@ -35,10 +51,10 @@ export function AccountDropdown() {
         className="group flex items-center gap-3 p-1.5 rounded-full hover:bg-gray-100 dark:hover:bg-white/5 transition-all duration-200 border border-transparent hover:border-gray-200 dark:hover:border-white/10"
       >
         <div className="w-9 h-9 rounded-full bg-gradient-to-tr from-violet-500 to-fuchsia-500 flex items-center justify-center text-white font-bold text-sm shadow-lg">
-          AH
+          {displayInitials}
         </div>
         <div className="hidden md:block text-left mr-1">
-          <p className="text-sm font-semibold text-gray-900 dark:text-white leading-none">Ahmed Hassan</p>
+          <p className="text-sm font-semibold text-gray-900 dark:text-white leading-none">{displayName}</p>
           <p className="text-[10px] text-gray-500 dark:text-white/40 mt-1">Administrator</p>
         </div>
         <ChevronDown size={14} className="text-gray-400 dark:text-white/40 transition-transform duration-200 group-hover:text-gray-600 dark:group-hover:text-white" />
@@ -52,8 +68,8 @@ export function AccountDropdown() {
                 <User size={24} />
             </div>
             <div>
-              <p className="text-base font-bold text-gray-900 dark:text-white">Ahmed Hassan</p>
-              <p className="text-xs text-gray-500 dark:text-white/40">ahmed@pulse-crm.com</p>
+              <p className="text-base font-bold text-gray-900 dark:text-white">{displayName}</p>
+              <p className="text-xs text-gray-500 dark:text-white/40">{displayEmail}</p>
             </div>
           </div>
 

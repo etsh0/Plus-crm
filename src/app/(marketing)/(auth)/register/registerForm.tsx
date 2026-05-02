@@ -5,6 +5,7 @@ import Image from "next/image";
 import bgImg from "@/assets/light-pillar-1776934798991.png";
 import { Controller } from "react-hook-form";
 import { useRegister } from "@/hooks/use-register";
+import { FullScreenLoader } from "@/components/ui/loaders/FullScreenLoader";
 
 export default function RegisterForm() {
   const {
@@ -20,8 +21,10 @@ export default function RegisterForm() {
   } = useRegister();
 
   return (
-    <main className="relative min-h-screen overflow-hidden">
-      {/* ── Register Page background image ── */}
+    <>
+      {isLoading && <FullScreenLoader message="Creating account..." />}
+      <main className="relative min-h-screen overflow-hidden">
+        {/* ── Register Page background image ── */}
       <Image
         src={bgImg}
         alt=""
@@ -311,5 +314,6 @@ export default function RegisterForm() {
         </div>
       </div>
     </main>
+    </>
   );
 }

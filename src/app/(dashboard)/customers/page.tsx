@@ -8,7 +8,8 @@ import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "@/redux/store/store"; 
 import { Eye, Pencil, Trash, X } from "lucide-react";
 import { deleteCustomer } from "@/redux/slice/customers/customers";
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import { TableSkeleton } from "@/components/ui/loaders/TableSkeleton";
 
 
 export default function CustomersPage() {
@@ -19,6 +20,12 @@ export default function CustomersPage() {
   const [isViewModalOpen, setIsViewModalOpen] = useState(false);
   const [selectedCustomer, setSelectedCustomer] = useState<any>(null);
   const dispatch = useDispatch()
+  const [isLoading, setIsLoading] = useState(true);
+
+  useEffect(() => {
+    const timer = setTimeout(() => setIsLoading(false), 800);
+    return () => clearTimeout(timer);
+  }, []);
 
   const filterCustomers = customers.filter( (type: any) => 
     type.company_name.toLowerCase().includes(searchQuery.toLowerCase()) || 
@@ -34,6 +41,23 @@ export default function CustomersPage() {
     setSelectedCustomer(customer);
     setIsViewModalOpen(true);
   };
+
+  if (isLoading) {
+    return (
+      <div className="space-y-8 max-w-400 mx-auto animate-in fade-in duration-500">
+        <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
+          <div>
+            <h1 className="text-2xl font-bold text-gray-900 dark:text-white">Customers</h1>
+            <p className="text-gray-500 dark:text-white/40 text-sm mt-1">
+              Manage your customer relationships and accounts
+            </p>
+          </div>
+          <div className="h-10 w-36 bg-gray-200 dark:bg-white/10 rounded-lg animate-pulse" />
+        </div>
+        <TableSkeleton rows={5} />
+      </div>
+    );
+  }
 
   return (
     <div className="space-y-8 max-w-400 mx-auto animate-in fade-in duration-500">

@@ -11,7 +11,8 @@ import {
   deleteCategory,
   editCategory,
 } from "@/redux/slice/customerCategory/customerCategory";
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import { TableSkeleton } from "@/components/ui/loaders/TableSkeleton";
 
 export default function CustomerCategoriesPage() {
   const dispatch = useDispatch();
@@ -21,6 +22,12 @@ export default function CustomerCategoriesPage() {
   const [description, setDescription] = useState("");
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [editingCategory, setEditingCategory] = useState<CustomerCategory | null>(null);
+  const [isInitialLoading, setIsInitialLoading] = useState(true);
+
+  useEffect(() => {
+    const timer = setTimeout(() => setIsInitialLoading(false), 800);
+    return () => clearTimeout(timer);
+  }, []);
 
 
 
@@ -79,6 +86,25 @@ export default function CustomerCategoriesPage() {
   const handleDelete = (id: number) => {
     dispatch(deleteCategory(id));
   };
+
+  if (isInitialLoading) {
+    return (
+      <div className="space-y-8 max-w-400 mx-auto animate-in fade-in duration-500">
+        <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
+          <div>
+            <h1 className="text-3xl font-bold text-gray-900 dark:text-white tracking-tight">
+              Customer Categories
+            </h1>
+            <p className="text-gray-500 dark:text-white/40 text-sm mt-1">
+              Manage and track your primary customer business segments.
+            </p>
+          </div>
+          <div className="h-10 w-44 bg-gray-200 dark:bg-white/10 rounded-lg animate-pulse" />
+        </div>
+        <TableSkeleton rows={4} />
+      </div>
+    );
+  }
 
   return (
     <div className="space-y-8 max-w-400 mx-auto animate-in fade-in duration-500">

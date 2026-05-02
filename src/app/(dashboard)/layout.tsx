@@ -1,6 +1,5 @@
 import Sidebar from "@/components/Dashboard/Sidebar";
 import Topbar from "@/components/Dashboard/Topbar";
-import { Toaster } from 'sonner';
 
 export default function DashboardLayout({
   children,
@@ -9,11 +8,6 @@ export default function DashboardLayout({
 }) {
   return (
     <div className="relative flex h-screen overflow-hidden bg-[#f8fafc] dark:bg-[#111111] transition-colors duration-300">
-      <Toaster 
-        theme="system" 
-        position="top-center" 
-        richColors
-      />
       <Sidebar />
       <div className="flex-1 flex flex-col min-w-0 overflow-hidden">
         <Topbar />
