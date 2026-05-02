@@ -1,81 +1,7 @@
-import { Contact, Customer } from "@/types";
 import { Lead } from "@/hooks/use-leads";
 import { Deal } from "@/hooks/use-deals";
 import { Opportunity } from "@/hooks/use-opportunities";
 
-export const initialCustomers: Customer[] = [
-  {
-    id: 1,
-    name: "Sarah Johnson",
-    role: "VP of Sales",
-    avatar: "https://i.pravatar.cc/150?img=1",
-    company: "Acme Corp",
-    email: "sarah.j@acmecorp.com",
-    phone: "+1 (555) 123-4567",
-    location: "New York, NY",
-    customerType: "VIP",
-    customerCategory: "Enterprise Companies",
-    assignedUser: "John Smith",
-    isActive: true,
-    lastContact: "2 days ago",
-  },
-  {
-    id: 2,
-    name: "Mike Chen",
-    role: "CEO",
-    avatar: "https://i.pravatar.cc/150?img=11",
-    company: "TechStart Inc",
-    email: "m.chen@techstart.io",
-    phone: "+1 (555) 234-5678",
-    location: "San Francisco, CA",
-    customerType: "VIP",
-    customerCategory: "Enterprise Companies",
-    assignedUser: "Sarah Johnson",
-    isActive: false,
-    lastContact: "1 week ago",
-  },
-];
-
-
-
-export const initialContacts: Contact[] = [
-  {
-    id: 1,
-    name: "Sarah Johnson",
-    role: "VP of Sales",
-    avatar: "https://i.pravatar.cc/150?img=1",
-    company: "Acme Corp",
-    email: "sarah.j@acmecorp.com",
-    phone: "+1 (555) 123-4567",
-    location: "New York, NY",
-    related_to: "Lead",
-    lastContact: "2 days ago",
-  },
-  {
-    id: 2,
-    name: "Mike Chen",
-    role: "CEO",
-    avatar: "https://i.pravatar.cc/150?img=11",
-    company: "TechStart Inc",
-    email: "m.chen@techstart.io",
-    phone: "+1 (555) 234-5678",
-    location: "San Francisco, CA",
-    related_to: "Customer",
-    lastContact: "1 week ago",
-  },
-  {
-    id: 3,
-    name: "Emily Davis",
-    role: "Director of IT",
-    avatar: "https://i.pravatar.cc/150?img=5",
-    company: "Global Solutions",
-    email: "emily@globalsol.com",
-    phone: "+1 (555) 345-6789",
-    location: "Austin, TX",
-    related_to: "Deal",
-    lastContact: "3 days ago",
-  },
-];
 
 export const initialLeads: Lead[] = [
   {
@@ -150,13 +76,6 @@ export const initialOpportunities: Opportunity[] = [
     initials: "SJ",
     status: "Active"
   }
-];
-
-export const initialCategories: CustomerCategory[] = [
-  { id: "#001", name: "Enterprise Companies", description: "Large scale B2B clients with 1000+ employees...", customers: 142, date: "Oct 24, 2023",  },
-  { id: "#002", name: "Individual Professionals", description: "Independent consultants and freelancers...", customers: 2845, date: "Nov 12, 2023" },
-  { id: "#003", name: "E-commerce Partners", description: "Online retailers and D2C brands...", customers: 89, date: "Dec 01, 2023" },
-  { id: "#004", name: "Educational Institutions", description: "Universities, schools, and ed-tech platforms...", customers: 34, date: "Jan 15, 2024" },
 ];
 
 export const dashboardStats = [
