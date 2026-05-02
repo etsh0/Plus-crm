@@ -17,6 +17,7 @@ export default function CustomerCategoriesPage() {
   const dispatch = useDispatch();
   const [search, setSearch] = useState("");
   const [name, setName] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
   const [description, setDescription] = useState("");
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [editingCategory, setEditingCategory] = useState<CustomerCategory | null>(null);
@@ -32,7 +33,7 @@ export default function CustomerCategoriesPage() {
 
   const handleSaveCategory = () => {
     if (!name.trim()) return;
-
+    setIsLoading(true);
     if (editingCategory) {
       const updatedCategory: CustomerCategory = {
         ...editingCategory,
@@ -282,8 +283,18 @@ export default function CustomerCategoriesPage() {
               <Button onClick={handleCloseModal} variant="secondary">
                 Cancel
               </Button>
-              <Button onClick={handleSaveCategory} variant="primary">
-                Save Category
+              <Button onClick={handleSaveCategory} variant="primary" disabled={isLoading}>
+                {isLoading ? (
+                  <>
+                    <svg className="animate-spin h-5 w-5 text-white" fill="none" viewBox="0 0 24 24">
+                      <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
+                      <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z" />
+                    </svg>
+                    Saving...
+                  </>
+                ) : (
+                  "Save Category"
+                )}
               </Button>
             </div>
           </div>
