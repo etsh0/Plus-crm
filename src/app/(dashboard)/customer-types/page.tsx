@@ -5,23 +5,23 @@ import {
   FileText,
   Printer,
   X,
-  Trash,
-  Eye
+  Users,
 } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
 import { SearchInput } from "@/components/ui/search-input";
-import Link from "next/link";
 import { useState } from "react";
 
 import { useSelector, useDispatch } from "react-redux";
-import { addNewType, deleteType } from "../../../redux/slice/customer-types/customer-types"
+import { addNewType, deleteType, updateType, CustomerType } from "../../../redux/slice/customer-types/customer-types"
 
 export default function CustomerTypesPage() {
   const dispatch = useDispatch();
   const [name, setName] = useState("")
   const [description, setDescription] = useState("")
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [searchQuery, setSearchQury] = useState("")
+  const [editingType, setEditingType] = useState<CustomerType | null>(null);
 
 
   // Select types from Redux state
@@ -29,32 +29,54 @@ export default function CustomerTypesPage() {
   (state: any) => state.customerTypes.types
 );
 
+const filterTypes = types.filter( (type: any) => type.name.toLowerCase().includes(searchQuery.toLowerCase()))
+
 const handleSaveType = () => {
   if (!name.trim()) return;
 
-  const newCustomerType = {
-    id: `#${Math.floor(Math.random() * 1000)
-      .toString()
-      .padStart(3, "0")}`,
-    name: name,
-    description: description,
-    customers: 0,
-    date: new Date().toLocaleDateString("en-US", {
-      month: "short",
-      day: "2-digit",
-      year: "numeric",
-    }),
-  };
+  if (editingType) {
+    const updatedType: CustomerType = {
+      ...editingType,
+      name: name,
+      description: description,
+    };
+    dispatch(updateType(updatedType));
+  } else {
+    const newCustomerType: CustomerType = {
+      id: Date.now(),
+      name: name,
+      description: description,
+      customers: 0,
+      date: new Date().toLocaleDateString("en-US", {
+        month: "short",
+        day: "2-digit",
+        year: "numeric",
+      }),
+    };
+    dispatch(addNewType(newCustomerType));
+  }
 
-  dispatch(addNewType(newCustomerType));
+  handleCloseModal();
+};
+
+const handleEdit = (type: CustomerType) => {
+  setEditingType(type);
+  setName(type.name);
+  setDescription(type.description);
+  setIsModalOpen(true);
+};
+
+const handleCloseModal = () => {
   setIsModalOpen(false);
+  setEditingType(null);
   setName("");
   setDescription("");
 };
 
-const handleDelete = (id: string) => {
+const handleDelete = (id: number) => {
   dispatch(deleteType(id));
 };
+
 
   return (
     <div className="space-y-8 max-w-400 mx-auto animate-in fade-in duration-500">
@@ -67,7 +89,12 @@ const handleDelete = (id: string) => {
         <Button 
           variant="primary"
           className="cursor-pointer"
-          onClick={() => setIsModalOpen(true)}
+          onClick={() => {
+            setEditingType(null);
+            setName("");
+            setDescription("");
+            setIsModalOpen(true);
+          }}
         >
           <Plus className="w-4 h-4" />
           <span>Add New Type</span>
@@ -80,8 +107,9 @@ const handleDelete = (id: string) => {
         <div className="p-5 flex flex-wrap items-center justify-between gap-4">
           <div className="flex items-center gap-3 flex-1 max-w-2xl">
             <SearchInput 
-              placeholder="Search customer types..." 
+              placeholder="Search customer types name..." 
               className="w-full"
+              onChange={(e) => setSearchQury(e.target.value)}
             />
           </div>
           
@@ -115,40 +143,41 @@ const handleDelete = (id: string) => {
               </tr>
             </thead>
             <tbody className="divide-y divide-gray-100 dark:divide-white/4">
-              {types?.map((type: any) => (
-                <tr key={type.id} className="hover:bg-gray-50 dark:hover:bg-white/1 transition-colors group">
-                  <td className="px-6 py-5 text-sm text-gray-500 dark:text-white/60 font-medium">{type.id}</td>
-                  <td className="px-6 py-5">
-                    <div className="flex items-center gap-3">
-                      <span className="text-sm font-bold text-gray-900 dark:text-white">{type.name}</span>
-                    </div>
-                  </td>
-                  <td className="px-6 py-5 text-sm text-gray-500 dark:text-white/40">{type.description}</td>
-                  <td className="px-6 py-5 text-center">
-                    <span className="inline-flex items-center px-3 py-1 rounded-full bg-gray-100 dark:bg-white/5 text-[11px] font-bold text-gray-600 dark:text-white/60 border border-gray-200 dark:border-white/[0.05]">
-                      {type.customers.toLocaleString()}
-                    </span>
-                  </td>
-                  <td className="px-6 py-5 text-sm text-gray-500 dark:text-white/60">{type.date}</td>
-                  <td className="px-6 py-5 text-right">
+              {filterTypes && filterTypes.length > 0 ? (
+                filterTypes.map((type: any) => (
+                  <tr key={type.id} className="hover:bg-gray-50 dark:hover:bg-white/1 transition-colors group">
+                    <td className="px-6 py-5 text-sm text-gray-500 dark:text-white/60 font-medium">#{type.id.toString().slice(-2).padStart(3, "0")}</td>
+                    <td className="px-6 py-5">
+                      <div className="flex items-center gap-3">
+                        <span className="text-sm font-bold text-gray-900 dark:text-white">{type.name}</span>
+                      </div>
+                    </td>
+                    <td className="px-6 py-5 text-sm text-gray-500 dark:text-white/40">{type.description}</td>
+                    <td className="px-6 py-5 text-center">
+                      <span className="inline-flex items-center px-3 py-1 rounded-full bg-gray-100 dark:bg-white/5 text-[11px] font-bold text-gray-600 dark:text-white/60 border border-gray-200 dark:border-white/[0.05]">
+                        {type.customers.toLocaleString()}
+                      </span>
+                    </td>
+                    <td className="px-6 py-5 text-sm text-gray-500 dark:text-white/60">{type.date}</td>
+                    <td className="px-6 py-5 text-right">
                       <div className="flex items-center justify-end gap-2">
-                        <Button asChild variant="secondary" size="sm">
-                          <Link href={''}>
-                            <svg
-                              width="12"
-                              height="12"
-                              fill="none"
-                              viewBox="0 0 24 24"
-                              stroke="currentColor"
-                            >
-                              <path
-                                strokeLinecap="round"
-                                strokeLinejoin="round"
-                                strokeWidth={2}
-                                d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"
-                              />
-                            </svg>
-                          </Link>
+                        <Button variant="secondary" size="sm" onClick={() => handleEdit(type)}>
+                          <svg
+
+                            width="12"
+                            height="12"
+                            fill="none"
+                            viewBox="0 0 24 24"
+                            stroke="currentColor"
+                          >
+                            <path
+                              strokeLinecap="round"
+                              strokeLinejoin="round"
+                              strokeWidth={2}
+                              d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"
+                            />
+                          </svg>
+                          Edit
                         </Button>
                         <Button
                           variant="destructive"
@@ -156,24 +185,26 @@ const handleDelete = (id: string) => {
                           className="cursor-pointer"
                           onClick={() => handleDelete(type.id)}
                         >
-                          <Link href={""}>
-                            <Trash />
-                          </Link>
-                        </Button>
-                        <Button
-                          variant="secondary"
-                          size="sm"
-                          className="cursor-pointer"
-                          
-                        >
-                          <Link href={""}>
-                            <Eye />
-                          </Link>
+                          Delete
                         </Button>
                       </div>
+                    </td>
+                  </tr>
+                ))
+              ) : (
+                <tr>
+                  <td colSpan={6} className="px-6 py-20 text-center">
+                    <div className="flex flex-col items-center justify-center gap-4 animate-in fade-in slide-in-from-bottom-4 duration-500">
+                      <div className="w-16 h-16 rounded-2xl bg-gray-50 dark:bg-white/5 flex items-center justify-center border border-gray-100 dark:border-white/5 shadow-inner">
+                        <Users className="w-8 h-8 text-gray-400 dark:text-white/20" />
+                      </div>
+                      <div className="space-y-1.5">
+                        <h3 className="text-base font-bold text-gray-900 dark:text-white">No customer types found</h3>
+                      </div>
+                    </div>
                   </td>
                 </tr>
-              ))}
+              )}
             </tbody>
           </table>
         </div>
@@ -184,8 +215,10 @@ const handleDelete = (id: string) => {
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 dark:bg-black/60 backdrop-blur-sm p-4">
           <div className="bg-white dark:bg-[#18181b] border border-gray-200 dark:border-white/10 rounded-2xl w-full max-w-md overflow-hidden shadow-xl animate-in zoom-in-95 duration-200">
             <div className="px-6 py-5 border-b border-gray-100 dark:border-white/4 flex items-center justify-between">
-              <h2 className="text-lg font-bold text-gray-900 dark:text-white">Add Customer Type</h2>
-              <button onClick={() => setIsModalOpen(false)} className="text-gray-400 hover:text-gray-900 dark:text-white/40 dark:hover:text-white transition-colors">
+              <h2 className="text-lg font-bold text-gray-900 dark:text-white">
+                {editingType ? "Edit Customer Type" : "Add Customer Type"}
+              </h2>
+              <button onClick={handleCloseModal} className="text-gray-400 hover:text-gray-900 dark:text-white/40 dark:hover:text-white transition-colors">
                 <X className="w-5 h-5" />
               </button>
             </div>
@@ -200,11 +233,11 @@ const handleDelete = (id: string) => {
               </div>
             </div>
             <div className="px-6 py-4 border-t border-gray-100 dark:border-white/[0.04] flex items-center justify-end gap-3 bg-gray-50/50 dark:bg-[#18181b]/50">
-              <Button variant="secondary" onClick={() => setIsModalOpen(false)}>
+              <Button variant="secondary" onClick={handleCloseModal}>
                 Cancel
               </Button>
               <Button variant="primary" onClick={handleSaveType}>
-                Save Type
+                {editingType ? "Update Type" : "Save Type"}
               </Button>
             </div>
           </div>

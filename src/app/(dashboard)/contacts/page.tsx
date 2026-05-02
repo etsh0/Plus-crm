@@ -65,10 +65,10 @@ export default function ContactsPage() {
                   Contact Info
                 </th>
                 <th className="px-6 py-4 text-[11px] font-bold text-gray-400 dark:text-white/30 uppercase tracking-wider">
-                  Contact Method
+                  Location
                 </th>
                 <th className="px-6 py-4 text-[11px] font-bold text-gray-400 dark:text-white/30 uppercase tracking-wider">
-                  Job Title
+                  Related To
                 </th>
                 <th className="px-6 py-4 text-[11px] font-bold text-gray-400 dark:text-white/30 uppercase tracking-wider">
                   Last Contact
@@ -167,11 +167,33 @@ export default function ContactsPage() {
                         </div>
                       </div>
                     </td>
-                    <td className="px-6 py-4 text-white">
-                      Phone
+                    <td className="px-6 py-4">
+                      <div className="flex items-center gap-1.5 text-gray-600 dark:text-white/60 text-[11px]">
+                        <svg
+                          className="w-3.5 h-3.5 text-gray-400 dark:text-white/30"
+                          fill="none"
+                          viewBox="0 0 24 24"
+                          stroke="currentColor"
+                        >
+                          <path
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                            strokeWidth={1.5}
+                            d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"
+                          />
+                          <path
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                            strokeWidth={1.5}
+                            d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"
+                          />
+                        </svg>
+                        {c.location}
+                      </div>
                     </td>
                     <td className="px-6 py-4 text-white">
                       <StatusBadge status={c.related_to} />
+                      {/* {c.related_to} */}
                     </td>
                     <td className="px-6 py-4 text-gray-500 dark:text-white/50 text-[11px]">
                       {c.lastContact}
