@@ -45,7 +45,7 @@ export function AccountDropdown() {
       </button>
 
       {isOpen && (
-        <div className="absolute right-0 mt-3 w-64 rounded-2xl bg-white dark:bg-[#121212] border border-gray-200 dark:border-white/10 shadow-[0_10px_40px_rgba(0,0,0,0.1)] dark:shadow-[0_10px_40px_rgba(0,0,0,0.5)] overflow-hidden z-50 animate-in fade-in zoom-in-95 duration-200">
+        <div className="absolute right-0 mt-3 w-64 rounded-2xl bg-white dark:bg-[#121212] border border-gray-200 dark:border-white/10 shadow-[0_10px_40px_rgba(0,0,0,0.1)] dark:shadow-[0_10px_40px_rgba(0,0,0,0.5)] overflow-hidden z-[200] animate-in fade-in zoom-in-95 duration-200">
           {/* Header */}
           <div className="p-4 border-b border-gray-100 dark:border-white/5 flex items-center gap-4 bg-gray-50/50 dark:bg-white/5">
             <div className="w-12 h-12 rounded-full bg-violet-500/10 flex items-center justify-center text-violet-500">

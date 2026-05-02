@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import { useParams, useRouter } from "next/navigation";
+import { useState } from "react";
 import { Field, Form, Formik } from "formik";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "@/redux/store/store";
@@ -32,7 +33,7 @@ export default function EditCustomerPage() {
   const params = useParams();
   const router = useRouter();
   const dispatch = useDispatch();
-
+  const [isLoading, setIsLoading] = useState(false);
   const customerId = Number(params.id);
   const customers = useSelector((state: RootState) => state.customers.customers);
   const customerTypes = useSelector((state: RootState) => state.customerTypes.types);
@@ -92,6 +93,7 @@ export default function EditCustomerPage() {
   };
 
   const handleUpdate = (values: any) => {
+    setIsLoading(true);
     const updated = {
       ...customer,
       ...values,
@@ -102,7 +104,7 @@ export default function EditCustomerPage() {
     toast.success("Customer updated successfully", {
       description: `${values.company_name} has been saved.`,
     });
-    router.push("/customers");
+    setTimeout(() => router.push("/customers"), 800);
   };
 
   const inputClass =
@@ -448,10 +450,23 @@ export default function EditCustomerPage() {
               </Link>
               <button
                 type="submit"
-                className="px-12 py-3.5 rounded-xl bg-[#a855f7] text-white text-sm font-bold hover:bg-[#9333ea] transition-all flex items-center gap-3 cursor-pointer shadow-lg shadow-purple-500/20"
+                disabled={isLoading}
+                className="px-12 py-3.5 rounded-xl bg-[#a855f7] text-white text-sm font-bold hover:bg-[#9333ea] transition-all flex items-center gap-3 cursor-pointer shadow-lg shadow-purple-500/20 disabled:opacity-70 disabled:cursor-not-allowed"
               >
-                <Save className="w-5 h-5" />
-                Save Changes
+                {isLoading ? (
+                  <>
+                    <svg className="animate-spin h-5 w-5 text-white" fill="none" viewBox="0 0 24 24">
+                      <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
+                      <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z" />
+                    </svg>
+                    Saving...
+                  </>
+                ) : (
+                  <>
+                    <Save className="w-5 h-5" />
+                    Save Changes
+                  </>
+                )}
               </button>
             </div>
           </Form>

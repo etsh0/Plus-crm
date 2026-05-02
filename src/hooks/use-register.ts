@@ -20,6 +20,7 @@ export const useRegister = () => {
   const router = useRouter();
   const [showPassword, setShowPassword] = useState(false);
   const [focused, setFocused] = useState<string | null>(null);
+  const [isLoading, setIsLoading] = useState(false);
 
   const {
     handleSubmit,
@@ -36,7 +37,7 @@ export const useRegister = () => {
 
   const onSubmit = (data: RegisterFormData) => {
     console.log("Register submitted:", data);
-    // Simulation of API call
+    setIsLoading(true);
     toast.success("Account created successfully! Welcome aboard.");
     setTimeout(() => {
       router.push("/dashboard");
@@ -52,5 +53,6 @@ export const useRegister = () => {
     setShowPassword,
     focused,
     setFocused,
+    isLoading,
   };
 };

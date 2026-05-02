@@ -16,6 +16,7 @@ export const useLogin = () => {
   const router = useRouter();
   const [showPassword, setShowPassword] = useState(false);
   const [focused, setFocused] = useState<string | null>(null);
+  const [isLoading, setIsLoading] = useState(false);
 
   const {
     handleSubmit,
@@ -28,7 +29,7 @@ export const useLogin = () => {
 
   const onSubmit = (data: LoginFormData) => {
     console.log("Login submitted:", data);
-    // Simulation of API call
+    setIsLoading(true);
     toast.success("Welcome back! Signing you in...");
     setTimeout(() => {
       router.push("/dashboard");
@@ -44,5 +45,6 @@ export const useLogin = () => {
     setShowPassword,
     focused,
     setFocused,
+    isLoading,
   };
 };

@@ -16,6 +16,7 @@ export default function RegisterForm() {
     setShowPassword,
     focused,
     setFocused,
+    isLoading,
   } = useRegister();
 
   return (
@@ -261,6 +262,7 @@ export default function RegisterForm() {
               <button
                 id="register-submit"
                 type="submit"
+                disabled={isLoading}
                 className="
                   mt-2 w-full py-3.5 rounded-xl text-sm font-semibold tracking-wide
                   bg-white/10 border border-white/20
@@ -270,9 +272,21 @@ export default function RegisterForm() {
                   shadow-[0_4px_24px_rgba(0,0,0,0.3)]
                   hover:shadow-[0_6px_32px_rgba(0,0,0,0.5)]
                   transition-all duration-300
+                  disabled:opacity-70 disabled:cursor-not-allowed
+                  flex items-center justify-center gap-2
                 "
               >
-                Register
+                {isLoading ? (
+                  <>
+                    <svg className="animate-spin h-4 w-4 text-white" fill="none" viewBox="0 0 24 24">
+                      <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
+                      <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z" />
+                    </svg>
+                    Creating account...
+                  </>
+                ) : (
+                  "Register"
+                )}
               </button>
             </form>
 
