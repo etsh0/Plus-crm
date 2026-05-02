@@ -19,6 +19,7 @@ export default function CustomerTypesPage() {
   const dispatch = useDispatch();
   const [name, setName] = useState("")
   const [description, setDescription] = useState("")
+  const [isLoading, setIsLoading] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [searchQuery, setSearchQury] = useState("")
   const [editingType, setEditingType] = useState<CustomerType | null>(null);
@@ -33,30 +34,34 @@ const filterTypes = types.filter( (type: any) => type.name.toLowerCase().include
 
 const handleSaveType = () => {
   if (!name.trim()) return;
+  setIsLoading(true);
 
-  if (editingType) {
-    const updatedType: CustomerType = {
-      ...editingType,
-      name: name,
-      description: description,
-    };
-    dispatch(updateType(updatedType));
-  } else {
-    const newCustomerType: CustomerType = {
-      id: Date.now(),
-      name: name,
-      description: description,
-      customers: 0,
-      date: new Date().toLocaleDateString("en-US", {
-        month: "short",
-        day: "2-digit",
-        year: "numeric",
-      }),
-    };
-    dispatch(addNewType(newCustomerType));
-  }
+  setTimeout(() => {
+    if (editingType) {
+      const updatedType: CustomerType = {
+        ...editingType,
+        name: name,
+        description: description,
+      };
+      dispatch(updateType(updatedType));
+    } else {
+      const newCustomerType: CustomerType = {
+        id: Date.now(),
+        name: name,
+        description: description,
+        customers: 0,
+        date: new Date().toLocaleDateString("en-US", {
+          month: "short",
+          day: "2-digit",
+          year: "numeric",
+        }),
+      };
+      dispatch(addNewType(newCustomerType));
+    }
 
-  handleCloseModal();
+    setIsLoading(false);
+    handleCloseModal();
+  }, 800);
 };
 
 const handleEdit = (type: CustomerType) => {
@@ -236,8 +241,18 @@ const handleDelete = (id: number) => {
               <Button variant="secondary" onClick={handleCloseModal}>
                 Cancel
               </Button>
-              <Button variant="primary" onClick={handleSaveType}>
-                {editingType ? "Update Type" : "Save Type"}
+              <Button variant="primary" onClick={handleSaveType} disabled={isLoading}>
+                {isLoading ? (
+                  <>
+                    <svg className="animate-spin h-5 w-5 text-white" fill="none" viewBox="0 0 24 24">
+                      <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
+                      <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z" />
+                    </svg>
+                    Saving...
+                  </>
+                ) : (
+                  editingType ? "Update Type" : "Save Type"
+                )}
               </Button>
             </div>
           </div>

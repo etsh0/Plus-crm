@@ -20,6 +20,7 @@ export default function LeadsStatusPage() {
   const [searchQuery, setSearchQury] = useState("")
   const [name, setName] = useState("")
   const [color, setColor] = useState("#a855f7")
+  const [isLoading, setIsLoading] = useState(false);
   const [editingStatus, setEditingStatus] = useState<leadStatus | null>(null);
     const dispatch = useDispatch();
 
@@ -32,24 +33,28 @@ export default function LeadsStatusPage() {
 
   const handleSaveType = () => {
     if (!name.trim()) return;
+    setIsLoading(true);
   
-    if (editingStatus) {
-      const updatedStatus: leadStatus = {
-        ...editingStatus,
-        name: name,
-        color: color,
-      };
-      dispatch(updateStatus(updatedStatus));
-    } else {
-      const newLeadStatus: leadStatus = {
-        id: `#${Math.floor(Math.random() * 1000).toString().padStart(2, "0")}`,
-        name: name,
-        color: color
-      };
-      dispatch(addNewStatus(newLeadStatus));
-    }
-  
-    handleCloseModal();
+    setTimeout(() => {
+      if (editingStatus) {
+        const updatedStatus: leadStatus = {
+          ...editingStatus,
+          name: name,
+          color: color,
+        };
+        dispatch(updateStatus(updatedStatus));
+      } else {
+        const newLeadStatus: leadStatus = {
+          id: `#${Math.floor(Math.random() * 1000).toString().padStart(2, "0")}`,
+          name: name,
+          color: color
+        };
+        dispatch(addNewStatus(newLeadStatus));
+      }
+    
+      setIsLoading(false);
+      handleCloseModal();
+    }, 800);
   };
   
   const handleEdit = (type: leadStatus) => {
@@ -254,8 +259,18 @@ export default function LeadsStatusPage() {
               <Button variant="secondary" onClick={() => handleCloseModal()}>
                 Cancel
               </Button>
-              <Button variant="primary" onClick={() => handleSaveType()}>
-                {editingStatus ? "Update Status" : "Save Status"}
+              <Button variant="primary" onClick={() => handleSaveType()} disabled={isLoading}>
+                {isLoading ? (
+                  <>
+                    <svg className="animate-spin h-5 w-5 text-white" fill="none" viewBox="0 0 24 24">
+                      <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
+                      <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z" />
+                    </svg>
+                    Saving...
+                  </>
+                ) : (
+                  editingStatus ? "Update Status" : "Save Status"
+                )}
               </Button>
             </div>
           </div>

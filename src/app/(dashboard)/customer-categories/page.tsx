@@ -34,29 +34,33 @@ export default function CustomerCategoriesPage() {
   const handleSaveCategory = () => {
     if (!name.trim()) return;
     setIsLoading(true);
-    if (editingCategory) {
-      const updatedCategory: CustomerCategory = {
-        ...editingCategory,
-        name,
-        description,
-      };
-      dispatch(editCategory(updatedCategory));
-    } else {
-      const newCustomerCategory: CustomerCategory = {
-        id: Date.now(),
-        name,
-        description,
-        customers: 0,
-        date: new Date().toLocaleDateString("en-US", {
-          month: "short",
-          day: "2-digit",
-          year: "numeric",
-        }),
-      };
-      dispatch(addNewCategory(newCustomerCategory));
-    }
 
-    handleCloseModal();
+    setTimeout(() => {
+      if (editingCategory) {
+        const updatedCategory: CustomerCategory = {
+          ...editingCategory,
+          name,
+          description,
+        };
+        dispatch(editCategory(updatedCategory));
+      } else {
+        const newCustomerCategory: CustomerCategory = {
+          id: Date.now(),
+          name,
+          description,
+          customers: 0,
+          date: new Date().toLocaleDateString("en-US", {
+            month: "short",
+            day: "2-digit",
+            year: "numeric",
+          }),
+        };
+        dispatch(addNewCategory(newCustomerCategory));
+      }
+
+      setIsLoading(false);
+      handleCloseModal();
+    }, 800);
   };
 
   const handleCloseModal = () => {

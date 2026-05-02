@@ -11,12 +11,23 @@ export interface contacts {
   createdAt: string;
 }
 
+const getInitialData = () => {
+  if (typeof window !== "undefined") {
+    const savedData = localStorage.getItem("contacts");
+    if (savedData) {
+      try {
+        return JSON.parse(savedData);
+      } catch (e) {
+        console.error("Failed to parse contacts from local storage");
+      }
+    }
+  }
+  return [];
+};
 
-const savedData = localStorage.getItem("contacts")
+export const initialContacts: contacts[] = getInitialData();
 
-export const initialContacts: contacts[] = savedData ? JSON.parse(savedData) :[];
-
-const contacts = createSlice({
+const contactsSlice = createSlice({
     name: "contact",
     initialState: {
         contacts: initialContacts
@@ -24,17 +35,27 @@ const contacts = createSlice({
     reducers: {
         addNewContact:(state, action: PayloadAction<contacts>) => {
             state.contacts.push(action.payload)
-            localStorage.setItem("contacts", JSON.stringify(state.contacts));
+            if (typeof window !== "undefined") {
+                localStorage.setItem("contacts", JSON.stringify(state.contacts));
+            }
+        },
+        updateContact: (state, action: PayloadAction<contacts>) => {
+            const index = state.contacts.findIndex(c => c.id === action.payload.id);
+            if (index !== -1) {
+                state.contacts[index] = action.payload;
+                if (typeof window !== "undefined") {
+                    localStorage.setItem("contacts", JSON.stringify(state.contacts));
+                }
+            }
         },
         deleteContact: (state, action: PayloadAction<number>) => {
           state.contacts = state.contacts.filter( type => type.id !== action.payload)
-          localStorage.setItem("contacts", JSON.stringify(state.contacts));
+          if (typeof window !== "undefined") {
+              localStorage.setItem("contacts", JSON.stringify(state.contacts));
+          }
       },
     }
 })
 
-
-export const { addNewContact, deleteContact } = contacts.actions;
-export default contacts.reducer;
-
-
+export const { addNewContact, updateContact, deleteContact } = contactsSlice.actions;
+export default contactsSlice.reducer;
