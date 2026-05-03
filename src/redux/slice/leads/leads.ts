@@ -16,7 +16,7 @@ export interface Lead {
 
 
 
-const savedData = localStorage.getItem("leads")
+const savedData = typeof window !== "undefined" ? localStorage.getItem("leads") : null
 
 export const initialLeads: Lead[] = savedData ? JSON.parse(savedData) : [];
 
@@ -31,6 +31,7 @@ const leads = createSlice({
       const lead = state.leads.find(l => l.id === action.payload.id);
       if (lead) {
         lead.status = action.payload.status;
+        localStorage.setItem("leads", JSON.stringify(state.leads));
       }
     },
     addNewLead: (state, action: PayloadAction<Lead>) => {
