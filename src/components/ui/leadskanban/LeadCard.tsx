@@ -1,99 +1,86 @@
 "use client";
 
-import { useDraggable } from "@dnd-kit/core";
-import { useRouter } from "next/navigation";
-import { Lead } from "@/types/lead";
-import { cn } from "@/lib/utils";
 import { ActionDropdown } from "@/components/ui/action-dropdown";
+import { Lead } from "@/redux/slice/leads/leads";
+import { RootState } from "@/redux/store/store";
+import { useDraggable } from "@dnd-kit/core";
+import { CSS } from "@dnd-kit/utilities";
+import { Building2 } from "lucide-react";
+import { useSelector } from "react-redux";
 
+export default function LeadCard({ item, statusColor }: { item: Lead, statusColor:string }) {
 
-export default function LeadCard({ item, onDelete }: { item: Lead; onDelete?: (id: string) => void }) {
-  const router = useRouter();
-  const { attributes, listeners, setNodeRef, transform } =
-    useDraggable({
-      id: item.id,
-    });
+  const { customers } = useSelector((state: RootState) => state.customers);
+  const customer = customers.find((c) => c.id === item.customer_id)
+
+  // kanban
+  const { attributes, listeners, setNodeRef, transform, isDragging } = useDraggable({
+    id: item.id.toString(),
+  });
 
   const style = {
-    transform: transform
-      ? `translate(${transform.x}px, ${transform.y}px)`
-      : undefined,
+    transform: CSS.Translate.toString(transform),
+    opacity: isDragging ? 0.5 : 1,
+    zIndex: isDragging ? 50 : 1,
+    position: 'relative' as const,
+    borderColor: statusColor ? `${statusColor}80` : undefined,
   };
 
-  const getStatusColor = (status: string) => {
-    switch (status) {
-      case "new": return "text-blue-500 bg-blue-500/10 border-blue-500/20";
-      case "contacted": return "text-purple-500 bg-purple-500/10 border-purple-500/20";
-      case "qualified": return "text-amber-500 bg-amber-500/10 border-amber-500/20";
-      case "proposal": return "text-emerald-500 bg-emerald-500/10 border-emerald-500/20";
-      case "closed": return "text-rose-500 bg-rose-500/10 border-rose-500/20";
-      default: return "text-gray-500 bg-gray-500/10 border-gray-500/20";
-    }
-  };
-
-  const getStatusTextOnly = (status: string) => {
-    switch (status) {
-      case "new": return "text-blue-500";
-      case "contacted": return "text-purple-500";
-      case "qualified": return "text-amber-500";
-      case "proposal": return "text-emerald-500";
-      case "closed": return "text-rose-500";
-      default: return "text-white";
-    }
-  };
-
-  // Mock data for visual completeness
-  const mockData = {
-    contact: "Tarek Samir",
-    role: "CEO",
-    value: "$75K",
-    tag: "Website",
-    owner: "Ahmed Hassan",
-    date: "Jan 15",
-    initials: item.title.split(' ').map(n => n[0]).join('').toUpperCase().slice(0, 2)
-  };
+  const formattedValue = item.expected_value 
+    ? new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD', maximumFractionDigits: 0 }).format(item.expected_value)
+    : "$0";
 
   return (
     <div
-      ref={setNodeRef}
-      {...listeners}
-      {...attributes}
-      style={style}
+        ref={setNodeRef}
+        style={style}
+        {...attributes}
+        {...listeners}
       className="bg-white dark:bg-[#1c1c1f] py-4 px-3 rounded shadow-sm border border-gray-100 dark:border-white/5 cursor-grab active:cursor-grabbing hover:shadow-md transition-all group"
     >
       <div className="flex items-start justify-between mb-5">
         <h3 className="font-bold text-[15px] text-gray-900 dark:text-white leading-tight">
-          {item.title}
+          {item.lead_title}
         </h3>
         <ActionDropdown 
-          onEdit={() => router.push(`/leads/edit/${item.id}`)}
-          onDelete={() => onDelete?.(item.id)}
-          onDetails={() => router.push(`/leads/${item.id}`)}
+          onEdit={() => {}}
         />
       </div>
 
-      <div className="flex items-center gap-3 mb-6">
-        <div className={cn("w-8 h-8 rounded-full flex items-center justify-center text-[10px] font-bold border", getStatusColor(item.status))}>
-          {mockData.initials}
+      <div className="space-y-2.5 mb-6">
+        <div className="flex flex-col gap-2">
+          <span className="text-[10px] font-black text-gray-400 dark:text-white/20 uppercase tracking-widest">Company</span>
+          <div className="flex items-center gap-1.5 mb-4 text-gray-400 dark:text-gray-500">
+            <Building2 className="w-3.5 h-3.5" />
+            {customer?.company_name || "Unknown"}
+          </div>
         </div>
-        <div>
-          <div className="text-[13px] font-bold text-gray-800 dark:text-gray-200">{mockData.contact}</div>
-          <div className="text-[11px] text-gray-400 font-medium">{mockData.role}</div>
+
+        <div className="flex flex-col gap-1">
+          <span className="text-[10px] font-black text-gray-400 dark:text-white/20 uppercase tracking-widest">Contact Information</span>
+          <span className="text-[14px] font-bold text-gray-700 dark:text-gray-300">
+            {customer?.contact_person_name || "N/A"}
+          </span>
+          {customer?.job_title && (
+            <span className={`text-[10px] font-black text-blue-400 uppercase tracking-[0.1em] mt-0.5`}>
+              {customer.job_title}
+            </span>
+          )}
         </div>
       </div>
 
       <div className="flex items-center justify-between mb-5">
-        <div className={cn("text-lg font-black tracking-tight", getStatusTextOnly(item.status))}>
-          {mockData.value}
+        <div className={"text-lg font-black tracking-tight"}>
+          {formattedValue}
         </div>
         <div className="bg-gray-50 dark:bg-white/5 px-2.5 py-1 rounded-lg text-[10px] font-bold text-gray-400 border border-gray-100 dark:border-white/5">
-          {mockData.tag}
+          {item.source}
         </div>
       </div>
 
       <div className="pt-4 border-t border-gray-50 dark:border-white/5 flex items-center justify-between text-[11px] font-medium">
-        <span className="text-gray-400">{mockData.owner}</span>
-        <span className="text-gray-400">{mockData.date}</span>
+        <span className="text-gray-400">User #{item.user_id || "Unassigned"}</span>
+        <span className="text-gray-400">{item.createdAt}</span>
       </div>
     </div>
   );

@@ -38,8 +38,7 @@ export interface customers {
   createdAt: string;
 }
 
-const savedData =
-  typeof window !== "undefined" ? localStorage.getItem("customers") : null;
+const savedData = typeof window !== "undefined" ? localStorage.getItem("customers") : null;
 
 export const initialCustomers: customers[] = savedData ? JSON.parse(savedData) : [];
 
