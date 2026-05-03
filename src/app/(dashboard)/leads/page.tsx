@@ -11,43 +11,14 @@ import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import KanbanBoard from "@/components/ui/leadskanban/kanbanBoard";
 import { SearchInput } from "@/components/ui/search-input";
-import { useEffect, useState } from "react";
-import { CardSkeleton } from "@/components/ui/loaders/CardSkeleton";
 
 export default function LeadsPage() {
-  const [isInitialLoading, setIsInitialLoading] = useState(true);
-
-  useEffect(() => {
-    const timer = setTimeout(() => setIsInitialLoading(false), 800);
-    return () => clearTimeout(timer);
-  }, []);
-
   const stats = [
     { title: "Total Leads", value: "3", change: "+8 new this week", icon: Target },
     { title: "Qualified Leads", value: "1", change: "+2 from last week", icon: TrendingUp },
     { title: "Avg. Lead Score", value: "84", change: "+3 points this month", icon: Star },
     { title: "Conversion Rate", value: "24%", change: "+2% from last month", icon: Users },
   ];
-
-  if (isInitialLoading) {
-    return (
-      <div className="space-y-8 max-w-400 mx-auto animate-in fade-in duration-500">
-        <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
-          <div>
-            <h1 className="text-3xl font-bold text-gray-900 dark:text-white tracking-tight">Leads</h1>
-            <p className="text-gray-500 dark:text-white/40 text-sm mt-1">Manage your potential customers and prospects</p>
-          </div>
-          <div className="h-10 w-28 bg-gray-200 dark:bg-white/10 rounded-lg animate-pulse" />
-        </div>
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-          <CardSkeleton />
-          <CardSkeleton />
-          <CardSkeleton />
-          <CardSkeleton />
-        </div>
-      </div>
-    );
-  }
 
   return (
     <div className="space-y-8 max-w-400 mx-auto animate-in fade-in duration-500">
@@ -88,15 +59,10 @@ export default function LeadsPage() {
             <h2 className="text-xl font-bold text-gray-900 dark:text-white tracking-tight">All Leads</h2>
             <p className="text-sm text-gray-500 dark:text-white/40 mt-1">Track and manage your sales opportunities</p>
           </div>
-          <div className="flex items-center gap-3">
-            <SearchInput 
-              placeholder="Search leads..." 
-              className="md:w-64"
-            />
-          </div>
         </div>
         <KanbanBoard />
       </div>
     </div>
   );
 }
+

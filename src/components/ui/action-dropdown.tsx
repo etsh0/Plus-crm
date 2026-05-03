@@ -6,20 +6,17 @@ import {
   Pencil,
   Trash2,
   Eye,
-  ExternalLink,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 
 interface ActionDropdownProps {
   onEdit?: () => void;
-  onDelete?: () => void;
   onDetails?: () => void;
   className?: string;
 }
 
 export function ActionDropdown({
   onEdit,
-  onDelete,
   onDetails,
   className,
 }: ActionDropdownProps) {
@@ -63,7 +60,7 @@ export function ActionDropdown({
       {isOpen && (
         <div className="absolute right-0 mt-1 w-48 rounded-xl bg-white dark:bg-[#121212] border border-gray-200 dark:border-white/10 shadow-[0_10px_30px_rgba(0,0,0,0.1)] dark:shadow-[0_10px_30px_rgba(0,0,0,0.5)] overflow-hidden z-[100] animate-in fade-in zoom-in-95 duration-200">
           <div className="p-1.5">
-            <button
+            {/* <button
               onClick={(e) => {
                 e.stopPropagation();
                 handleAction(onDetails);
@@ -74,7 +71,7 @@ export function ActionDropdown({
             >
               <Eye size={16} className="text-gray-400 dark:text-white/30" />
               View Details
-            </button>
+            </button> */}
             <button
               onClick={(e) => {
                 e.stopPropagation();
@@ -85,20 +82,7 @@ export function ActionDropdown({
               className="w-full flex items-center gap-2.5 px-3 py-2 rounded-lg text-sm text-gray-600 dark:text-white/70 hover:text-gray-900 dark:hover:text-white hover:bg-gray-100 dark:hover:bg-white/5 transition-colors"
             >
               <Pencil size={16} className="text-gray-400 dark:text-white/30" />
-              Edit Action
-            </button>
-            <div className="my-1 border-t border-gray-100 dark:border-white/5" />
-            <button
-              onClick={(e) => {
-                e.stopPropagation();
-                handleAction(onDelete);
-              }}
-              onPointerDown={(e) => e.stopPropagation()}
-              onMouseDown={(e) => e.stopPropagation()}
-              className="w-full flex items-center gap-2.5 px-3 py-2 rounded-lg text-sm text-red-500 hover:bg-red-500/10 transition-colors"
-            >
-              <Trash2 size={16} />
-              Delete Action
+              Edit
             </button>
           </div>
         </div>
