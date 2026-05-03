@@ -10,7 +10,7 @@ import {
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import KanbanBoard from "@/components/ui/leadskanban/kanbanBoard";
-import { SearchInput } from "@/components/ui/search-input";
+
 
 export default function LeadsPage() {
   const stats = [

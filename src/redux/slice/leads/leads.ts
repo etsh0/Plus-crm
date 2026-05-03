@@ -3,13 +3,12 @@ import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 export interface Lead {
   id: number;
   lead_title: string;
-
   customer_id?: number;
   expected_value?:number;
-
   status: string,
   source: string,
   user_id?: number,
+  description?: string,
   createdAt?: string;
 }
 
@@ -37,11 +36,20 @@ const leads = createSlice({
     addNewLead: (state, action: PayloadAction<Lead>) => {
       state.leads.push(action.payload)
       localStorage.setItem("leads", JSON.stringify(state.leads));
+    },
+    updateLead: (state, action: PayloadAction<Lead>) => {
+      const updatedLead = action.payload;
+      const existingLeadIndex = state.leads.findIndex(l => l.id === updatedLead.id);
+      
+      if (existingLeadIndex !== -1) {
+        state.leads[existingLeadIndex] = updatedLead;
+        localStorage.setItem("leads", JSON.stringify(state.leads));
+      }
     }
   }
 })
 
 
-export const { updateLeadStatus, addNewLead } = leads.actions;
+export const { updateLeadStatus, addNewLead, updateLead } = leads.actions;
 export default leads.reducer;
 

@@ -1,17 +1,18 @@
-"use client";
+"use client"
 
-import { Save, Target, DollarSign, Users, Info, ArrowRightLeft, Globe, User } from "lucide-react";
-import { useRouter } from "next/navigation";
-import { Button } from "@/components/ui/button";
-import { RootState } from "@/redux/store/store";
-import { useDispatch, useSelector } from "react-redux";
-import { Field, Form, Formik } from "formik";
+
 import * as z from "zod";
-import { addNewLead } from "@/redux/slice/leads/leads";
+import { useParams, useRouter } from "next/navigation";
+import { useState } from "react";
+import { Formik, Form, Field } from "formik";
+import { updateContact, contacts } from "@/redux/slice/contacts/contacts";
+import { useDispatch, useSelector } from "react-redux";
+import { RootState } from "@/redux/store/store";
 import { toast } from "sonner";
-import Link from "next/link";
+import { ArrowLeft, ArrowRightLeft, DollarSign, Globe, Info, Save, Target, User, Users } from "lucide-react";
+import { updateLead } from "@/redux/slice/leads/leads";
+import { Button } from "@/components/ui/button";
 
-// Validation Schema with Zod
 const leadSchema = z.object({
   lead_title: z.string().min(3, "Lead title must be at least 3 characters"),
   customer_id: z.union([z.string(), z.number()]).transform(v => Number(v)).pipe(z.number().min(1, "Please select a customer")),
@@ -20,59 +21,80 @@ const leadSchema = z.object({
   user_id: z.union([z.string(), z.number()]).transform(v => Number(v)).pipe(z.number().min(1, "Please select a responsible user")),
 });
 
-export default function AddLeadPage() {
+export default function EditLeadPage() {
+  const params = useParams();
+  const id = params.id;
   const router = useRouter();
   const dispatch = useDispatch();
   const { customers } = useSelector((state: RootState) => state.customers);
+  const {leads} = useSelector((state: RootState) => state.leads);
+  const lead = leads.find((lead) => lead.id === Number(id));
   const { status: leadStatuses } = useSelector((state: RootState) => state.leadStatus);
   const defaultStatus = leadStatuses.length > 0 ? leadStatuses[0].name : "New";
 
+
   const initialValues = {
-    lead_title: "",
-    customer_id: 0,
-    expected_value: 0,
-    source: "",
-    user_id: 0,
-    description: "",
-    status: defaultStatus,
+    lead_title: lead?.lead_title || "",
+    customer_id: lead?.customer_id || 0,
+    expected_value: lead?.expected_value || 0,
+    source: lead?.source || "",
+    user_id: lead?.user_id || 0,
+    description: lead?.description || "",
+    status: lead?.status || defaultStatus,
   };
-
-  const handleSaveLead = (values: any) => {
-    const data = {
-      ...values,
-      customer_id: Number(values.customer_id),
-      expected_value: Number(values.expected_value),
-      user_id: Number(values.user_id),
-      id: Date.now(),
-      createdAt: new Date().toLocaleDateString("en-US", {
-        month: "short",
-        day: "2-digit",
-        year: "numeric",
-      }),
-    };
-    dispatch(addNewLead(data));
-    toast.success("Lead created successfully!");
-    router.push("/leads");
-  };
-
   const validate = (values: any) => {
-    const result = leadSchema.safeParse(values);
-    if (!result.success) {
-      const errors: any = {};
-      result.error.issues.forEach((issue) => {
-        errors[issue.path[0]] = issue.message;
-      });
-      return errors;
+    const errors: any = {};
+    if (!values.lead_title) {
+      errors.lead_title = "Lead title is required";
+    } else if (values.lead_title.length < 3) {
+      errors.lead_title = "Lead title must be at least 3 characters";
     }
-    return {};
+    if (!values.customer_id) {
+      errors.customer_id = "Customer is required";
+    }
+    if (!values.expected_value) {
+      errors.expected_value = "Expected value is required";
+    }
+    if (!values.source) {
+      errors.source = "Source is required";
+    }
+    if (!values.user_id) {
+      errors.user_id = "Responsible user is required";
+    }
+    if (!values.description) {
+      errors.description = "Description is required";
+    }
+    if (!values.status) {
+      errors.status = "Status is required";
+    }
+    return errors;
   };
 
+const handleEditLead = (values: any) => {
+  const data = {
+    ...values,
+    customer_id: Number(values.customer_id),
+    expected_value: Number(values.expected_value),
+    user_id: Number(values.user_id),
+    id: Number(id),
+    createdAt: new Date().toLocaleDateString("en-US", {
+      month: "short",
+      day: "2-digit",
+      year: "numeric",
+    }),
+  };
+
+  dispatch(updateLead(data));
+  toast.success("Lead updated successfully!");
+  router.push("/leads");
+};
   return (
-    <div className="max-w-6xl mx-auto animate-in fade-in slide-in-from-bottom-4 duration-700 pb-12">
+    <>
+<div className="max-w-6xl mx-auto animate-in fade-in slide-in-from-bottom-4 duration-700 pb-12">
       <Formik
         initialValues={initialValues}
         validate={validate}
-        onSubmit={handleSaveLead}
+        onSubmit={handleEditLead}
       >
         {({ errors, touched, isSubmitting }) => (
           <Form className="space-y-8">
@@ -171,7 +193,7 @@ export default function AddLeadPage() {
                         {/* Expected Value */}
                         <div className="space-y-2">
                           <label className="text-[11px] font-black text-gray-400 dark:text-white/30 uppercase tracking-widest ml-1 flex items-center gap-2">
-                            <DollarSign size={12}/> Expected Value
+                            <DollarSign  size={12}/> Expected Value
                           </label>
                           <div className="relative">
                             <div className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400 font-bold">$</div>
@@ -280,6 +302,7 @@ export default function AddLeadPage() {
                     <div className="p-4 rounded-2xl bg-purple-500/5 border border-purple-500/10">
                       <div className="flex items-center gap-2 mb-2">
                         <User size={14} className="text-purple-500" />
+
                         <span className="text-[10px] font-bold text-purple-500 uppercase tracking-widest">Active Manager</span>
                       </div>
                       <p className="text-xs text-gray-500 dark:text-white/40 leading-relaxed">
@@ -294,5 +317,6 @@ export default function AddLeadPage() {
         )}
       </Formik>
     </div>
-  );
+    </>
+  )
 }
