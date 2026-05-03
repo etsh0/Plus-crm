@@ -9,6 +9,7 @@ import { Field, Form, Formik } from "formik";
 import * as z from "zod";
 import { addNewLead } from "@/redux/slice/leads/leads";
 import { toast } from "sonner";
+import Link from "next/link";
 
 // Validation Schema with Zod
 const leadSchema = z.object({
@@ -23,6 +24,8 @@ export default function AddLeadPage() {
   const router = useRouter();
   const dispatch = useDispatch();
   const { customers } = useSelector((state: RootState) => state.customers);
+  const { status: leadStatuses } = useSelector((state: RootState) => state.leadStatus);
+  const defaultStatus = leadStatuses.length > 0 ? leadStatuses[0].name : "New";
 
   const initialValues = {
     lead_title: "",
@@ -31,7 +34,7 @@ export default function AddLeadPage() {
     source: "",
     user_id: 0,
     description: "",
-    status: "NEW",
+    status: defaultStatus,
   };
 
   const handleSaveLead = (values: any) => {

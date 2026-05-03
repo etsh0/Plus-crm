@@ -7,7 +7,7 @@ export interface leadStatus {
     color:string
 }
 
-const savedData = localStorage.getItem("lead-status")
+const savedData = typeof window !== "undefined" ? localStorage.getItem("lead-status") : null
 
 export const initialLeadStatus: leadStatus[] = savedData ? JSON.parse(savedData) : [];
 
