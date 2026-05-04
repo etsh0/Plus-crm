@@ -9,7 +9,6 @@ import {
 } from "lucide-react";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
-import { SearchInput } from "@/components/ui/search-input";
 import KanbanBoard from "@/components/ui/dealskanban/kanbanBoard";
 import { useEffect, useState } from "react";
 import { CardSkeleton } from "@/components/ui/loaders/CardSkeleton";
@@ -87,12 +86,6 @@ export default function DealsPage() {
           <div>
             <h2 className="text-xl font-bold text-gray-900 dark:text-white tracking-tight">All Deals</h2>
             <p className="text-sm text-gray-500 dark:text-white/40 mt-1">Track and manage your sales opportunities</p>
-          </div>
-          <div className="flex items-center gap-3">
-            <SearchInput 
-              placeholder="Search deals..." 
-              className="md:w-64"
-            />
           </div>
         </div>
 

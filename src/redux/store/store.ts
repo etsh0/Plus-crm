@@ -6,6 +6,7 @@ import customers from "../slice/customers/customers"
 import contacts from "../slice/contacts/contacts"
 import auth from "../slice/auth/authSlice"
 import leads from "../slice/leads/leads"
+import deals from "../slice/deals/deals"
 
 export const myStore = configureStore({
     reducer:{
@@ -15,7 +16,8 @@ export const myStore = configureStore({
         customers: customers,
         contacts: contacts,
         auth: auth,
-        leads: leads
+        leads: leads,
+        deals: deals
     }
 });
 
