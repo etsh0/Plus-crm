@@ -10,23 +10,55 @@ import {
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import KanbanBoard from "@/components/ui/dealskanban/kanbanBoard";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useMemo } from "react";
 import { CardSkeleton } from "@/components/ui/loaders/CardSkeleton";
+import { useSelector } from "react-redux";
+import { RootState } from "@/redux/store/store";
+
 
 export default function DealsPage() {
   const [isInitialLoading, setIsInitialLoading] = useState(true);
+  const { deals } = useSelector((state: RootState) => state.deals);
 
   useEffect(() => {
     const timer = setTimeout(() => setIsInitialLoading(false), 800);
     return () => clearTimeout(timer);
   }, []);
 
-  const stats = [
-    { title: "Total Pipeline Value", value: "$425,000", change: "+12% from last month", icon: DollarSign },
-    { title: "Active Deals", value: "3", change: "+3 new this week", icon: TrendingUp },
-    { title: "Avg. Probability", value: "60%", change: "+5% from last month", icon: Percent },
-    { title: "This Month", value: "5", change: "deals closing", icon: Calendar },
-  ];
+  const stats = useMemo(() => {
+    const totalPipeline = deals.reduce((acc, d) => acc + (d.value || 0), 0);
+    const activeDeals = deals.filter(d => d.status !== "WON" && d.status !== "LOST").length;
+    const wonDeals = deals.filter(d => d.status === "WON").length;
+    const winRate = deals.length > 0 ? ((wonDeals / deals.length) * 100).toFixed(0) : "0";
+    
+    const closingThisMonth = deals.filter(d => {
+      if (!d.createdAt) return false;
+      const date = new Date(d.createdAt);
+      const now = new Date();
+      return date.getMonth() === now.getMonth() && date.getFullYear() === now.getFullYear();
+    }).length;
+
+    const newThisWeek = deals.filter(d => {
+      if (!d.createdAt) return false;
+      const date = new Date(d.createdAt);
+      const now = new Date();
+      return (now.getTime() - date.getTime()) / (1000 * 3600 * 24) <= 7;
+    }).length;
+
+    const formatCurrency = (val: number) =>
+      new Intl.NumberFormat("en-US", {
+        style: "currency",
+        currency: "USD",
+        maximumFractionDigits: 0,
+      }).format(val);
+
+    return [
+      { title: "Total Pipeline Value", value: formatCurrency(totalPipeline), change: "Cumulative value", icon: DollarSign },
+      { title: "Active Deals", value: activeDeals.toString(), change: `+${newThisWeek} new this week`, icon: TrendingUp },
+      { title: "Win Rate", value: `${winRate}%`, change: "Won vs Total", icon: Percent },
+      { title: "Closing This Month", value: closingThisMonth.toString(), change: "Expected this cycle", icon: Calendar },
+    ];
+  }, [deals]);
 
   if (isInitialLoading) {
     return (
@@ -97,3 +129,4 @@ export default function DealsPage() {
     </div>
   );
 }
+

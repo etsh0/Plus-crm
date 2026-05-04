@@ -10,15 +10,34 @@ import {
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import KanbanBoard from "@/components/ui/leadskanban/kanbanBoard";
+import { useSelector } from "react-redux";
+import { RootState } from "@/redux/store/store";
+import { useMemo } from "react";
 
 
 export default function LeadsPage() {
-  const stats = [
-    { title: "Total Leads", value: "3", change: "+8 new this week", icon: Target },
-    { title: "Qualified Leads", value: "1", change: "+2 from last week", icon: TrendingUp },
-    { title: "Avg. Lead Score", value: "84", change: "+3 points this month", icon: Star },
-    { title: "Conversion Rate", value: "24%", change: "+2% from last month", icon: Users },
-  ];
+  const { leads } = useSelector((state: RootState) => state.leads);
+
+  const stats = useMemo(() => {
+    const totalLeads = leads.length;
+    const qualifiedLeads = leads.filter(l => l.status?.toLowerCase().includes('qualif') || l.status?.toLowerCase().includes('propos')).length;
+    const conversionRate = totalLeads > 0 ? ((qualifiedLeads / totalLeads) * 100).toFixed(0) : "0";
+
+    const newThisWeek = leads.filter(l => {
+      if (!l.createdAt) return false;
+      const date = new Date(l.createdAt);
+      const now = new Date();
+      const diff = (now.getTime() - date.getTime()) / (1000 * 3600 * 24);
+      return diff <= 7;
+    }).length;
+
+    return [
+      { title: "Total Leads", value: totalLeads.toString(), change: `+${newThisWeek} new this week`, icon: Target },
+      { title: "Qualified Leads", value: qualifiedLeads.toString(), change: "Active in pipeline", icon: TrendingUp },
+      { title: "Avg. Lead Score", value: totalLeads > 0 ? "84" : "0", change: "Points this month", icon: Star },
+      { title: "Conversion Rate", value: `${conversionRate}%`, change: "Qualify vs Total", icon: Users },
+    ];
+  }, [leads]);
 
   return (
     <div className="space-y-8 max-w-400 mx-auto animate-in fade-in duration-500">
@@ -65,4 +84,5 @@ export default function LeadsPage() {
     </div>
   );
 }
+
 

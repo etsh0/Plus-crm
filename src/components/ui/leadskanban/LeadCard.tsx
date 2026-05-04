@@ -8,6 +8,7 @@ import { ArrowLeftRight, Building2, Pencil } from "lucide-react";
 import Link from "next/link";
 import { useDispatch, useSelector } from "react-redux";
 import { CardBadge, CardIconButton, CardLabel, CardWrapper } from "../KanbanCardUI";
+import { users } from "@/constants/users";
 import { addNewDeal } from "@/redux/slice/deals/deals";
 
 export default function LeadCard({
@@ -49,6 +50,7 @@ export default function LeadCard({
 
   const { customers } = useSelector((state: RootState) => state.customers);
   const customer = customers.find((c) => c.id === item.customer_id);
+  const owner = users.find((u) => u.id == item.user_id);
 
   // kanban
   const { attributes, listeners, setNodeRef, transform, isDragging } =
@@ -154,10 +156,12 @@ export default function LeadCard({
         </div>
       </div>
       
-      <div className="mt-3 text-[10px] text-gray-300 dark:text-gray-600 font-bold uppercase tracking-tighter">
-        Owner #{item.user_id || "0"}
+      <div className="mt-3 text-[10px] text-gray-400 dark:text-white/30 font-bold uppercase tracking-widest flex items-center gap-1.5">
+        <div className="w-1 h-1 rounded-full bg-blue-500" />
+        {owner?.name || `Owner #${item.user_id || "0"}`}
       </div>
     </CardWrapper>
   );
 }
+
 

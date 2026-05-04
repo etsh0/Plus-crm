@@ -8,6 +8,7 @@ import { useSelector } from "react-redux";
 import { RootState } from "@/redux/store/store";
 import { CardBadge, CardIconButton, CardLabel, CardWrapper } from "../KanbanCardUI";
 import Link from "next/link";
+import { users } from "@/constants/users";
 
 export default function DealCard({
   item,
@@ -20,6 +21,7 @@ export default function DealCard({
 }) {
   const { customers } = useSelector((state: RootState) => state.customers);
   const customer = customers.find((c) => c.id === item.customer_id);
+  const owner = users.find((u) => u.id == item.user_id);
 
   const { attributes, listeners, setNodeRef, transform, isDragging } =
     useDraggable({
@@ -113,12 +115,14 @@ export default function DealCard({
         </div>
       </div>
 
-      <div className="mt-3 text-[10px] text-gray-300 dark:text-gray-600 font-bold uppercase tracking-tighter">
-        Owner #{item.user_id || "0"}
+      <div className="mt-3 text-[10px] text-gray-400 dark:text-white/30 font-bold uppercase tracking-widest flex items-center gap-1.5">
+        <div className="w-1 h-1 rounded-full bg-blue-500" />
+        {owner?.name || `Owner #${item.user_id || "0"}`}
       </div>
     </CardWrapper>
   );
 }
+
 
 
 
