@@ -5,7 +5,6 @@ import Image from "next/image";
 import bgImg from "@/assets/light-pillar-1776934798991.png";
 import { Controller } from "react-hook-form";
 import { useLogin } from "@/hooks/use-login";
-import { Spinner } from "@/components/ui/spinner";
 import { FullScreenLoader } from "@/components/ui/loaders/FullScreenLoader";
 
 export default function LoginForm() {
