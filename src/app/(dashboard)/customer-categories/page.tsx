@@ -13,6 +13,7 @@ import {
 } from "@/redux/slice/customerCategory/customerCategory";
 import { useState, useEffect } from "react";
 import { TableSkeleton } from "@/components/ui/loaders/TableSkeleton";
+import { RootState } from "@/redux/store/store";
 
 export default function CustomerCategoriesPage() {
   const dispatch = useDispatch();
@@ -30,9 +31,14 @@ export default function CustomerCategoriesPage() {
   }, []);
 
 
+  const { customers } = useSelector((state: RootState) => state.customers);
+  const categories =useSelector((state: any) => state.customerCategory.categories) || [];
 
-  const categories =
-    useSelector((state: any) => state.customerCategory.categories) || [];
+  const customersPerCategory  = categories.map( (cat) => ({
+    name: cat.name,
+    value: customers.filter( (c) => c.customer_category_id === cat.id).length,
+    color: "#ccc",
+  }))
 
   const filterCategory = categories.filter((category: any) =>
     category.name.toLowerCase().includes(search.toLowerCase()),
@@ -193,7 +199,9 @@ export default function CustomerCategoriesPage() {
                     </td>
                     <td className="px-6 py-5 text-center">
                       <span className="inline-flex items-center px-3 py-1 rounded-full bg-gray-100 dark:bg-white/5 text-[11px] font-bold text-gray-600 dark:text-white/60 border border-gray-200 dark:border-white/[0.05]">
-                        {category?.customers?.toLocaleString()}
+                        {
+                          customers.filter( (c) => c.customer_category_id === category.id).length
+                        }
                       </span>
                     </td>
                     <td className="px-6 py-5 text-sm text-gray-500 dark:text-white/60">
@@ -262,7 +270,7 @@ export default function CustomerCategoriesPage() {
             </h2>
           </div>
           <div className="h-[300px] w-full">
-            <PiplineChart data={categories} />
+            <PiplineChart data={customersPerCategory} />
           </div>
         </div>
       </div>

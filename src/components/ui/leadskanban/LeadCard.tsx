@@ -1,15 +1,15 @@
 "use client";
 
-import { ActionDropdown } from "@/components/ui/action-dropdown";
-import { Lead } from "@/redux/slice/leads/leads";
+import { Lead, updateLeadStatus } from "@/redux/slice/leads/leads";
 import { RootState } from "@/redux/store/store";
 import { useDraggable } from "@dnd-kit/core";
 import { CSS } from "@dnd-kit/utilities";
 import { ArrowLeftRight, Building2, Pencil } from "lucide-react";
 import Link from "next/link";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { CardBadge, CardIconButton, CardLabel, CardWrapper } from "../KanbanCardUI";
 import { users } from "@/constants/users";
+import { addNewDeal } from "@/redux/slice/deals/deals";
 
 export default function LeadCard({
   item,
@@ -20,6 +20,34 @@ export default function LeadCard({
   statusColor: string;
   onEdit?: (lead: Lead) => void;
 }) {
+
+  const dispatch = useDispatch()
+  const handleConvert = (lead: Lead) => {
+    if(lead.status === "CONVERTED") return;
+      const newDeal = {
+      id: Date.now(),
+      deal_title: lead.lead_title || "New Deal",
+      value: lead.expected_value,
+
+      status: "NEW",
+
+      customer_id: lead.customer_id, 
+      createdAt: new Date().toLocaleDateString("en-US", {
+        month: "short",
+        day: "2-digit",
+        year: "numeric",
+      }),
+      description: lead.description || ""
+    };
+
+
+    dispatch(addNewDeal(newDeal));
+    dispatch(updateLeadStatus({
+      id: lead.id,
+      status: "CONVERTED"
+    }));
+  }
+
   const { customers } = useSelector((state: RootState) => state.customers);
   const customer = customers.find((c) => c.id === item.customer_id);
   const owner = users.find((u) => u.id == item.user_id);
@@ -68,13 +96,18 @@ export default function LeadCard({
               <Pencil size={14} />
             </CardIconButton>
           </Link>
-          <div className="relative group/tooltip">
-            <CardIconButton>
+          <div  onPointerDown={(e) => 
+            {
+              e.stopPropagation();
+              handleConvert(item)
+            }
+            } className="relative group/tooltip">
+            <CardIconButton >
               <ArrowLeftRight size={14} />
             </CardIconButton>
-            <span className="absolute bottom-full left-1/2 -translate-x-1/2 mb-2 px-2 py-1 bg-gray-900 dark:bg-black text-white text-[10px] font-bold uppercase tracking-widest rounded border border-white/10 opacity-0 group-hover/tooltip:opacity-100 transition-opacity pointer-events-none whitespace-nowrap z-[110] shadow-xl">
+            <div className="absolute bottom-full left-1/2 -translate-x-1/2 mb-2 px-2 py-1 bg-gray-900 dark:bg-black text-white text-[10px] font-bold uppercase tracking-widest rounded border border-white/10 opacity-0 group-hover/tooltip:opacity-100 transition-opacity whitespace-nowrap z-[110] shadow-xl">
               Convert to deal
-            </span>
+            </div>
           </div>
         </div>
       </div>

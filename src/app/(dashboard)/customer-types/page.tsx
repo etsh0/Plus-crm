@@ -15,6 +15,7 @@ import { TableSkeleton } from "@/components/ui/loaders/TableSkeleton";
 
 import { useSelector, useDispatch } from "react-redux";
 import { addNewType, deleteType, updateType, CustomerType } from "../../../redux/slice/customer-types/customer-types"
+import { RootState } from "@/redux/store/store";
 
 export default function CustomerTypesPage() {
   const dispatch = useDispatch();
@@ -33,11 +34,10 @@ export default function CustomerTypesPage() {
 
 
   // Select types from Redux state
- const types = useSelector(
-  (state: any) => state.customerTypes.types
-);
-
+const types = useSelector((state: any) => state.customerTypes.types);
+const { customers } = useSelector((state: RootState) => state.customers);
 const filterTypes = types.filter( (type: any) => type.name.toLowerCase().includes(searchQuery.toLowerCase()))
+
 
 const handleSaveType = () => {
   if (!name.trim()) return;
@@ -181,7 +181,9 @@ const handleCloseModal = () => {
                     <td className="px-6 py-5 text-sm text-gray-500 dark:text-white/40">{type.description}</td>
                     <td className="px-6 py-5 text-center">
                       <span className="inline-flex items-center px-3 py-1 rounded-full bg-gray-100 dark:bg-white/5 text-[11px] font-bold text-gray-600 dark:text-white/60 border border-gray-200 dark:border-white/[0.05]">
-                        {type.customers.toLocaleString()}
+                        {
+                          customers.filter( (c) => c.customer_type_id === type.id).length
+                        }
                       </span>
                     </td>
                     <td className="px-6 py-5 text-sm text-gray-500 dark:text-white/60">{type.date}</td>
