@@ -12,6 +12,7 @@ import { toast } from "sonner";
 import { ArrowLeft, ArrowRightLeft, DollarSign, Globe, Info, Save, Target, User, Users } from "lucide-react";
 import { updateLead } from "@/redux/slice/leads/leads";
 import { Button } from "@/components/ui/button";
+import { users } from "@/constants/users";
 
 const leadSchema = z.object({
   lead_title: z.string().min(3, "Lead title must be at least 3 characters"),
@@ -290,9 +291,11 @@ const handleEditLead = (values: any) => {
                         }`}
                       >
                         <option value={0}>Select User</option>
-                        <option value={1}>Ahmed Hassan</option>
-                        <option value={2}>Sarah Johnson</option>
-                        <option value={3}>John Smith</option>
+                        {users.map((user) => (
+                          <option key={user.id} value={user.id}>
+                            {user.name}
+                          </option>
+                        ))}
                       </Field>
                       {errors.user_id && touched.user_id && (
                         <p className="text-[10px] text-red-500 font-bold uppercase tracking-wider ml-1">{errors.user_id as string}</p>
