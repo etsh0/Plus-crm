@@ -7,7 +7,11 @@ export const Hero = () => {
       aria-label="Hero"
       className="relative min-h-screen w-full flex flex-col items-center justify-center overflow-hidden bg-black"
     >
-      <div className="absolute inset-0 pointer-events-none select-none overflow-hidden">
+      <div 
+        data-aos="fade" 
+        data-aos-duration="1500"
+        className="absolute inset-0 pointer-events-none select-none overflow-hidden"
+      >
         <video
           src="/light-pillar-1776935081893.webm" 
           autoPlay
@@ -21,6 +25,8 @@ export const Hero = () => {
 
       {/* ── Subtle dark vignette so text stays legible ── */}
       <div
+        data-aos="fade"
+        data-aos-duration="2000"
         aria-hidden="true"
         className="absolute inset-0 bg-[radial-gradient(ellipse_70%_70%_at_50%_50%,transparent_20%,rgba(0,0,0,0.72)_100%)]"
       />
@@ -29,13 +35,13 @@ export const Hero = () => {
       <div className="relative z-10 flex flex-col items-center text-center px-6 pt-40 pb-24 max-w-4xl mx-auto gap-7">
 
         {/* Badge */}
-        <div data-aos="fade-down" className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full border border-violet-400/20 bg-violet-500/10 backdrop-blur-sm text-[10px] sm:text-xs font-medium text-violet-300 tracking-wide">
+        <div data-aos="fade-up" className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full border border-violet-400/20 bg-violet-500/10 backdrop-blur-sm text-[10px] sm:text-xs font-medium text-violet-300 tracking-wide">
           <span className="w-1.5 h-1.5 rounded-full bg-violet-400 animate-pulse" />
           Now in public beta — free to get started
         </div>
 
         {/* Headline */}
-        <h1 data-aos="fade-up" data-aos-delay="100" className="text-[34px] sm:text-6xl md:text-7xl font-bold leading-[1.08] tracking-tight text-white drop-shadow-[0_2px_24px_rgba(168,85,247,0.4)]">
+        <h1 data-aos="fade-up" data-aos-delay="150" className="text-[34px] sm:text-6xl md:text-7xl font-bold leading-[1.08] tracking-tight text-white drop-shadow-[0_2px_24px_rgba(168,85,247,0.4)]">
           Your customers,{' '}
           <span className="bg-linear-to-r from-fuchsia-400 via-violet-400 to-purple-400 bg-clip-text text-transparent">
             finally
@@ -44,14 +50,14 @@ export const Hero = () => {
         </h1>
 
         {/* Sub-headline */}
-        <p data-aos="fade-up" data-aos-delay="200" className="max-w-xl text-xs sm:text-lg text-white/55 leading-relaxed">
+        <p data-aos="fade-up" data-aos-delay="300" className="max-w-xl text-xs sm:text-lg text-white/55 leading-relaxed">
           PulseCRM is the high-performance command center for sales
           teams. Streamline your workflow, automate follow-ups, and
           visualize your entire pipeline in one luminous interface.
         </p>
 
         {/* CTAs */}
-        <div data-aos="fade-up" data-aos-delay="300" className="flex flex-wrap items-center justify-center gap-4 mt-1">
+        <div data-aos="fade-up" data-aos-delay="450" className="flex flex-wrap items-center justify-center gap-4 mt-1">
 
           {/* Primary */}
           <Link
@@ -79,7 +85,7 @@ export const Hero = () => {
         </div>
 
         {/* Social proof */}
-        <div data-aos="fade-up" data-aos-delay="400" className="flex flex-col sm:flex-row items-center gap-4 sm:gap-8 mt-3">
+        <div data-aos="fade-up" data-aos-delay="600" className="flex flex-col sm:flex-row items-center gap-4 sm:gap-8 mt-3">
 
           {/* Avatars */}
           <div className="flex items-center gap-3">

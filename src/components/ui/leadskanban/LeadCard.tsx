@@ -41,7 +41,7 @@ export default function LeadCard({
     };
 
 
-    dispatch(addNewDeal(newDeal));
+    dispatch(addNewDeal(newDeal as any));
     dispatch(updateLeadStatus({
       id: lead.id,
       status: "CONVERTED"

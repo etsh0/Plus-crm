@@ -34,9 +34,9 @@ export default function CustomerCategoriesPage() {
   const { customers } = useSelector((state: RootState) => state.customers);
   const categories =useSelector((state: any) => state.customerCategory.categories) || [];
 
-  const customersPerCategory  = categories.map( (cat) => ({
+  const customersPerCategory  = categories.map( (cat: any) => ({
     name: cat.name,
-    value: customers.filter( (c) => c.customer_category_id === cat.id).length,
+    value: customers.filter( (c: any) => c.customer_category_id === cat.id).length,
     color: "#ccc",
   }))
 
