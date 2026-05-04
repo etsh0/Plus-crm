@@ -9,13 +9,22 @@ import { RootState } from "@/redux/store/store";
 import { CardBadge, CardIconButton, CardLabel, CardWrapper } from "../KanbanCardUI";
 import Link from "next/link";
 
-export default function DealCard({ item, statusColor }: { item: Deal, statusColor?: string }) {
+export default function DealCard({
+  item,
+  statusColor,
+  onEdit,
+}: {
+  item: Deal;
+  statusColor?: string;
+  onEdit?: (deal: Deal) => void;
+}) {
   const { customers } = useSelector((state: RootState) => state.customers);
   const customer = customers.find((c) => c.id === item.customer_id);
 
-  const { attributes, listeners, setNodeRef, transform, isDragging } = useDraggable({
-    id: item.id.toString(),
-  });
+  const { attributes, listeners, setNodeRef, transform, isDragging } =
+    useDraggable({
+      id: item.id.toString(),
+    });
 
   const style = {
     transform: CSS.Translate.toString(transform),
@@ -24,10 +33,10 @@ export default function DealCard({ item, statusColor }: { item: Deal, statusColo
 
   // Format currency
   const formatValue = (val: number) => {
-    return new Intl.NumberFormat('en-US', { 
-      style: 'currency', 
-      currency: 'USD', 
-      maximumFractionDigits: 0 
+    return new Intl.NumberFormat("en-US", {
+      style: "currency",
+      currency: "USD",
+      maximumFractionDigits: 0,
     }).format(val);
   };
 
