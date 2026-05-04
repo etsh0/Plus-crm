@@ -5,7 +5,7 @@ import { Lead } from "@/redux/slice/leads/leads";
 import { RootState } from "@/redux/store/store";
 import { useDraggable } from "@dnd-kit/core";
 import { CSS } from "@dnd-kit/utilities";
-import { Building2, Pencil } from "lucide-react";
+import { ArrowLeftRight, Building2, Pencil } from "lucide-react";
 import Link from "next/link";
 import { useSelector } from "react-redux";
 
@@ -68,6 +68,12 @@ export default function LeadCard({
             <Pencil size={16} className="text-gray-400 dark:text-white/30" />
           </button>
         </Link>
+        <div className="relative group/tooltip cursor-pointer text-gray-400 hover:text-gray-900 dark:hover:text-white p-1 rounded-md hover:bg-gray-100 dark:hover:bg-white/5 transition-all">
+          <ArrowLeftRight size={16} />
+          <span className="absolute bottom-full left-1/2 -translate-x-1/2 mb-2 px-2 py-1 bg-gray-900 dark:bg-black text-white text-[10px] font-bold uppercase tracking-widest rounded border border-white/10 opacity-0 group-hover/tooltip:opacity-100 transition-opacity pointer-events-none whitespace-nowrap z-100 shadow-xl">
+            Convert to deal
+          </span>
+        </div>
       </div>
 
       <div className="space-y-2.5 mb-6">
