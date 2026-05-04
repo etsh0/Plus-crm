@@ -14,8 +14,6 @@ export interface Lead {
 }
 
 
-
-
 const savedData = typeof window !== "undefined" ? localStorage.getItem("leads") : null
 
 export const initialLeads: Lead[] = savedData ? JSON.parse(savedData) : [];

@@ -3,32 +3,37 @@
 import { useDroppable } from "@dnd-kit/core";
 
 
-import { Plus } from "lucide-react";
-import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
-import { Deal } from "@/types/deal";
+import { useSelector } from "react-redux";
+import { RootState } from "@/redux/store/store";
 import DealCard from "./DealCard";
 
-export default function Column({
-  column,
-  items,
-  onDelete,
-}: {
-  column: { id: string; title: string };
-  items: Deal[];
-  onDelete?: (id: string) => void;
-}) {
+export default function Column({column}: {column:{id:string, title:string}}) {
   const { setNodeRef } = useDroppable({
     id: column.id,
   });
 
+    const deals = useSelector((state: RootState) => state.deals.deals);
+    const columnDeals = deals.filter((deal) => deal.status.toUpperCase() === column.title.toUpperCase());
+
+
   const getTitleColor = (id: string) => {
     switch (id) {
-      case "prospect": return "text-blue-500";
-      case "negotiation": return "text-purple-500";
-      case "won": return "text-amber-500";
-      case "lost": return "text-emerald-500";
+      case "new": return "text-blue-500";
+      case "proposal": return "text-indigo-500";
+      case "won": return "text-emerald-500";
+      case "lost": return "text-rose-500";
       default: return "text-white";
+    }
+  };
+
+  const getHexColor = (id: string) => {
+    switch (id) {
+      case "new": return "#3b82f6";
+      case "proposal": return "#6366f1";
+      case "won": return "#10b981";
+      case "lost": return "#f43f5e";
+      default: return "#ffffff";
     }
   };
 
@@ -42,23 +47,20 @@ export default function Column({
           {column.title}
         </h2>
         <span className="flex items-center justify-center text-[11px] font-bold h-6 w-6 rounded-full bg-white/10 text-white/60">
-          {items.length}
+          {columnDeals.length}
         </span>
       </div>
 
       <div className="flex-1 space-y-3 mb-4">
-        {items.map((item) => (
-          <DealCard key={item.id} item={item} onDelete={onDelete} />
+        {columnDeals.map((item) => (
+          <DealCard 
+            key={item.id} 
+            item={item} 
+            statusColor={getHexColor(column.id)} 
+          />
         ))}
       </div>
 
-      <Button
-        variant="ghost"
-        className="w-full bg-white/2 border-dashed border-2 border-white/5 py-4 rounded hover:bg-white/5 hover:border-white/10 text-white/40 transition-all group cursor-pointer"
-      >
-        <Plus className="w-4 h-4 mr-2 group-hover:rotate-90 transition-transform" />
-        <span className="text-xs font-bold">Add Deal</span>
-      </Button>
     </div>
   );
 }
