@@ -8,6 +8,7 @@ import { CSS } from "@dnd-kit/utilities";
 import { ArrowLeftRight, Building2, Pencil } from "lucide-react";
 import Link from "next/link";
 import { useSelector } from "react-redux";
+import { CardBadge, CardIconButton, CardLabel, CardWrapper } from "../KanbanCardUI";
 
 export default function LeadCard({
   item,
@@ -29,9 +30,6 @@ export default function LeadCard({
 
   const style = {
     transform: CSS.Translate.toString(transform),
-    opacity: isDragging ? 0.5 : 1,
-    zIndex: isDragging ? 50 : 1,
-    position: "relative" as const,
     borderColor: statusColor ? `${statusColor}80` : undefined,
   };
 
@@ -44,81 +42,89 @@ export default function LeadCard({
     : "$0";
 
   return (
-    <div
+    <CardWrapper
       ref={setNodeRef}
       style={style}
+      isDragging={isDragging}
       {...attributes}
       {...listeners}
-      className="bg-white dark:bg-[#1c1c1f] py-4 px-3 rounded shadow-sm border border-gray-100 dark:border-white/5 cursor-grab active:cursor-grabbing hover:shadow-md transition-all group"
     >
-      <div className="flex items-center justify-between mb-5">
-        <h3 className="font-bold text-[15px] text-gray-900 dark:text-white leading-tight">
+      <div className="flex items-start justify-between mb-4">
+        <h3 className="font-bold text-[15px] text-gray-900 dark:text-white leading-tight pr-4">
           {item.lead_title}
         </h3>
-        <Link href={`/leads/edit/${item.id}`}>
-          <button
-            onClick={(e) => {
-              e.stopPropagation();
-              onEdit?.(item);
-            }}
-            onPointerDown={(e) => e.stopPropagation()}
-            onMouseDown={(e) => e.stopPropagation()}
-            className="w-full flex items-center gap-2.5 px-3 py-2 rounded-lg text-sm text-gray-600 dark:text-white/70 hover:text-gray-900 dark:hover:text-white hover:bg-gray-100 dark:hover:bg-white/5 transition-colors"
-          >
-            <Pencil size={16} className="text-gray-400 dark:text-white/30" />
-          </button>
-        </Link>
-        <div className="relative group/tooltip cursor-pointer text-gray-400 hover:text-gray-900 dark:hover:text-white p-1 rounded-md hover:bg-gray-100 dark:hover:bg-white/5 transition-all">
-          <ArrowLeftRight size={16} />
-          <span className="absolute bottom-full left-1/2 -translate-x-1/2 mb-2 px-2 py-1 bg-gray-900 dark:bg-black text-white text-[10px] font-bold uppercase tracking-widest rounded border border-white/10 opacity-0 group-hover/tooltip:opacity-100 transition-opacity pointer-events-none whitespace-nowrap z-100 shadow-xl">
-            Convert to deal
-          </span>
+        <div className="flex items-center gap-1 flex-shrink-0">
+          <Link href={`/leads/edit/${item.id}`}>
+            <CardIconButton
+              onClick={(e) => {
+                e.stopPropagation();
+                onEdit?.(item);
+              }}
+              onPointerDown={(e) => e.stopPropagation()}
+              onMouseDown={(e) => e.stopPropagation()}
+            >
+              <Pencil size={14} />
+            </CardIconButton>
+          </Link>
+          <div className="relative group/tooltip">
+            <CardIconButton>
+              <ArrowLeftRight size={14} />
+            </CardIconButton>
+            <span className="absolute bottom-full left-1/2 -translate-x-1/2 mb-2 px-2 py-1 bg-gray-900 dark:bg-black text-white text-[10px] font-bold uppercase tracking-widest rounded border border-white/10 opacity-0 group-hover/tooltip:opacity-100 transition-opacity pointer-events-none whitespace-nowrap z-[110] shadow-xl">
+              Convert to deal
+            </span>
+          </div>
         </div>
       </div>
 
-      <div className="space-y-2.5 mb-6">
-        <div className="flex flex-col gap-2">
-          <span className="text-[10px] font-black text-gray-400 dark:text-white/20 uppercase tracking-widest">
-            Company
-          </span>
-          <div className="flex items-center gap-1.5 mb-4 text-gray-400 dark:text-gray-500">
-            <Building2 className="w-3.5 h-3.5" />
-            {customer?.company_name || "Unknown"}
+      <div className="space-y-4 mb-6">
+        <div>
+          <CardLabel>Company</CardLabel>
+          <div className="flex items-center gap-2 text-gray-500 dark:text-gray-400">
+            <Building2 className="w-3.5 h-3.5 opacity-70" />
+            <span className="text-sm font-medium truncate">
+              {customer?.company_name || "Unknown"}
+            </span>
           </div>
         </div>
 
-        <div className="flex flex-col gap-1">
-          <span className="text-[10px] font-black text-gray-400 dark:text-white/20 uppercase tracking-widest">
-            Contact Information
-          </span>
-          <span className="text-[14px] font-bold text-gray-700 dark:text-gray-300">
-            {customer?.contact_person_name || "N/A"}
-          </span>
-          {customer?.job_title && (
-            <span
-              className={`text-[10px] font-black text-blue-400 uppercase tracking-[0.1em] mt-0.5`}
-            >
-              {customer.job_title}
+        <div>
+          <CardLabel>Contact Info</CardLabel>
+          <div className="flex flex-col gap-1">
+            <span className="text-[13px] font-semibold text-gray-800 dark:text-gray-200">
+              {customer?.contact_person_name || "N/A"}
             </span>
-          )}
+            {customer?.job_title && (
+              <span className="text-[10px] font-bold text-blue-500/80 uppercase tracking-widest">
+                {customer.job_title}
+              </span>
+            )}
+          </div>
         </div>
       </div>
 
-      <div className="flex items-center justify-between mb-5">
-        <div className={"text-lg font-black tracking-tight"}>
-          {formattedValue}
+      <div className="mt-auto pt-4 border-t border-gray-50 dark:border-white/5 flex items-end justify-between">
+        <div className="flex flex-col gap-0.5">
+          <CardLabel className="mb-0">Expected</CardLabel>
+          <div className="text-lg font-black tracking-tight text-gray-900 dark:text-white">
+            {formattedValue}
+          </div>
         </div>
-        <div className="bg-gray-50 dark:bg-white/5 px-2.5 py-1 rounded-lg text-[10px] font-bold text-gray-400 border border-gray-100 dark:border-white/5">
-          {item.source}
-        </div>
-      </div>
 
-      <div className="pt-4 border-t border-gray-50 dark:border-white/5 flex items-center justify-between text-[11px] font-medium">
-        <span className="text-gray-400">
-          User #{item.user_id || "Unassigned"}
-        </span>
-        <span className="text-gray-400">{item.createdAt}</span>
+        <div className="flex flex-col items-end gap-2">
+          <CardBadge className="bg-blue-50 dark:bg-blue-500/10 text-blue-600 dark:text-blue-400 border-blue-100 dark:border-blue-500/20">
+            {item.source}
+          </CardBadge>
+          <div className="flex items-center gap-1.5 text-[10px] text-gray-400 font-medium">
+            <span>{item.createdAt}</span>
+          </div>
+        </div>
       </div>
-    </div>
+      
+      <div className="mt-3 text-[10px] text-gray-300 dark:text-gray-600 font-bold uppercase tracking-tighter">
+        Owner #{item.user_id || "0"}
+      </div>
+    </CardWrapper>
   );
 }
+
