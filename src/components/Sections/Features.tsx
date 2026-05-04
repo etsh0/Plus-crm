@@ -9,10 +9,10 @@ export const Features = () => {
         
         {/* ── Section Heading ── */}
         <div className="text-center max-w-2xl mb-20">
-          <h2 className="text-4xl sm:text-5xl font-bold text-white tracking-tight leading-tight mb-6 drop-shadow-sm">
+          <h2 data-aos="fade-up" className="text-4xl sm:text-5xl font-bold text-white tracking-tight leading-tight mb-6 drop-shadow-sm">
               Engineered for Excellence
           </h2>
-          <p className="text-white/50 text-xs md:text-base leading-relaxed">
+          <p data-aos="fade-up" data-aos-delay="100" className="text-white/50 text-xs md:text-base leading-relaxed">
               PulseCRM delivers the tools you need to outpace the competition without the complexity
               of legacy systems.
           </p>
@@ -22,7 +22,7 @@ export const Features = () => {
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6 w-full">
           
           {/* Card 1 */}
-          <div className="group relative p-px rounded-lg bg-linear-to-b from-violet-500/30 to-white/5 overflow-hidden transition-all duration-500 shadow-[0_0_40px_-10px_rgba(168,85,247,0.3)]">
+          <div data-aos="fade-up" data-aos-delay="200" className="group relative p-px rounded-lg bg-linear-to-b from-violet-500/30 to-white/5 overflow-hidden transition-all duration-500 shadow-[0_0_40px_-10px_rgba(168,85,247,0.3)]">
             <div className="relative h-full bg-[#050508] backdrop-blur-xl rounded-lg p-8 flex flex-col ">  
               <div className="text-white mb-4 flex items-center ">
                 <User size={"40"} />
@@ -38,7 +38,7 @@ export const Features = () => {
           </div>
 
           {/* Card 2 */}
-          <div className="group relative p-px rounded-lg bg-linear-to-b from-violet-500/30 to-white/5 overflow-hidden transition-all duration-500 shadow-[0_0_40px_-10px_rgba(168,85,247,0.3)]">
+          <div data-aos="fade-up" data-aos-delay="300" className="group relative p-px rounded-lg bg-linear-to-b from-violet-500/30 to-white/5 overflow-hidden transition-all duration-500 shadow-[0_0_40px_-10px_rgba(168,85,247,0.3)]">
             <div className="relative h-full bg-[#050508] backdrop-blur-xl rounded-lg p-8 flex flex-col">
               <div className="text-white mb-4 flex items-center ">
                 <Percent size={"40"} />
@@ -53,7 +53,7 @@ export const Features = () => {
           </div>
 
           {/* Card 3 */}
-          <div className="group relative p-px rounded-lg bg-linear-to-b from-violet-500/30 to-white/5 overflow-hidden transition-all duration-500 shadow-[0_0_40px_-10px_rgba(168,85,247,0.3)]">
+          <div data-aos="fade-up" data-aos-delay="400" className="group relative p-px rounded-lg bg-linear-to-b from-violet-500/30 to-white/5 overflow-hidden transition-all duration-500 shadow-[0_0_40px_-10px_rgba(168,85,247,0.3)]">
             <div className="relative h-full bg-[#050508] backdrop-blur-xl rounded-lg p-8 flex flex-col">
               <div className="text-white mb-4 flex items-center ">
                 <ChartNoAxesCombined size={"40"} />

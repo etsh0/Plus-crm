@@ -7,10 +7,10 @@ export const HowItWorks = () => {
       <div className="relative z-10 max-w-6xl w-full px-6 flex flex-col items-center">
         {/* ── Heading ── */}
         <div className="text-center max-w-2xl mb-24">
-          <h2 className="text-4xl sm:text-5xl font-bold text-white tracking-tight leading-tight mb-6">
+          <h2 data-aos="fade-up" className="text-4xl sm:text-5xl font-bold text-white tracking-tight leading-tight mb-6">
             How it works
           </h2>
-          <p className="text-white/50 text-xs md:text-base leading-relaxed">
+          <p data-aos="fade-up" data-aos-delay="100" className="text-white/50 text-xs md:text-base leading-relaxed">
             Get up and running in minutes. Our streamlined process ensures you spend less time setting up and more time closing deals.
           </p>
         </div>
@@ -21,7 +21,7 @@ export const HowItWorks = () => {
           <div className="hidden md:block absolute top-8 left-[16%] right-[16%] h-[1px] bg-gradient-to-r from-transparent via-violet-500/30 to-transparent" />
 
           {/* Step 1 */}
-          <div className="relative flex flex-col items-center text-center group">
+          <div data-aos="fade-up" data-aos-delay="200" className="relative flex flex-col items-center text-center group">
             {/* Number badge */}
             <div className="relative mb-8 transition-transform duration-500 ">
               <div className="absolute inset-0 bg-violet-500/20 blur-xl rounded-full opacity-50 group-hover:opacity-100 transition-opacity duration-500" />
@@ -40,7 +40,7 @@ export const HowItWorks = () => {
           </div>
 
           {/* Step 2 */}
-          <div className="relative flex flex-col items-center text-center group">
+          <div data-aos="fade-up" data-aos-delay="300" className="relative flex flex-col items-center text-center group">
             <div className="relative mb-8 transition-transform duration-500">
               <div className="absolute inset-0 bg-fuchsia-500/20 blur-xl rounded-full opacity-50 group-hover:opacity-100 transition-opacity duration-500" />
               <div className="w-16 h-16 rounded-2xl bg-[#050508] border border-white/10 flex items-center justify-center relative z-10 backdrop-blur-xl shadow-[0_0_30px_rgba(217,70,239,0.2)]">
@@ -58,7 +58,7 @@ export const HowItWorks = () => {
           </div>
 
           {/* Step 3 */}
-          <div className="relative flex flex-col items-center text-center group">
+          <div data-aos="fade-up" data-aos-delay="400" className="relative flex flex-col items-center text-center group">
             <div className="relative mb-8 transition-transform duration-500">
               <div className="absolute inset-0 bg-purple-500/20 blur-xl rounded-full opacity-50 group-hover:opacity-100 transition-opacity duration-500" />
               <div className="w-16 h-16 rounded-2xl bg-[#050508] border border-white/10 flex items-center justify-center relative z-10 backdrop-blur-xl shadow-[0_0_30px_rgba(168,85,247,0.2)]">

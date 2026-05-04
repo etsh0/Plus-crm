@@ -56,7 +56,7 @@ export const Pricing = () => {
           <h2 className="text-4xl sm:text-5xl font-bold text-white tracking-tight leading-tight mb-6">
             Plans for every stage of growth
           </h2>
-          <p className="text-white/50 text-xs md:text-base leading-relaxed">
+          <p data-aos="fade-up" data-aos-delay="100" className="text-white/50 text-xs md:text-base leading-relaxed">
             Choose the plan that fits your team needs. All plans include our core blazingly fast workspace.
           </p>
         </div>
@@ -66,6 +66,8 @@ export const Pricing = () => {
           {plans.map((plan, i) => (
             <div 
               key={i}
+              data-aos="fade-up"
+              data-aos-delay={i * 100 + 200}
               className={`
                 relative flex flex-col p-8 rounded-3xl border transition-all duration-500
                 ${plan.popular 

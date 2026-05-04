@@ -47,10 +47,10 @@ export const Testimonials = () => {
       <div className="relative z-10 max-w-6xl w-full px-6 flex flex-col items-center">
         {/* Heading */}
         <div className="text-center max-w-2xl mb-20">
-          <h2 className="text-4xl sm:text-5xl font-bold text-white tracking-tight leading-tight mb-6">
+          <h2 data-aos="fade-up" className="text-4xl sm:text-5xl font-bold text-white tracking-tight leading-tight mb-6">
             Loved by Teams Worldwide
           </h2>
-          <p className="text-white/50 text-xs md:text-base leading-relaxed">
+          <p data-aos="fade-up" data-aos-delay="100" className="text-white/50 text-xs md:text-base leading-relaxed">
             Join thousands of teams who have optimized their sales process with PulseCRM.
           </p>
         </div>
@@ -60,6 +60,8 @@ export const Testimonials = () => {
           {testimonials.map((t, i) => (
             <div 
               key={i}
+              data-aos="fade-up"
+              data-aos-delay={i * 100 + 200}
               className="group relative p-8 rounded-2xl bg-white/[0.02] border border-white/5 backdrop-blur-sm flex flex-col transition-all duration-500 hover:bg-white/[0.04] hover:border-white/10"
             >
               <div className="flex items-center gap-4 mb-6">
