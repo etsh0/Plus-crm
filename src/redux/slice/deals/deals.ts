@@ -12,6 +12,7 @@ export interface Deal {
   expectedCloseDate?: string;
   user_id?: number,
   createdAt: string;
+  description:string;
 }
 
 
@@ -40,10 +41,21 @@ const deals = createSlice({
         localStorage.setItem("deals", JSON.stringify(state.deals));
       }
     },
+      updateDeal: (state, action: PayloadAction<Omit<Deal, "createdAt"> & { id: number }>) => {
+      const { id, ...updates } = action.payload;
+      const index = state.deals.findIndex(deal => deal.id === id);
+      if (index !== -1) {
+        state.deals[index] = {
+          ...state.deals[index],
+          ...updates
+        };
+        localStorage.setItem("deals", JSON.stringify(state.deals));
+      }
+    }
   }
 })
 
 
-export const { addNewDeal, updateDealStatus } = deals.actions;
+export const { addNewDeal, updateDealStatus , updateDeal} = deals.actions;
 export default deals.reducer;
 

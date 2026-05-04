@@ -10,6 +10,7 @@ import * as z from "zod";
 import { addNewLead } from "@/redux/slice/leads/leads";
 import { toast } from "sonner";
 import Link from "next/link";
+import { users } from "@/constants/users";
 
 // Validation Schema with Zod
 const leadSchema = z.object({
@@ -268,9 +269,11 @@ export default function AddLeadPage() {
                         }`}
                       >
                         <option value={0}>Select User</option>
-                        <option value={1}>Ahmed Hassan</option>
-                        <option value={2}>Sarah Johnson</option>
-                        <option value={3}>John Smith</option>
+                        {users.map((user) => (
+                          <option key={user.id} value={user.id}>
+                            {user.name}
+                          </option>
+                        ))}
                       </Field>
                       {errors.user_id && touched.user_id && (
                         <p className="text-[10px] text-red-500 font-bold uppercase tracking-wider ml-1">{errors.user_id as string}</p>

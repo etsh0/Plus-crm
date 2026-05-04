@@ -1,38 +1,45 @@
 "use client";
 
-
-import { Building2, Calendar } from "lucide-react";
+import { Building2, Calendar, Pencil } from "lucide-react";
 import { cn } from "@/lib/utils";
-import { ActionDropdown } from "@/components/ui/action-dropdown";
 import { Deal } from "@/redux/slice/deals/deals";
-
 import { useDraggable } from "@dnd-kit/core";
 import { CSS } from "@dnd-kit/utilities";
 import { useSelector } from "react-redux";
 import { RootState } from "@/redux/store/store";
+import Link from "next/link";
 
-export default function DealCard({ item, statusColor }: { item: Deal, statusColor?: string }) {
+export default function DealCard({
+  item,
+  statusColor,
+  onEdit,
+}: {
+  item: Deal;
+  statusColor?: string;
+  onEdit?: (deal: Deal) => void;
+}) {
   const { customers } = useSelector((state: RootState) => state.customers);
   const customer = customers.find((c) => c.id === item.customer_id);
 
-  const { attributes, listeners, setNodeRef, transform, isDragging } = useDraggable({
-    id: item.id.toString(),
-  });
+  const { attributes, listeners, setNodeRef, transform, isDragging } =
+    useDraggable({
+      id: item.id.toString(),
+    });
 
   const style = {
     transform: CSS.Translate.toString(transform),
     opacity: isDragging ? 0.5 : 1,
     zIndex: isDragging ? 50 : 1,
-    position: 'relative' as const,
+    position: "relative" as const,
     borderColor: statusColor ? `${statusColor}80` : undefined,
   };
 
   // Format currency
   const formatValue = (val: number) => {
-    return new Intl.NumberFormat('en-US', { 
-      style: 'currency', 
-      currency: 'USD', 
-      maximumFractionDigits: 0 
+    return new Intl.NumberFormat("en-US", {
+      style: "currency",
+      currency: "USD",
+      maximumFractionDigits: 0,
     }).format(val);
   };
 
@@ -45,31 +52,53 @@ export default function DealCard({ item, statusColor }: { item: Deal, statusColo
       className="bg-white dark:bg-[#1c1c1f] py-4 px-3 rounded shadow-sm border border-gray-100 dark:border-white/5 cursor-grab active:cursor-grabbing hover:shadow-md transition-all group"
     >
       {/* Header: Title and Actions */}
-      <div className="flex items-start justify-between mb-2">
+      <div className="flex items-center justify-between mb-2">
         <h3 className="font-bold text-[15px] text-gray-900 dark:text-white leading-tight">
           {item.deal_title}
         </h3>
-        <ActionDropdown />
+        <Link href={`/deals/edit/${item.id}`}>
+          <button
+            onClick={(e) => {
+              e.stopPropagation();
+              onEdit?.(item);
+            }}
+            onPointerDown={(e) => e.stopPropagation()}
+            onMouseDown={(e) => e.stopPropagation()}
+            className="w-full flex items-center gap-2.5 px-3 py-2 rounded-lg text-sm text-gray-600 dark:text-white/70 hover:text-gray-900 dark:hover:text-white hover:bg-gray-100 dark:hover:bg-white/5 transition-colors"
+          >
+            <Pencil size={16} className="text-gray-400 dark:text-white/30" />
+          </button>
+        </Link>
       </div>
 
       {/* Company/Organization */}
       <div className="flex flex-col gap-1 mb-4">
-        <span className="text-[10px] font-black text-gray-400 dark:text-white/20 uppercase tracking-widest">Company</span>
+        <span className="text-[10px] font-black text-gray-400 dark:text-white/20 uppercase tracking-widest">
+          Company
+        </span>
         <div className="flex items-center gap-1.5 text-gray-400 dark:text-gray-500">
           <Building2 className="w-3.5 h-3.5" />
-          <span className="text-[12px] font-medium">{customer?.company_name || "Unknown Company"}</span>
+          <span className="text-[12px] font-medium">
+            {customer?.company_name || "Unknown Company"}
+          </span>
         </div>
       </div>
 
       {/* Contact Person */}
       <div className="flex flex-col gap-1 mb-6">
-        <span className="text-[10px] font-black text-gray-400 dark:text-white/20 uppercase tracking-widest">Contact</span>
+        <span className="text-[10px] font-black text-gray-400 dark:text-white/20 uppercase tracking-widest">
+          Contact
+        </span>
         <div className="text-[13px]">
-          <span className="font-bold text-gray-800 dark:text-gray-200">{customer?.contact_person_name || "N/A"}</span>
+          <span className="font-bold text-gray-800 dark:text-gray-200">
+            {customer?.contact_person_name || "N/A"}
+          </span>
           {customer?.job_title && (
             <>
               <span className="text-gray-400 dark:text-gray-500 mx-1">·</span>
-              <span className="text-gray-400 dark:text-gray-500 font-medium">{customer.job_title}</span>
+              <span className="text-gray-400 dark:text-gray-500 font-medium">
+                {customer.job_title}
+              </span>
             </>
           )}
         </div>
@@ -88,9 +117,10 @@ export default function DealCard({ item, statusColor }: { item: Deal, statusColo
           <Calendar className="w-3.5 h-3.5" />
           <span>{item.createdAt}</span>
         </div>
-        <span className="text-gray-400">Owner #{item.user_id || "Unassigned"}</span>
+        <span className="text-gray-400">
+          Owner #{item.user_id || "Unassigned"}
+        </span>
       </div>
     </div>
   );
 }
-
